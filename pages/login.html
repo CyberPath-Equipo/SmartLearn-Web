@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iniciar sesión</title>
+  <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>Smart Learn</h1>
+    <p class="subtitle">Iniciar sesión</p>
+    <button onclick="paginaPrincipal()" class="btn-ghost">Volver a SL</button>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <form id="loginForm" name="formLogIn">
+        <input type="email" id="correo" name="email" placeholder="Correo electrónico" required />
+        <input type="password" id="password" name="password" placeholder="Contraseña" required />
+        <button type="submit" name="btn_submit" class="btn-primary">Entrar</button>
+      </form>
+    </section>
+  </main>
+<footer class="footer">
+      <div class="footer-content">
+          <div class="contenedor-columnas">
+              <div class="columna">
+                  <p>Developed by <b><i>CyberPath</i></b> 2025 &copy;</p>
+                  <br>
+                  <p><a href="mailto:cyberpathcontacto@gmail.com" class="enlaceCorreo">Contacto: cyberpathcontacto@gmail.com</a></p>
+              </div>
+              <div class="columna">
+                  <p><a href="avisoPrivacidad.html" target="_blank" class="enlaceAvisoPriv">Aviso de privacidad</a></p>
+              </div>
+              <div class="columna">
+                  <p>Redes Sociales</p>
+                  <br>
+                  <p><a href="https://instagram.com/cyberpath_oficial/" target="_blank"><img src="../images/icon_instagram.png" width="60" height="60" ></a> &nbsp;&nbsp;&nbsp;
+                  <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank"><img src="../images/icon_youtube.png" width="84.9" height="60" ></a>
+              </div>
+          </div>
+      </div>
+  </footer>
+
+  <script src="../scripts/login.js"></script>
+  <script src="../scripts/script.js"></script>
+</body>
+</html>

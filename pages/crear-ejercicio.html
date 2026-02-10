@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear ejercicio - SmartLearn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/styles.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <h1 id="pageTitle">Ejercicio</h1>
+
+        <div class="header-right">
+            <button class="btn-ghost" onclick="window.history.back()">← Volver</button>
+            <span id="subtemaNombre" class="tag-info"></span>
+            <button class="btn-ghost" onclick="logout()">Cerrar sesión</button>
+    <img src="../images/perfilUsuarioSinFondo.png" alt="Perfil del usuario" height="50" class="perfilUsuario" style="margin-top: -10px;" onclick="perfilUser()">
+        </div>
+    </header>
+
+<main class="container">
+
+    <section class="card">
+        <h2>Datos del ejercicio</h2>
+
+        <form id="ejercicioForm">
+
+            <div class="form-group">
+                <label for="nombreEjercicio">Nombre del ejercicio</label>
+                <input
+                    type="text"
+                    id="nombreEjercicio"
+                    placeholder="Ej. Ejercicio de variables"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-primary full-width">
+                Guardar ejercicio
+            </button>
+
+        </form>
+    </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="contenedor-columnas">
+
+      <div class="columna">
+        <p>Developed by <b><i>CyberPath</i></b> 2025 &copy;</p>
+        <br />
+        <p><a href="mailto:cyberpathcontacto@gmail.com" class="enlaceCorreo">
+            Contacto: cyberpathcontacto@gmail.com
+        </a></p>
+      </div>
+
+      <div class="columna">
+        <p><a href="avisoPrivacidad.html" target="_blank" class="enlaceAvisoPriv">Aviso de privacidad</a></p>
+      </div>
+
+      <div class="columna">
+        <p>Redes Sociales</p>
+        <br />
+        <p>
+          <a href="https://instagram.com/cyberpath_oficial/" target="_blank">
+            <img src="../images/icon_instagram.png" width="60" height="60">
+          </a>
+          &nbsp;&nbsp;&nbsp;
+          <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank">
+            <img src="../images/icon_youtube.png" width="84.9" height="60">
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/crear-ejercicio.js"></script>
+<script src="../scripts/script.js"></script>
+
+</body>
+</html>

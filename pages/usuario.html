@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del usuario</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+</head>
+
+<body>
+
+<header class="header">
+    <h1 id="pageTitle">Perfil de Usuario</h1>
+
+    <div class="header-right">
+        <button class="btn-ghost" onclick="window.history.back()">← Volver</button>
+    </div>
+</header>
+
+<main class="container" role="main">
+
+    <!-- PERFIL -->
+    <section id="usuarioTarget" class="card">
+        <img src="../images/perfilUsuario.png" alt="perfil del Usuario" id="imgPerfilUsr">
+        <h2 id="infoLabel">Perfil de Usuario</h2>
+        <section id="infoUsr">
+            <p><span class="campo">Nombre:</span> <span id="nombreLabel"></span></p>
+            <p><span class="campo">Correo:</span> <span id="correoLabel"></span></p>
+            <button class="btn-primary" onclick="solicitarAutenticacion('password')">
+                Cambiar contraseña
+            </button>
+        </section>
+
+        <!-- ACCIONES PRINCIPALES -->
+        <section id="accionesExtra" class="action-buttons">
+            <button class="btn-secondary" onclick="solicitarAutenticacion('editar')">
+                Editar perfil
+            </button>
+
+            <button class="peligro" onclick="solicitarAutenticacion('eliminar')">
+                Borrar usuario
+            </button>
+
+            <button class="peligro" onclick="logout()">
+                Cerrar sesión
+            </button>
+        </section>
+    </section>
+
+
+    <!-- VERIFICACIÓN DE CONTRASEÑA -->
+    <section id="verificarPasswordSection" class="card hidden">
+        <h3>Verificación de seguridad</h3>
+        <p>Para continuar, confirma tu contraseña</p>
+
+        <form id="verificarPasswordForm">
+            <div class="form-group">
+                <label for="passwordConfirmacion">Contraseña actual</label>
+                <input type="password" id="passwordConfirmacion" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Confirmar</button>
+                <button class="peligro" onclick="cancelarAccion()">Cancelar</button>
+            </div>
+        </form>
+    </section>
+
+
+    <!-- CAMBIAR CONTRASEÑA -->
+    <section id="cambiarPasswordSection" class="card hidden">
+        <h3>Cambiar contraseña</h3>
+
+        <form id="cambiarPasswordForm">
+            <div class="form-group">
+                <label for="nuevaPassword">Nueva contraseña</label>
+                <input type="password" id="nuevaPassword" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmarPassword">Confirmar contraseña</label>
+                <input type="password" id="confirmarPassword" required>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                Actualizar contraseña
+            </button>
+        </form>
+    </section>
+
+
+    <!-- EDITAR USUARIO -->
+    <section id="editarUsuarioSection" class="card hidden">
+        <h3>Editar perfil</h3>
+
+        <form id="editarUsuarioForm">
+            <div class="form-group">
+                <label for="editarNombre">Nombre</label>
+                <input type="text" id="editarNombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editarCorreo">Correo</label>
+                <input type="email" id="editarCorreo" required>
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label for="editarContrasena">Contraseña</label>
+                <input type="password" id="editarContrasena" required>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                Guardar cambios
+            </button>
+        </form>
+    </section>
+
+
+    <!-- ELIMINAR CUENTA -->
+    <section id="eliminarCuentaSection" class="card hidden">
+        <h3>Eliminar cuenta</h3>
+
+        <p class="warning-text">
+            <strong>Advertencia:</strong> Esta acción es permanente y no se puede deshacer.
+        </p>
+
+        <button class="peligro" onclick="confirmarEliminacion()">
+            Eliminar definitivamente
+        </button>
+    </section>
+
+</main>
+
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="contenedor-columnas">
+
+            <div class="columna">
+                <p>Developed by <b><i>CyberPath</i></b> 2025 &copy;</p>
+                <br />
+                <p>
+                    <a href="mailto:cyberpathcontacto@gmail.com" class="enlaceCorreo">
+                        Contacto: cyberpathcontacto@gmail.com
+                    </a>
+                </p>
+            </div>
+
+            <div class="columna">
+                <p>
+                    <a href="avisoPrivacidad.html" target="_blank" class="enlaceAvisoPriv">
+                        Aviso de privacidad
+                    </a>
+                </p>
+            </div>
+
+            <div class="columna">
+                <p>Redes Sociales</p>
+                <br />
+                <p>
+                    <a href="https://instagram.com/cyberpath_oficial/" target="_blank">
+                        <img src="../images/icon_instagram.png" width="60" height="60">
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank">
+                        <img src="../images/icon_youtube.png" width="84.9" height="60">
+                    </a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<script src="../scripts/usuario.js"></script>
+<script src="../scripts/script.js"></script>
+</body>
+</html>

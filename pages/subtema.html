@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Subtemas - Smart Learn</title>
+  <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+
+<body>
+
+<header class="header">
+  <h1 id="pageTitle">Subtemas</h1>
+  <div class="header-right">
+    <button class="btn-ghost" onclick="window.history.back()">← Volver</button>
+    <span id="temaNombre"></span>
+    <button id="btnAddSubtema" class="btn-primary" onclick="mostrarFormAdd()">+ Nuevo Subtema</button>
+    <button class="btn-ghost" onclick="logout()">Cerrar sesión</button>
+    <img src="../images/perfilUsuarioSinFondo.png" alt="Perfil del usuario" height="50" class="perfilUsuario" style="margin-top: -10px;" onclick="perfilUser()">
+  </div>
+</header>
+
+<main class="container" role="main">
+  <section class="card">
+
+    <!-- Formulario agregar subtema -->
+    <div id="formBox" class="hidden" role="region">
+      <form id="subtemaForm">
+
+        <label for="nombreSubtema">Nombre del subtema</label>
+        <input id="nombreSubtema" name="nombreSubtema" type="text" placeholder="Nombre del subtema" required />
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Guardar</button>
+          <button type="button" class="btn-secondary" onclick="ocultarForm()">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Formulario para editar subtema -->
+    <div id="formBoxEdit" class="hidden" role="region">
+      <form id="editSubtemaForm">
+
+        <input type="hidden" id="editId" />
+
+        <label for="editNombre">Nombre</label>
+        <input id="editNombre" name="editNombre" type="text" required />
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Actualizar</button>
+          <button type="button" class="btn-secondary" onclick="ocultarFormEdit()">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Tabla de subtemas -->
+    <div id="tableContainer">
+      <table id="elementosTable" class="full-width">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="subtemasBody">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mensajes -->
+    <div id="messages" role="status" aria-live="polite" class="hidden"></div>
+
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="contenedor-columnas">
+
+      <div class="columna">
+        <p>Developed by <b><i>CyberPath</i></b> 2025 &copy;</p>
+        <br />
+        <p><a href="mailto:cyberpathcontacto@gmail.com" class="enlaceCorreo">
+            Contacto: cyberpathcontacto@gmail.com
+        </a></p>
+      </div>
+
+      <div class="columna">
+        <p><a href="avisoPrivacidad.html" target="_blank" class="enlaceAvisoPriv">Aviso de privacidad</a></p>
+      </div>
+
+      <div class="columna">
+        <p>Redes Sociales</p>
+        <br />
+        <p>
+          <a href="https://instagram.com/cyberpath_oficial/" target="_blank">
+            <img src="../images/icon_instagram.png" width="60" height="60">
+          </a>
+          &nbsp;&nbsp;&nbsp;
+          <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank">
+            <img src="../images/icon_youtube.png" width="84.9" height="60">
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+<script src="../scripts/script.js"></script> <!-- fuentes compartidas -->
+<script src="../scripts/subtema.js"></script>
+
+</body>
+</html>

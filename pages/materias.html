@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gestión de materias</title>
+  <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+
+<body>
+  <header class="header">
+    <h1>Gestión de Materias</h1>
+    <img src="../images/Blanco_sin_fondo_Recortada_Smart_Learn_logo.png" 
+         alt="imagen SL" 
+         width="87" 
+         height="60" 
+         class="logo_sl" 
+         onclick="paginaPrincipal()"
+         style="margin-top: -10px;" >
+
+    <img src="../images/perfilUsuarioSinFondo.png" alt="Perfil del usuario" height="60" class="perfilUsuario" style="margin-top: -10px;" onclick="perfilUser()">
+    <button class="btn-ghost" onclick="logout()">Cerrar sesión</button>
+  </header>
+
+  <main class="container">
+    <section class="card">
+
+      <div class="topbar">
+        <h2>Materias disponibles</h2>
+        <button id="btnAdd" class="btn-primary" onclick="mostrarFormAdd()">+ Nueva materia</button>
+        <div id="formBox" class="hidden">
+          <form id="subjectForm">
+            <input id="nombreMateria" type="text" placeholder="Nombre de la materia" required />
+            <input id="descripcion" type="text" placeholder="Descripción de la materia" />
+            <button type="submit" class="btn-primary">Guardar</button>
+          </form>
+        </div>
+        <div id="formBoxEdit" class="hidden">
+          <form id="editForm">
+            <input id="nombreMateriaEdit" type="text" placeholder="Nombre de la materia" required />
+            <input id="descripcionEdit" type="text" placeholder="Descripción de la materia" />
+            <button type="submit" class="btn-primary">Guardar</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tabla que se llenará desde JavaScript -->
+      <div id="tableContainer">
+        <table id="materiasTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody id="materiasBody">
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="../scripts/materias.js"></script>
+
+  <footer class="footer">
+      <div class="footer-content">
+          <div class="contenedor-columnas">
+              <div class="columna">
+                  <p>Developed by <b><i>CyberPath</i></b> 2025 &copy;</p>
+                  <br>
+                  <p><a href="mailto:cyberpathcontacto@gmail.com" class="enlaceCorreo">Contacto: cyberpathcontacto@gmail.com</a></p>
+              </div>
+              <div class="columna">
+                  <p><a href="../pages/avisoPrivacidad.html" target="_blank" class="enlaceAvisoPriv">Aviso de privacidad</a></p>
+              </div>
+              <div class="columna">
+                  <p>Redes Sociales</p>
+                  <br>
+                  <p><a href="https://instagram.com/cyberpath_oficial/" target="_blank"><img src="../images/icon_instagram.png" width="60" height="60" ></a> &nbsp;&nbsp;&nbsp;
+                  <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank"><img src="../images/icon_youtube.png" width="84.9" height="60" ></a>
+              </div>
+          </div>
+      </div>
+  </footer>
+
+
+  <script src="../scripts/script.js"></script>
+</body>
+</html>

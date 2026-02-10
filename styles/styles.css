@@ -1,0 +1,843 @@
+/* ------------------------------ */
+/*     ESTILOS GENERALES          */
+/* ------------------------------ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: #f4f6f9;
+  color: #222;
+  min-height: 100vh;
+}
+
+
+/* ------------------------------ */
+/*    ESTILOS PARA SECCIONES      */
+/*      (Página SmartLearn)       */
+/* ------------------------------ */
+
+/* ---------- HERO SECTION ---------- */
+
+.hero {
+  width: 100%;
+  padding: 60px 20px;
+  margin-bottom: 40px;
+  border-radius: 12px;
+
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.45),
+      rgba(0, 0, 0, 0.45)
+    ),
+    url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f') center/cover no-repeat;
+
+  color: black;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.hero h2 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.hero p {
+  max-width: 650px;
+  font-size: 1.2em;
+  line-height: 1.5;
+}
+
+.hero-btn {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 22px;
+  background: #008cff;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.hero-btn:hover {
+  background: #006dd1;
+}
+
+
+main {
+  width: 90%;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding-bottom: 40px;
+}
+
+/* Secciones generales */
+section {
+  margin-bottom: 45px;
+  padding: 25px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+/* Hover suave (solo visual, elegante) */
+section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* Títulos de cada sección */
+section h2 {
+  font-size: 1.7rem;
+  margin-bottom: 12px;
+  color: #005fcc;
+  border-left: 6px solid #005fcc;
+  padding-left: 10px;
+}
+
+/* Párrafos */
+section p {
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+/* Estilo de listas (para "¿Qué ofrece SmartLearn?") */
+section ul {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+section ul li {
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Colores degradados suaves para alternar secciones (opcional pero bonito) */
+section:nth-child(odd) {
+  background: linear-gradient(to bottom right, #ffffff, #f7faff);
+}
+
+section:nth-child(even) {
+  background: linear-gradient(to bottom right, #ffffff, #f5f7fb);
+}
+
+
+/* ------------------------------ */
+/*          HEADER GENERAL        */
+/* ------------------------------ */
+
+/* HEADER FIJO */
+header, #header2 {
+  z-index: 999;
+  background: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);  
+}
+
+
+.header, #header2 {
+  background: #005fcc;
+  /*  background: #183881;*/
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+}
+
+.header h1,
+#header2 h1 {
+  font-size: 2.2rem;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* NAV BAR */
+#navegacion ul {
+  list-style: none;
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+#navegacion a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+#navegacion a:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ------------------------------ */
+/*         BOTONES                */
+/* ------------------------------ */
+
+.btn-primary {
+  background: #005fcc;
+  color: white;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background: #0047a1;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  transition: 0.3s;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary {
+  background: #b0b2b7;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-secondary:hover {
+  background: #565e6b;
+}
+
+/* ------------------------------ */
+/*       CONTENEDORES Y CARDS     */
+/* ------------------------------ */
+
+.container {
+  width: 90%;
+  max-width: 500px;
+  margin: 40px auto;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Formularios */
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+input:focus {
+  border-color: #005fcc;
+  outline: none;
+}
+
+/* ------------------------------ */
+/*       PÁGINA MATERIAS          */
+/* ------------------------------ */
+
+.logo_sl {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.logo_sl:hover{
+    transform: scale(1.02);
+}
+
+.perfilUsuario {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.perfilUsuario:hover{
+    transform: scale(1.02);
+}
+
+.topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.topbar h2 {
+  font-size: 1.4rem;
+  color: #005fcc;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Tabla de materias */
+#materiasTable, #temasTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+#materiasTable th {
+  background: #005fcc;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+#temasTable th {
+  background: #005fcc;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+#materiasTable td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+#temasTable td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Botón de acciones dentro de la tabla */
+.action-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.edit-btn {
+  background: #ffc107;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #e0a800;
+}
+
+.delete-btn:hover {
+  background: #b52a37;
+}
+
+/* ------------------------------ */
+/*            FOOTER              */
+/* ------------------------------ */
+
+footer {
+  margin-top: 50px;
+  text-align: center;
+  padding: 20px;
+  background: #005fcc;
+  color: white;
+  font-size: 1rem;
+}
+
+
+/* --- FOOTER PEGADO ABAJO --- */
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  margin-top: auto;                  /* Esto empuja el footer al fondo */
+  background: #1a1a1a;
+  color: #f1f1f1;
+  padding: 20px;
+  text-align: center;
+  font-size: 0.95em;
+}
+
+.footer-content {
+  max-width: 900px;
+  margin: auto;
+}
+
+.footer-links {
+  list-style: none;
+  margin: 12px 0 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.footer-links a {
+  color: #9cd3ff;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.footer-links a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+
+.contenedor-columnas {
+  display: flex; /* Alinea los hijos en fila */
+}
+
+.columna {
+  flex: 1; /* Cada columna toma el mismo espacio disponible */
+  padding: 10px; /* Añade espacio interno */
+}
+
+.enlaceAvisoPriv{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: whitesmoke;
+    text-decoration: none;
+    cursor: help;
+}
+
+.enlaceCorreo {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: rgb(126, 126, 126);
+  text-decoration: none;
+}
+
+/* ---------------------------------------------------------------- */
+/*                    ESTILOS PARA SUBTEMAS                         */
+/* ---------------------------------------------------------------- */
+
+/* Contenedor general */
+.container {
+  width: 90%;
+  max-width: 900px;
+  margin: 30px auto;
+}
+
+/* Tarjeta general */
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+  margin-top: 20px;
+}
+
+/* Header */
+.header-right {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+/* Botón volver */
+.btn-ghost {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  position: static;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ------------------------
+ Formularios Agregar-Editar
+ ------------------------*/
+#formBox, #formBoxEdit {
+  margin-bottom: 25px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #f5f7fc;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+#formBox label, #formBoxEdit label {
+  font-weight: bold;
+  color: #005fcc;
+  margin-top: 10px;
+  display: block;
+}
+
+#formBox textarea, #formBoxEdit textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  resize: vertical;
+  min-height: 80px;
+  font-size: 1rem;
+}
+
+#formBox textarea:focus, #formBoxEdit textarea:focus {
+  border-color: #005fcc;
+  outline: none;
+}
+
+/* Botón final de cada formulario (submit/cancelar)*/
+.form-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+/*----------------
+ Tabla de subtemas 
+ ---------------*/
+#elementosTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+#elementosTable th {
+  background: #005fcc;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+#elementosTable td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+/* Al poner el cursor sobre elemento*/
+#elementosTable tbody tr:hover {
+  background: #eef5ff;
+}
+
+/*------------------------
+   Botones de acciones
+ Eliminar, Editar, Cancelar
+------------------------*/
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.edit-btn {
+  background: #ffc107;
+  color: black;
+}
+
+.edit-btn:hover {
+  background: #e0a800;
+}
+
+.delete-btn {
+  background: #dc3545;
+}
+
+.delete-btn:hover {
+  background: #b52a37;
+}
+
+/*-----------------------
+ Mensajes (éxito / error) 
+-----------------------*/
+#messages {
+  margin-top: 20px;
+  padding: 12px;
+  background: #e9f3ff;
+  border-left: 5px solid #005fcc;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  color: #005fcc;
+}
+
+#messages.error {
+  background: #ffe8e8;
+  border-left-color: #cc0000;
+  color: #cc0000;
+}
+
+/* --------------------------------------------- */
+/*        ESTILOS ESPECÍFICOS PARA TEORÍA        */
+/* --------------------------------------------- */
+
+/* Contenedor principal de teoría */
+#teoriaSection {
+  margin-top: 25px;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+
+/* Formulario de teoría */
+#teoriaForm label {
+  font-weight: bold;
+  color: #005fcc;
+  margin-top: 12px;
+  display: block;
+}
+
+#teoriaForm input,
+#teoriaForm textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #f9fafb;
+  transition: border 0.3s;
+}
+
+#teoriaForm input:focus,
+#teoriaForm textarea:focus {
+  border-color: #005fcc;
+  outline: none;
+}
+
+#teoriaForm textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+#editarTeoriaForm input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #f9fafb;
+  transition: border 0.3s;
+}
+
+#editarTeoriaForm textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* Contenido visual de teoría existente */
+#contenidoTeoriaView {
+  background: #f5f7fc;
+  padding: 18px;
+  border-radius: 10px;
+  line-height: 1.6;
+  font-size: 1rem;
+  white-space: pre-wrap;
+  border-left: 4px solid #005fcc;
+}
+
+/* Contenedor de botones cuando la teoría EXISTE */
+.teoria-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+/* Aviso cuando no existe teoría */
+#noTeoriaMessage {
+  padding: 14px;
+  background: #e9f3ff;
+  border-left: 5px solid #005fcc;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #005fcc;
+  margin-bottom: 18px;
+}
+
+/*---------------- 
+ Perfil de Usuario
+ -------------- */
+
+#usuarioTarget {
+    max-width: 820px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+#imgPerfilUsr {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 16px;
+    border: 3px solid #2563eb;
+}
+
+#infoLabel {
+    margin-bottom: 20px;
+    color: #2563eb;
+    font-size: 1.5rem;
+}
+
+#infoUsr {
+    text-align: left;
+    margin: 0 auto 20px auto;
+    width: 100%;
+    max-width: 1300px;
+}
+
+#infoUsr p {
+    margin: 8px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.campo {
+    font-weight: bold;
+    color: #444;
+}
+
+/* Acciones adicionales */
+
+#accionesExtra {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+#accionesExtra button {
+    padding: 10px;
+    font-size: 1rem;
+    margin: 0 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 300px;
+}
+
+/* Botón peligro */
+.peligro {
+  background: #d14343;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.peligro:hover {
+    background: #b91c1c;
+}
+
+.warning-text {
+    margin: 16px 0 20px;
+    padding: 14px 16px;
+
+    background-color: #fff1f2;     
+    border-left: 4px solid #dc2626;  
+
+    color: #7f1d1d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+
+    border-radius: 8px;
+}
+
+.warning-text strong {
+    font-weight: 600;
+}
+
+
+button{
+  margin-top: 4px;
+}
+
+/* --------------
+Elementos ocultos
+-------------- */
+.hidden {
+  display: none !important;
+}
+
+
+/*-----------------
+    Ejercicio     |
+-----------------*/
+
+/* Checkbox alineado */
+.checkbox-area{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
