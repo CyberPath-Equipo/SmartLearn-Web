@@ -1,47 +1,72 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Iniciar sesión</title>
-  <link rel="stylesheet" href="../styles/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="author" content="CyberPath S.A.S.">
+    <title>Iniciar Sesión | Smart Learn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
-  <header class="header">
-    <h1>Smart Learn</h1>
-    <p class="subtitle">Iniciar sesión</p>
-    <button onclick="paginaPrincipal()" class="btn-ghost">Volver a SL</button>
-  </header>
+    <header id="main-header" class="header-top" role="banner">
+        <h1 id="pageTitle">Smart Learn</h1>
+        <p class="subtitle">Iniciar sesión</p>
+        <button onclick="paginaPrincipal()" class="btn-ghost">Volver a SL</button>
+    </header>
 
-  <main class="container">
-    <section class="card">
-      <form id="loginForm" name="formLogIn">
-        <input type="email" id="correo" name="email" placeholder="Correo electrónico" required />
-        <input type="password" id="password" name="password" placeholder="Contraseña" required />
-        <button type="submit" name="btn_submit" class="btn-primary">Entrar</button>
-      </form>
-    </section>
-  </main>
-<footer class="footer">
-      <div class="footer-content">
-          <div class="contenedor-columnas">
-              <div class="columna">
-                  <p>Developed by <b><i>CyberPath</i></b> 2025 &copy;</p>
-                  <br>
-                  <p><a href="mailto:cyberpathcontacto@gmail.com" class="enlaceCorreo">Contacto: cyberpathcontacto@gmail.com</a></p>
-              </div>
-              <div class="columna">
-                  <p><a href="avisoPrivacidad.html" target="_blank" class="enlaceAvisoPriv">Aviso de privacidad</a></p>
-              </div>
-              <div class="columna">
-                  <p>Redes Sociales</p>
-                  <br>
-                  <p><a href="https://instagram.com/cyberpath_oficial/" target="_blank"><img src="../images/icon_instagram.png" width="60" height="60" ></a> &nbsp;&nbsp;&nbsp;
-                  <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank"><img src="../images/icon_youtube.png" width="84.9" height="60" ></a>
-              </div>
-          </div>
-      </div>
-  </footer>
+    <main class="auth-main">
+        <section class="card auth-card">
+            <div class="auth-card-header">
+                <h2>Iniciar Sesión</h2>
+                <p>Accede a tu cuenta de Smart Learn</p>
+            </div>
+            <form id="loginForm" name="formLogIn" class="auth-form">
+                <div class="form-group">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="email" id="correo" name="email" placeholder="ejemplo@correo.com" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required />
+                </div>
+                <button type="submit" name="btn_submit" class="btn-primary auth-submit">Entrar</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>¿Aún no tienes una cuenta? <a href="registroUser.html" class="auth-link">Regístrate aquí</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>CyberPath S.A.S.</h3>
+                <p>Desarrollado por <i>CyberPath</i> &copy; 2026</p>
+                <p><a href="mailto:cyberpathcontacto@gmail.com">cyberpathcontacto@gmail.com</a></p>
+            </div>
+
+            <div class="footer-col">
+                <h3>Recursos</h3>
+                <p><a href="avisoPrivacidad.html">Aviso de privacidad</a></p>
+                <p><a href="smartLearn.html">¿Qué es Smart Learn?</a></p>
+            </div>
+
+            <div class="footer-col">
+                <p><strong>Redes Sociales</strong></p>
+                <div class="social-icons">
+                    <a href="https://instagram.com/cyberpath_oficial/" target="_blank" aria-label="Síguenos en Instagram">
+                        <img src="../images/icon_instagram.png" width="50" alt="Logo de Instagram">
+                    </a>
+                    <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank" aria-label="Visita nuestro canal de YouTube">
+                        <img src="../images/icon_youtube.png" width="70" alt="Logo de YouTube">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-copy">Hecho en México · Smart Learn · CyberPath S.A.S.</p>
+    </footer>
+
 
   <script src="../scripts/login.js"></script>
   <script src="../scripts/script.js"></script>

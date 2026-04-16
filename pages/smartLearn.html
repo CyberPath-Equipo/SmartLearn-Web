@@ -1,188 +1,220 @@
 <!DOCTYPE html>
-<!doctype html>
 <html lang="es">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Smart Learn</title>
-  <link rel="stylesheet" href="../styles/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="author" content="CyberPath S.A.S.">
+    <meta name="description"
+        content="Smart Learn: Plataforma educativa accesible para estudiantes con discapacidad visual. Aprende sin límites con tecnología inclusiva.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Learn | Educación accesible para todos</title>
+    <link rel="stylesheet" href="../styles/styles.css">
 </head>
 
-<style>
-    /* Contenedor flexible para texto + imagen */
-    .info-block {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      align-items: center;
-    }
-
-    .info-block img {
-      width: 260px;
-      max-width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .info-text {
-      flex: 1;
-      min-width: 260px;
-    }
-  </style>
-
 <body>
-    <header id="header2">
-        <h1>Smart Learn</h1>
-        <p class="subtitle">Educación de calidad para <b>todos</b></p>
-        <nav id="navegacion">
-          <ul>
-            <li><a href="login.html">Inicio de sesión</a></li>
-            <li><a href="registroUser.html">Registro de usuario*</a></li>
-            <li><a href="smartLearn.html">Sobre Smart Learn</a></li>
-          </ul>
+    <!-- Skip link para accesibilidad -->
+    <a href="#main-content" class="skip-link">Ir al contenido principal</a>
+
+    <header id="main-header" role="banner">
+        <!-- Parte grande que se ocultará al hacer scroll -->
+        <div class="header-top">
+            <h1>Smart Learn</h1>
+            <p class="subtitle">Educación de calidad para <strong>todos</strong></p>
+        </div>
+
+        <!-- Barra de navegación que queda visible -->
+        <nav id="navegacion" aria-label="Navegación principal">
+            <ul>
+                <li><a href="login.html">Iniciar sesión</a></li>
+                <li><a href="registroUser.html">Registrarse</a></li>
+                <li><a href="smartLearn.html">Sobre nosotros</a></li>
+            </ul>
         </nav>
     </header>
 
-    <main style="padding: 30px; max-width: 950px; margin: auto; line-height: 1.6;">
-
-        <!-- HERO SECTION -->
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Aprende sin límites</h2>
-                <p>La plataforma educativa accesible para personas con discapacidad visual</p>
-                <!-- <a href="registroUser.html" class="hero-btn">Comenzar</a> -->
+    <main id="main-content">
+        <!-- CARRUSEL DE TEMAS -->
+        <section class="topics-carousel-container" aria-label="Navegación de Temas">
+            <button class="carousel-btn prev-btn" aria-label="Anterior">&#10094;</button>
+            <div class="topics-carousel">
+                <a href="#que-es" class="topic-card">
+                    <!-- TODO: Agrega la imagen aquí, colocando su ruta en el src="" -->
+                    <img src="../images/Fondo_Azul_Smart_Learn_logo copy.png" alt="¿Qué es?" class="carousel-img">
+                    <h3>¿Qué es?</h3>
+                </a>
+                <a href="#mision" class="topic-card">
+                    <!-- TODO: Agrega la imagen aquí, colocando su ruta en el src="" -->
+                    <img src="../images/mision_vector.png" alt="Misión" class="carousel-img">
+                    <h3>Misión</h3>
+                </a>
+                <a href="#ofrece" class="topic-card">
+                    <!-- TODO: Agrega la imagen aquí, colocando su ruta en el src="" -->
+                    <img src="../images/educacion_vector.png" alt="¿Qué ofrece?" class="carousel-img">
+                    <h3>¿Qué ofrece?</h3>
+                </a>
+                <a href="#porque-existe" class="topic-card">
+                    <!-- TODO: Agrega la imagen aquí, colocando su ruta en el src="" -->
+                    <img src="../images/pregunta_vector.png" alt="¿Por qué?" class="carousel-img">
+                    <h3>¿Por qué?</h3>
+                </a>
+                <a href="#accesibilidad" class="topic-card">
+                    <!-- TODO: Agrega la imagen aquí, colocando su ruta en el src="" -->
+                    <img src="../images/accesibilidad_vector.png" alt="Accesibilidad" class="carousel-img">
+                    <h3>Accesibilidad</h3>
+                </a>
             </div>
-
-            <!-- Imagen opcional -->
-            <!-- <img src="https://cdn.pixabay.com/photo/2015/01/08/18/26/keyboard-593350_1280.jpg" alt="Estudiante usando tecnología accesible"> -->
+            <button class="carousel-btn next-btn" aria-label="Siguiente">&#10095;</button>
         </section>
 
-        <!-- SECCIÓN 1 -->
-        <section style="margin-bottom: 45px;">
-            <h2 style="font-size: 1.8em; margin-bottom: 10px;">¿Qué es Smart Learn?</h2>
+        <!-- HERO -->
+        <section class="hero" aria-labelledby="hero-title">
+            <h2 id="hero-title">Aprende sin límites</h2>
+            <p style="color: #324378;">Una plataforma educativa 100% accesible
+                diseñada para personas con discapacidad visual.</p>
+        </section>
 
-            <div class="info-block" style="background: #f7f7f7; padding: 18px; border-radius: 8px;">
-                
+
+        <!-- SECCIÓN 1 -->
+        <section aria-labelledby="que-es">
+            <h2 id="que-es">¿Qué es Smart Learn?</h2>
+            <div class="card info-block">
                 <div class="info-text">
                     <p>
-                        Smart Learn es una plataforma educativa accesible creada por CyberPath S.A. de C.V.  
-                        Diseñada especialmente para estudiantes con discapacidad visual, ofrece herramientas 
-                        que permiten un aprendizaje autónomo, intuitivo y seguro.
+                        Smart Learn es una plataforma educativa accesible creada por <strong>CyberPath S.A.S.</strong>
+                        Permite un aprendizaje autónomo, intuitivo y seguro para estudiantes con discapacidad visual.
                     </p>
                 </div>
-
-                <img src="../images/Fondo_Azul_Smart_Learn_logo.png" 
-                     alt="Imagen representativa de aprendizaje accesible">
+                <img src="../images/Fondo_Azul_Smart_Learn_logo.png"
+                    alt="Logo de Smart Learn con fondo azul representando tecnología educativa accesible">
             </div>
         </section>
 
         <!-- SECCIÓN 2 -->
-        <section style="margin-bottom: 45px;">
-            <h2 style="font-size: 1.8em; margin-bottom: 10px;">Nuestra misión</h2>
-
-            <div class="info-block" style="background: #f0faff; padding: 18px; border-radius: 8px;">
-                
-                <img src="../images/misionEducativa.jpg" 
-                     alt="Imagen de misión educativa">
-
+        <section aria-labelledby="mision">
+            <h2 id="mision">Nuestra misión</h2>
+            <div class="card info-block">
+                <img src="../images/misionEducativa.jpg"
+                    alt="Imagen ilustrativa de estudiantes accediendo a educación inclusiva">
                 <div class="info-text">
                     <p>
-                        Brindar acceso a educación de calidad a todas las personas mediante tecnología inclusiva 
-                        que derribe las barreras que enfrentan las personas con discapacidad visual en su proceso de aprendizaje.
+                        Brindar acceso a educación de calidad mediante tecnología inclusiva que elimine barreras de
+                        aprendizaje para todas las personas.
                     </p>
+                    <!--La otra era: Brindar acceso a educación de calidad a todas las personas mediante tecnología inclusiva que derribe las barreras que enfrentan las personas con discapacidad visual en su proceso de aprendizaje. -->
                 </div>
-
             </div>
         </section>
 
         <!-- SECCIÓN 3 -->
-        <section style="margin-bottom: 45px;">
-            <h2 style="font-size: 1.8em; margin-bottom: 10px;">¿Qué ofrece Smart Learn?</h2>
-
-            <div style="background: #f7f7f7; padding: 18px; border-radius: 8px;">
-
-                <div class="info-block">
-                    <div class="info-text">
-                        <ul style="margin-left: 20px;">
-                            <li>Lectura en voz alta y navegación mediante audio.</li>
-                            <li>Reconocimiento de voz para realizar acciones rápidamente.</li>
-                            <li>Contenido teórico y práctico totalmente accesible.</li>
-                            <li>Compatibilidad con teclado Braille y dispositivos especializados.</li>
-                            <li>Retroalimentación personalizada y seguimiento del progreso.</li>
-                        </ul>
-                    </div>
-
-                    <img src="../images/tecnologiaInclusiva.jpeg" 
-                         alt="Imagen sobre tecnología inclusiva">
+        <section aria-labelledby="ofrece">
+            <h2 id="ofrece">¿Qué ofrece Smart Learn?</h2>
+            <div class="card info-block">
+                <div class="info-text">
+                    <ul>
+                        <li>Lectura en voz alta y navegación mediante audio.</li>
+                        <li>Reconocimiento y control por voz.</li>
+                        <li>Contenido totalmente accesible.</li>
+                        <li>Compatibilidad con dispositivos Braille.</li>
+                        <li>Seguimiento académico personalizado.</li>
+                    </ul>
                 </div>
-
+                <img src="../images/tecnologiaInclusiva.jpeg"
+                    alt="Ilustración de tecnologías inclusivas: voz, braille y lectores de pantalla">
             </div>
         </section>
 
         <!-- SECCIÓN 4 -->
-        <section style="margin-bottom: 45px;">
-            <h2 style="font-size: 1.8em; margin-bottom: 10px;">¿Por qué desarrollamos esta plataforma?</h2>
-
-            <div class="info-block" style="background: #fff7e6; padding: 18px; border-radius: 8px;">
-                
-                <img src="../images/accesibilidadEducativa.jpg" 
-                     alt="Datos de accesibilidad educativa">
-
+        <section aria-labelledby="porque-existe">
+            <h2 id="porque-existe">¿Por qué existe Smart Learn?</h2>
+            <div class="card info-block">
+                <img src="../images/accesibilidadEducativa.png"
+                    alt="Estudiantes en México superando barreras educativas gracias a la tecnología">
                 <div class="info-text">
                     <p>
-                        En México, miles de estudiantes con discapacidad visual enfrentan dificultades para acceder 
-                        a materiales educativos adecuados.  
-                        Smart Learn surge como una solución basada en investigaciones del INEGI y otras fuentes confiables
-                        que evidencian la necesidad urgente de herramientas verdaderamente accesibles.
+                        Miles de estudiantes en México enfrentan dificultades diarias para acceder a educación de
+                        calidad.
+                        Smart Learn nace para cambiar esa realidad con herramientas tecnológicas accesibles.
                     </p>
                 </div>
-
             </div>
         </section>
 
         <!-- SECCIÓN 5 -->
-        <section style="margin-bottom: 45px;">
-            <h2 style="font-size: 1.8em; margin-bottom: 10px;">Accesibilidad ante todo</h2>
-
-            <div class="info-block" style="background: #eaf9ea; padding: 18px; border-radius: 8px;">
-
+        <section aria-labelledby="accesibilidad">
+            <h2 id="accesibilidad">Accesibilidad ante todo</h2>
+            <div class="card info-block">
                 <div class="info-text">
                     <p>
-                        La plataforma está diseñada siguiendo estándares de accesibilidad digital, permitiendo que cualquier usuario,  
-                        con o sin discapacidad visual, pueda navegarla con facilidad, ya sea mediante audio, teclado, 
-                        dispositivos asistivos o controles tradicionales.
+                        Totalmente compatible con lectores de pantalla, navegación por teclado, comandos de voz
+                        y dispositivos asistivos. Diseñada desde cero pensando en la inclusión.
                     </p>
                 </div>
-
-                <img src="../images/accesibilidadDigital.jpg" 
-                     alt="Representación de accesibilidad digital">
-
+                <img src="../images/accesibilidadDigital.jpg"
+                    alt="Iconos representando accesibilidad digital: lector de pantalla, braille y teclado">
             </div>
         </section>
 
     </main>
 
-  <footer class="footer">
-      <div class="footer-content">
-          <div class="contenedor-columnas">
-              <div class="columna">
-                  <p>Developed by <b><i>CyberPath</i></b> 2025 &copy;</p>
-                  <br>
-                  <p><a href="mailto:cyberpathcontacto@gmail.com" class="enlaceCorreo">Contacto: cyberpathcontacto@gmail.com</a></p>
-              </div>
-              <div class="columna">
-                  <p><a href="avisoPrivacidad.html" target="_blank" class="enlaceAvisoPriv">Aviso de privacidad</a></p>
-              </div>
-              <div class="columna">
-                  <p>Redes Sociales</p>
-                  <br>
-                  <p><a href="https://instagram.com/cyberpath_oficial/" target="_blank"><img src="../images/icon_instagram.png" width="60" height="60" ></a> &nbsp;&nbsp;&nbsp;
-                  <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank"><img src="../images/icon_youtube.png" width="84.9" height="60" ></a>
-              </div>
-          </div>
-      </div>
-  </footer>
+    <footer role="contentinfo">
+        <!--<iframe src="footer.html" title="Footer" frameborder="0" width="100%" height="263px"></iframe>
+        hay que ver cómo usar un solo footer para todas las páginas-->
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>CyberPath S.A.S.</h3>
+                <p>Desarrollado por <i>CyberPath</i> &copy; 2026</p>
+                <p><a href="mailto:cyberpathcontacto@gmail.com">cyberpathcontacto@gmail.com</a></p>
+            </div>
 
-    <script src="../scripts/script.js"></script>
+            <div class="footer-col">
+                <h3>Recursos</h3>
+                <p><a href="avisoPrivacidad.html">Aviso de privacidad</a></p>
+                <p><a href="smartLearn.html">¿Qué es Smart Learn?</a></p>
+            </div>
+
+            <div class="footer-col">
+                <p><strong>Redes Sociales</strong></p>
+                <div class="social-icons">
+                    <a href="https://instagram.com/cyberpath_oficial/" target="_blank"
+                        aria-label="Síguenos en Instagram">
+                        <img src="../images/icon_instagram.png" width="50" alt="Logo de Instagram">
+                    </a>
+                    <a href="https://www.youtube.com/@CyberPath_oficial" target="_blank"
+                        aria-label="Visita nuestro canal de YouTube">
+                        <img src="../images/icon_youtube.png" width="70" alt="Logo de YouTube">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-copy">Hecho en México · Smart Learn · CyberPath S.A.S.</p>
+    </footer>
+
+    <script src="../scripts/carousel.js"></script>
+    <!--Script para el header y cuando se hace scroll -->
+    <script>
+        const header = document.getElementById('main-header');
+        const body = document.body;
+
+        window.addEventListener('scroll', () => {
+            // Calculamos la altura actual del header para compensar exactamente ese espacio
+            const headerHeight = header.offsetHeight;
+
+            if (window.scrollY > 100) {
+                if (!header.classList.contains('scrolled')) {
+                    header.classList.add('scrolled');
+                    // Añadimos al body el espacio que el header va a "perder"
+                    // Ajusta este número según cuánto mide tu .header-top (ej: 60px)
+                    body.style.paddingTop = '40px';
+                }
+            } else {
+                if (header.classList.contains('scrolled')) {
+                    header.classList.remove('scrolled');
+                    body.style.paddingTop = '0';
+                }
+            }
+        });
+    </script>
+
 </body>
+
 </html>

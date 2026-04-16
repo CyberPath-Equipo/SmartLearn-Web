@@ -55,10 +55,10 @@ function mostrarMaterias(materias) {
             <td>${materia.nombre}</td>
             <td>${materia.descripcion ?? "Sin descripción"}</td>
             <td>
-                <button class="btn-small btn-edit" onclick="mostrarFormEdit(${materia.id}, '${materia.nombre}', '${materia.descripcion ?? ""}')">
+                <button class="btn-edit" onclick="mostrarFormEdit(${materia.id}, '${materia.nombre}', '${materia.descripcion ?? ""}')">
                     Editar
                 </button>
-                <button class="btn-small btn-delete" onclick="eliminarMateria(${materia.id})">
+                <button class="btn-delete" onclick="eliminarMateria(${materia.id})">
                     Eliminar
                 </button>
             </td>
@@ -118,8 +118,19 @@ formularioMateria.addEventListener("submit", async (e) => {
 
     const nombre = document.getElementById("nombreMateria").value.trim();
     const descripcion = document.getElementById("descripcion").value.trim();
+    const slug = nombre.toLowerCase().replace(/\s+/g, "-");
 
-    const data = { nombre, descripcion };
+    if (nombre === "") {
+        alert("El nombre no puede estar vacío");
+        return;
+    }
+
+    if (descripcion === "") {
+        alert("La descripción no puede estar vacía");
+        return;
+    }
+
+    const data = { nombre, descripcion, slug };
 
     try {
         // Crear la materia
@@ -186,7 +197,7 @@ formularioEdit.addEventListener("submit", async (e) => {
     }
 
     // Confirmación por seguridad
-    if (!confirm("Seguro que quiere mantener los cambios en la materia?")){
+    if (!confirm("Seguro que quiere mantener los cambios en la materia?")) {
         return;
     }
 
@@ -265,15 +276,16 @@ async function eliminarMateria(id) {
 
 // Delegación de eventos para captar clicks en cualquier btn_idMateria
 document.addEventListener("click", async (e) => {
-        if (e.target.classList.contains("btn_idMateria")) {
+    if (e.target.classList.contains("btn_idMateria")) {
 
         const idMateria = e.target.id;
         const nombreMateria = e.target.dataset.nombre;
+        const slug = nombreMateria.toLowerCase().replace(/\s+/g, "-");
 
         localStorage.setItem("idMateria", idMateria);
         localStorage.setItem("nombreMateria", nombreMateria);
 
-        window.location.href = `tema.html?idMateria=${idMateria}`;
+        window.location.href = `tema.html?idMateria=${idMateria}&slug=${slug}`;
     }
 });
 
