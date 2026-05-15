@@ -1,0 +1,40 @@
+<template>
+  <div class="registroUser-view">
+
+        <section class="card auth-card">
+            <div class="auth-card-header">
+                <h2>Crea tu Cuenta</h2>
+                <p>Únete a Smart Learn y comienza a aprender</p>
+            </div>
+            <form id="loginForm" name="formLogIn" class="auth-form">
+                <div class="form-group">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" placeholder="Tu nombre y apellidos" required />
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="email" id="correo" placeholder="ejemplo@correo.com" required />
+                </div>
+                <div class="form-group">
+                    <label for="contrasena">Contraseña</label>
+                    <input type="password" id="contrasena" placeholder="Crea una contraseña segura" required />
+                </div>
+                <button type="submit" class="btn-primary auth-submit">Registrarme</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>¿Ya tienes una cuenta? <a href="/login" class="auth-link">Inicia sesión</a></p>
+            </div>
+        </section>
+    
+  </div>
+</template>
+
+<script setup>
+import { useRouter } from 'vue-router';
+const router = useRouter();
+</script>
+
+<style scoped>
+/* Estilos específicos de la vista */
+</style>

@@ -1,0 +1,119 @@
+<template>
+  <div class="view-container">
+    <!-- ================= CREAR TEORÍA ================= -->
+        <section id="crearTeoriaSection" class="card" style="display:none;">
+            <h2>Crear teoría</h2>
+
+            <form id="teoriaForm">
+                <div class="form-group">
+                    <label for="tituloIngresado">Título de la teoría</label>
+                    <input type="text" id="tituloIngresado" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contenidoIngresado">Contenido</label>
+                    <textarea id="contenidoIngresado" rows="6" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary full-width">
+                    Crear teoría
+                </button>
+            </form>
+        </section>
+
+        <!-- ================= EDITAR TEORÍA ================= -->
+        <section id="editarTeoriaForm" class="card" style="display:none;">
+            <h2>Editar teoría</h2>
+
+            <form id="editarTeoriaForm">
+
+                <div class="form-group">
+                    <label for="editarTitulo">Título de la teoría</label>
+                    <input
+                        type="text"
+                        id="editarTitulo"
+                        name="editarTitulo"
+                        placeholder="Título de la teoría"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="editarContenido">Contenido</label>
+                    <textarea
+                        id="editarContenido"
+                        name="editarContenido"
+                        rows="8"
+                        placeholder="Edita el contenido de la teoría..."
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="submit" class="btn-primary">
+                        Guardar cambios
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        onclick="cargarTeoria()"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="peligro"
+                        onclick="eliminarTeoria()"
+                    >
+                        Eliminar teoría
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+
+        <!-- ================= TEORÍA + EJERCICIOS ================= -->
+        <section id="teoriaSection" class="card" style="display:none;">
+            <h2 id="tituloTeoriaExistente"></h2>
+
+            <p id="contenidoTeoriaExistente" class="texto-teoria"></p>
+
+            <div class="action-buttons">
+                <button class="btn-secondary" onclick="editarTeoria()">Editar teoría</button>
+                <button class="peligro" onclick="eliminarTeoria()">Eliminar teoría</button>
+            </div>
+
+            <hr style="margin-top: 1%;">
+
+            <!-- ================= EJERCICIOS ================= -->
+            <h3>Ejercicios</h3>
+
+            <div id="tableContainer">
+                <table  id="elementosTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ejerciciosBody"></tbody>
+                </table>
+            </div>
+
+            <div class="action-buttons" style="margin-top:15px;">
+                <button class="btn-secondary" onclick="crearEjercicio()" style="margin-top: 2%;">
+                    + Crear ejercicio
+                </button>
+            </div>
+        </section>
+  </div>
+</template>
+
+<script setup>
+</script>
+

@@ -1,0 +1,67 @@
+<template>
+  <div class="view-container">
+    <section class="card">
+
+      <!-- Formulario para agregar tema -->
+      <div id="formBox" class="hidden" role="region">
+        <form id="temaForm">
+
+          <label for="nombreTema">Nombre del tema</label>
+          <input id="nombreTema" name="nombreTema" type="text" placeholder="Nombre del tema" required />
+
+          <label for="descripcionTema">Descripción</label>
+          <textarea id="descripcionTema" name="descripcionTema" placeholder="Descripción del tema"></textarea>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Guardar</button>
+            <button type="button" class="btn-secondary" onclick="ocultarForm()">Cancelar</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Formulario para editar tema -->
+      <div id="formBoxEdit" class="hidden" role="region">
+        <form id="editTemaForm">
+
+          <input type="hidden" id="editId" />
+
+          <label for="editNombre">Nombre</label>
+          <input id="editNombre" name="editNombre" type="text" required />
+
+          <label for="editDescripcion">Descripción</label>
+          <textarea id="editDescripcion" name="editDescripcion"></textarea>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Actualizar</button>
+            <button type="button" class="btn-secondary" onclick="ocultarFormEdit()">Cancelar</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Tabla de temas -->
+      <div id="tableContainer">
+        <table id="temasTable" class="full-width">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="temasBody">
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mensajes -->
+      <div id="messages" role="status" aria-live="polite" class="hidden"></div>
+
+    </section>
+  </div>
+</template>
+
+<script setup>
+</script>
+

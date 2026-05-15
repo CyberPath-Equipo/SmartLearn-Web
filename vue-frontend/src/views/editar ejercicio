@@ -1,0 +1,38 @@
+<template>
+  <div class="view-container">
+    <section class="card">
+            <h2>Edicion de teoria</h2>
+            <form id="formEditarEjercicio">
+                <input type="hidden" id="idEjercicio">
+
+                <div class="campo">
+                    <label for="nombre">Nombre del ejercicio</label>
+                    <input type="text" id="nombre" required>
+                </div>
+
+                <div class="acciones">
+                    <button type="submit" class="peligro">Guardar cambios</button>
+                    <button type="button" class="btn-secondary" onclick="volver()">Cancelar</button>
+                </div>
+            </form>
+
+            <h2 style="margin-top: 50px;">Preguntas</h2>
+            <div id="tableContainer">
+                <table  id="elementosTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Enunciado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ejerciciosBody"></tbody>
+                </table>
+            </div>
+        </section>
+  </div>
+</template>
+
+<script setup>
+</script>
+

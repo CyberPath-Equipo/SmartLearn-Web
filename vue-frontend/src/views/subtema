@@ -1,0 +1,61 @@
+<template>
+  <div class="view-container">
+    <section class="card">
+
+    <!-- Formulario agregar subtema -->
+    <div id="formBox" class="hidden" role="region">
+      <form id="subtemaForm">
+
+        <label for="nombreSubtema">Nombre del subtema</label>
+        <input id="nombreSubtema" name="nombreSubtema" type="text" placeholder="Nombre del subtema" required />
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Guardar</button>
+          <button type="button" class="btn-secondary" onclick="ocultarForm()">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Formulario para editar subtema -->
+    <div id="formBoxEdit" class="hidden" role="region">
+      <form id="editSubtemaForm">
+
+        <input type="hidden" id="editId" />
+
+        <label for="editNombre">Nombre</label>
+        <input id="editNombre" name="editNombre" type="text" required />
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Actualizar</button>
+          <button type="button" class="btn-secondary" onclick="ocultarFormEdit()">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Tabla de subtemas -->
+    <div id="tableContainer">
+      <table id="elementosTable" class="full-width">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="subtemasBody">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mensajes -->
+    <div id="messages" role="status" aria-live="polite" class="hidden"></div>
+
+  </section>
+  </div>
+</template>
+
+<script setup>
+</script>
+
