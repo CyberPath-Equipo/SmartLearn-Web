@@ -7,6 +7,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/smartlearn'
+    },
+    {
       path: '/auth',
       component: AuthLayout,
       children: [
@@ -30,11 +34,11 @@ const router = createRouter({
       ]
     },
     {
-      path: '/sl-layout',
+      path: '/smartlearn',
       component: () => import('../components/NavBarPrincipal.vue'),
       children: [
         {
-          path: '/smartlearn',
+          path: '',
           name: 'smartlearn',
           component: () => import('../views/SmartlearnView.vue')
         }
@@ -46,7 +50,7 @@ const router = createRouter({
       meta: { requiresAuth: true }, // Toda esta sección requiere auth
       children: [
         {
-          path: '',
+          path: '/dashboard',
           name: 'dashboard',
           component: () => import('../views/DashboardView.vue')
         },
@@ -56,17 +60,17 @@ const router = createRouter({
           component: () => import('../views/MateriasView.vue')
         },
         {
-          path: 'tema',
+          path: 'tema/:idMateria/:nombreMateria',
           name: 'tema',
           component: () => import('../views/TemaView.vue')
         },
         {
-          path: 'subtema',
+          path: 'subtema/:idTema/:nombreTema',
           name: 'subtema',
           component: () => import('../views/SubtemaView.vue')
         },
         {
-          path: 'teoria',
+          path: 'teoria/:idSubtema/:nombreSubtema',
           name: 'teoria',
           component: () => import('../views/TeoriaView.vue')
         },
@@ -98,8 +102,8 @@ const router = createRouter({
         {
           path: 'usuario',
           name: 'usuario',
-          component: () => import('../views/UsuarioView.vue'),
-          meta: { roles: ['ADMIN'] } // Solo para administradores
+          component: () => import('../views/UsuarioView.vue')
+          // Accesible para cualquier usuario autenticado (requiresAuth heredado del padre)
         }
       ]
     }
@@ -110,24 +114,24 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
   const isAuthenticated = authStore.isAuthenticated;
-  
+
   // Validar si requiere ser invitado (login, registro)
   if (to.meta.requiresGuest && isAuthenticated) {
-    return next('/');
+    return next('/dashboard');
   }
 
   // Validar si requiere autenticación (Dashboard y paneles)
   if (to.meta.requiresAuth && !isAuthenticated) {
     return next('/login');
   }
-  
+
   // Opcional: si la ruta requiere autenticación, verificamos que el token siga vivo
   if (to.meta.requiresAuth && isAuthenticated) {
     const isValid = await authStore.checkAuth();
     if (!isValid) {
       return next('/login');
     }
-    
+
     // Verificación de Roles (si la ruta tiene restricción específica)
     if (to.meta.roles && to.meta.roles.length > 0) {
       const isAuthorized = to.meta.roles.some(role => {
@@ -135,10 +139,10 @@ router.beforeEach(async (to, from, next) => {
         if (role === 'DOCENTE') return authStore.isDocente;
         return false;
       });
-      
+
       if (!isAuthorized) {
         // Redirigir al dashboard general si no tiene permisos
-        return next('/');
+        return next('/dashboard');
       }
     }
   }

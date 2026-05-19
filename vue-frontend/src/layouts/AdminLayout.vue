@@ -4,7 +4,7 @@
     
     <nav class="admin-nav" v-if="authStore.isAuthenticated">
       <ul class="admin-menu">
-        <li><router-link to="/">Dashboard</router-link></li>
+        <li><router-link to="/dashboard">Dashboard</router-link></li>
         
         <!-- Módulos para DOCENTES -->
         <li v-if="authStore.isDocente || authStore.isAdmin"><router-link to="/materias">Materias</router-link></li>

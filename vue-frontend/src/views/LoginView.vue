@@ -52,7 +52,7 @@ const handleLogin = async () => {
   loading.value = false;
   
   if (result.success) {
-    router.push('/');
+    router.push('/dashboard');
   } else {
     errorMessage.value = result.message;
   }
