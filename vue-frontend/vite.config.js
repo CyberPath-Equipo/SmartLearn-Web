@@ -10,7 +10,7 @@ export default defineConfig({
         target: 'http://marco-des.mexicocentral.cloudapp.azure.com',
         changeOrigin: true,
         secure: false
-      }
+       }
     }
   }
 })
