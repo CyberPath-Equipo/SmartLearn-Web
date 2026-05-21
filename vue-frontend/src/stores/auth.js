@@ -13,6 +13,8 @@ export const useAuthStore = defineStore('auth', {
           correo,
           contrasena
         });
+        console.log(response.data);
+        
         const data = response.data;
 
         this.token = data.token;
@@ -31,12 +33,20 @@ export const useAuthStore = defineStore('auth', {
 
         return { success: true };
       } catch (error) {
-        return { success: false, message: 'Usuario o contraseña incorrectas' };
+        console.error(error);
+        return {
+          success: false,
+          message:
+            error.response?.data?.error ||
+            error.response?.data ||
+            error.message
+        };
       }
     },
 
     async getProfile(idUsuario) {
       try {
+        console.log('Obteniendo perfil...');
         const response = await api.get(`/usuario/${idUsuario}`, {
           headers: {
             Authorization: `Bearer ${this.token}`
