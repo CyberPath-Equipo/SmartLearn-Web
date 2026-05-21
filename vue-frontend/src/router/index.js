@@ -10,47 +10,36 @@ const router = createRouter({
       path: '/',
       redirect: '/smartlearn'
     },
-    {
-      path: '/auth',
-      component: AuthLayout,
-      children: [
-        {
-          path: '/login',
-          name: 'login',
-          component: () => import('../views/LoginView.vue'),
-          meta: { requiresGuest: true }
-        },
-        {
-          path: '/registro',
-          name: 'registro',
-          component: () => import('../views/RegistrouserView.vue'),
-          meta: { requiresGuest: true }
-        },
-        {
-          path: '/privacidad',
-          name: 'privacidad',
-          component: () => import('../views/AvisoprivacidadView.vue')
-        }
-      ]
-    },
-    {
-      path: '/smartlearn',
-      component: () => import('../components/NavBarPrincipal.vue'),
-      children: [
-        {
-          path: '',
-          name: 'smartlearn',
-          component: () => import('../views/SmartlearnView.vue')
-        }
-      ]
-    },
+      {
+    path: '/auth',
+    component: AuthLayout,
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('../views/LoginView.vue'),
+        meta: { requiresGuest: true }
+      },
+      {
+        path: 'registro',
+        name: 'registro',
+        component: () => import('../views/RegistrouserView.vue'),
+        meta: { requiresGuest: true }
+      },
+      {
+        path: 'privacidad',
+        name: 'privacidad',
+        component: () => import('../views/AvisoprivacidadView.vue')
+      }
+    ]
+  },
     {
       path: '/',
       component: AdminLayout,
       meta: { requiresAuth: true }, // Toda esta sección requiere auth
       children: [
         {
-          path: '/dashboard',
+          path: 'dashboard',
           name: 'dashboard',
           component: () => import('../views/DashboardView.vue')
         },
@@ -122,14 +111,14 @@ router.beforeEach(async (to, from, next) => {
 
   // Validar si requiere autenticación (Dashboard y paneles)
   if (to.meta.requiresAuth && !isAuthenticated) {
-    return next('/login');
+    return next('/auth/login');
   }
 
   // Opcional: si la ruta requiere autenticación, verificamos que el token siga vivo
   if (to.meta.requiresAuth && isAuthenticated) {
     const isValid = await authStore.checkAuth();
     if (!isValid) {
-      return next('/login');
+      return next('/auth/login');
     }
 
     // Verificación de Roles (si la ruta tiene restricción específica)
