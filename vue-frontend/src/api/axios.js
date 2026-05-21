@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/smartlearn/api',
+  baseURL: '/api',
   headers: {
     'X-Client-Type': 'mobile'
   }

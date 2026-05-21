@@ -12,12 +12,13 @@
       </div>
 
       <nav id="navegacion" role="navigation" aria-label="Navegación principal">
-        <ul>
-          <li><router-link to="/login">Inicio de sesión</router-link></li>
-          <li><router-link to="/registro">Registro de usuario</router-link></li>
-          <li><router-link to="/smartlearn">Sobre Smart Learn</router-link></li>
-        </ul>
-      </nav>
+         <ul>
+           <li><router-link to="/login">Inicio de sesión</router-link></li>
+           <li><router-link to="/registro">Registro de usuario</router-link></li>
+           <li><router-link to="/smartlearn">Sobre Smart Learn</router-link></li>
+           <li><router-link to="/smartlearn/movil">Sobre Smart Learn Móvil</router-link></li>
+         </ul>
+       </nav>
     </header>
 
     <main class="auth-main">

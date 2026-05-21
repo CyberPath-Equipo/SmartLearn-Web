@@ -41,6 +41,11 @@ const router = createRouter({
           path: '',
           name: 'smartlearn',
           component: () => import('../views/SmartlearnView.vue')
+        },
+        {
+          path: 'movil',
+          name: 'smartlearn-movil',
+          component: () => import('../views/SmartlearnMovilView.vue')
         }
       ]
     },
