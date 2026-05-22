@@ -45,8 +45,7 @@ const contrasena = ref('');
 const errorMessage = ref('');
 const successMessage = ref('');
 
-const handleRegister = async (event) => {
-  event.preventDefault();
+const handleRegister = async () => {
   errorMessage.value = '';
   successMessage.value = '';
 
