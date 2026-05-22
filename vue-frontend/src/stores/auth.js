@@ -46,7 +46,11 @@ export const useAuthStore = defineStore('auth', {
 
     async register(usuarioDto) {
       try {
-        const response = await api.post('/usuario/registro', usuarioDto);
+        const response = await api.post('/usuario/registro', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(usuarioDto)
+        });
         return {
           success: true,
           data: response.data
