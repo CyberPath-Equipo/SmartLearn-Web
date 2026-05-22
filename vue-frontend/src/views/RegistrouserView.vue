@@ -25,7 +25,7 @@
             <div v-if="successMessage" class="auth-success">{{ successMessage }}</div>
             
             <div class="auth-footer">
-                <p>¿Ya tienes una cuenta? <a href="/login" class="auth-link">Inicia sesión</a></p>
+                <p>¿Ya tienes una cuenta? <router-link to="/auth/login" class="auth-link">Inicia sesión</router-link></p>
             </div>
         </section>
     
@@ -50,9 +50,10 @@ const handleRegister = async () => {
   successMessage.value = '';
 
   const payload = {
-    nombre: nombre.value,
+    nombreCuenta: nombre.value,
     correo: correo.value,
-    contrasena: contrasena.value
+    contrasena: contrasena.value,
+    idRol: 3 // Rol predertiminado para docente
   };
 
   const result = await authStore.register(payload);
