@@ -10,29 +10,45 @@ const router = createRouter({
       path: '/',
       redirect: '/smartlearn'
     },
-      {
-    path: '/auth',
-    component: AuthLayout,
-    children: [
-      {
-        path: 'login',
-        name: 'login',
-        component: () => import('../views/LoginView.vue'),
-        meta: { requiresGuest: true }
-      },
-      {
-        path: 'registro',
-        name: 'registro',
-        component: () => import('../views/RegistrouserView.vue'),
-        meta: { requiresGuest: true }
-      },
-      {
-        path: 'privacidad',
-        name: 'privacidad',
-        component: () => import('../views/AvisoprivacidadView.vue')
-      }
-    ]
-  },
+    {
+      path: '/auth',
+      component: AuthLayout,
+      children: [
+        {
+          path: '/login',
+          name: 'login',
+          component: () => import('../views/LoginView.vue'),
+          meta: { requiresGuest: true }
+        },
+        {
+          path: '/registro',
+          name: 'registro',
+          component: () => import('../views/RegistrouserView.vue'),
+          meta: { requiresGuest: true }
+        },
+        {
+          path: '/privacidad',
+          name: 'privacidad',
+          component: () => import('../views/AvisoprivacidadView.vue')
+        }
+      ]
+    },
+    {
+      path: '/smartlearn',
+      component: () => import('../components/NavBarPrincipal.vue'),
+      children: [
+        {
+          path: '',
+          name: 'smartlearn',
+          component: () => import('../views/SmartlearnView.vue')
+        },
+        {
+          path: 'movil',
+          name: 'smartlearn-movil',
+          component: () => import('../views/SmartlearnMovilView.vue')
+        }
+      ]
+    },
     {
       path: '/',
       component: AdminLayout,
