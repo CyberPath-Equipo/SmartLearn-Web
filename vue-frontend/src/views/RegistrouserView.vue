@@ -23,7 +23,7 @@
       <div v-if="successMessage" class="auth-success">{{ successMessage }}</div>
       
       <div class="auth-footer">
-          <p>¿Ya tienes una cuenta? <router-link to="/auth/login" class="auth-link">Inicia sesión</router-link></p>
+          <p>¿Ya tienes una cuenta? <router-link to="/login" class="auth-link">Inicia sesión</router-link></p>
       </div>
   </section>
 </template>
@@ -42,33 +42,21 @@ const errorMessage = ref('');
 const successMessage = ref('');
 
 const handleRegister = async () => {
-  errorMessage.value = '';
-  successMessage.value = '';
+  console.log("CLICK FUNCIONA");
 
-  const payload = {
-    nombreCuenta: nombre.value,
-    correo: correo.value,
-    contrasena: contrasena.value,
-    idRol: 3 // Rol predertiminado para docente
-  };
+  try {
+    const response = await api.post('/usuario/registro', {
+      nombreCuenta: nombre.value,
+      correo: correo.value,
+      contrasena: contrasena.value,
+      idRol: 3
+    });
 
-  const result = await authStore.register(payload);
+    console.log(response.data);
 
-  if (!result.success) {
-    errorMessage.value = result.message || 'No se pudo registrar el usuario';
-    return;
+  } catch (e) {
+    console.error(e);
   }
-
-  // Guarda al usuario en local storage
-  if (result.data && result.data.nombreCuenta) {
-    localStorage.setItem("usuario", result.data.nombreCuenta);
-  }
-
-  successMessage.value = result.data?.message || 'Registro exitoso. Revisa tu correo para verificar tu cuenta.';
-  // Redirigir al login después de un registro exitoso
-  setTimeout(() => {
-    router.push('/auth/login');
-  }, 1200);
 };
 </script>
 
