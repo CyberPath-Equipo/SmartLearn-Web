@@ -40,6 +40,7 @@ const correo = ref('');
 const contrasena = ref('');
 const errorMessage = ref('');
 const successMessage = ref('');
+import api from '../services/api';
 
 const handleRegister = async () => {
   console.log("CLICK FUNCIONA");
