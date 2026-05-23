@@ -51,7 +51,7 @@ const handleRegister = async () => {
       idRol: 2
     });
 
-    if (response.status === 201 || response.status === 202) {
+    if (!response.data.error) {
       router.push('/auth/login');
     } else {
       errorMessage.value = 'Error en el registro. Por favor, intenta nuevamente.';
