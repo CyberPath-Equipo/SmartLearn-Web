@@ -40,7 +40,7 @@ const correo = ref('');
 const contrasena = ref('');
 const errorMessage = ref('');
 const successMessage = ref('');
-import api from '../services/api';
+import api from '../api/axios';
 
 const handleRegister = async () => {
   console.log("CLICK FUNCIONA");
