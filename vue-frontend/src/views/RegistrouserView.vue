@@ -20,7 +20,6 @@
           <button type="submit" class="btn-primary auth-submit">Registrarme</button>
       </form>
       <div v-if="errorMessage" class="auth-error">{{ errorMessage }}</div>
-      <div v-if="successMessage" class="auth-success">{{ successMessage }}</div>
       
       <div class="auth-footer">
           <p>¿Ya tienes una cuenta? <router-link to="/login" class="auth-link">Inicia sesión</router-link></p>
@@ -39,7 +38,6 @@ const nombre = ref('');
 const correo = ref('');
 const contrasena = ref('');
 const errorMessage = ref('');
-const successMessage = ref('');
 import api from '../api/axios';
 
 const handleRegister = async () => {
@@ -50,19 +48,16 @@ const handleRegister = async () => {
       nombreCuenta: nombre.value,
       correo: correo.value,
       contrasena: contrasena.value,
-      idRol: 3
+      idRol: 2
     });
 
-    if (response.status === 201) {
-      successMessage.value = 'Registro exitoso. Redirigiendo al inicio de sesión...';
-      setTimeout(() => {
-        router.push('/login');
-      }, 2000);
+    if (response.status === 201 || response.status === 202) {
+      router.push('/auth/login');
     } else {
       errorMessage.value = 'Error en el registro. Por favor, intenta nuevamente.';
     }
-
   } catch (e) {
+    errorMessage.value = e.response?.data?.error || 'Error en el registro. Por favor, intenta nuevamente.';
     console.error(e);
   }
 };
@@ -79,16 +74,5 @@ const handleRegister = async () => {
   text-align: center;
   font-size: 0.95rem;
   border: 1px solid #f5c6cb;
-}
-.auth-success {
-  color: #155724;
-  background-color: #d4edda;
-  padding: 12px;
-  border-radius: 8px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-align: center;
-  font-size: 0.95rem;
-  border: 1px solid #c3e6cb;
 }
 </style>
