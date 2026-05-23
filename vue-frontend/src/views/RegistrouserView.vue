@@ -53,7 +53,14 @@ const handleRegister = async () => {
       idRol: 3
     });
 
-    console.log(response.data);
+    if (response.status === 201) {
+      successMessage.value = 'Registro exitoso. Redirigiendo al inicio de sesión...';
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+    } else {
+      errorMessage.value = 'Error en el registro. Por favor, intenta nuevamente.';
+    }
 
   } catch (e) {
     console.error(e);
