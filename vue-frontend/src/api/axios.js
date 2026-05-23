@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://marco-des.mexicocentral.cloudapp.azure.com/backend/smartlearn/api',
+  baseURL: 'http://marco-des.mexicocentral.cloudapp.azure.com/smartlearn/api',
   headers: {
     'X-Client-Type': 'mobile'
   }

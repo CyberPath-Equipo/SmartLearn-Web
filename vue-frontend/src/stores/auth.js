@@ -46,8 +46,6 @@ export const useAuthStore = defineStore('auth', {
 
     async register(usuarioDto) {
       console.log("Entró a handleRegister");
-      console.log(authStore);
-      console.log(authStore.register);
       try {
         const response = await api.post('/usuario/registro', usuarioDto);
         return {
