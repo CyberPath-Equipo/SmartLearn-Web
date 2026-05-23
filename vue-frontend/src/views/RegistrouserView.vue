@@ -52,7 +52,7 @@ const handleRegister = async () => {
     });
 
     if (!response.data.error) {
-      router.push('/web/login');
+      router.push('/login');
     } else {
       errorMessage.value = 'Error en el registro. Por favor, intenta nuevamente.';
     }
