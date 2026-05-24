@@ -43,7 +43,7 @@
       <h2 id="que-es">¿Qué es Smart Learn?</h2>
       <div class="card info-block">
         <div class="info-text">
-          <p>Smart Learn es una plataforma educativa accesible creada por <strong>CyberPath S.A. de C.V.</strong> Diseñada especialmente para estudiantes con discapacidad visual, ofrece herramientas que permiten un aprendizaje autónomo, intuitivo y seguro.</p>
+          <p>Smart Learn es una plataforma educativa accesible creada por <strong>CyberPath S.A.S</strong> Diseñada especialmente para estudiantes con discapacidad visual, ofrece herramientas que permiten un aprendizaje autónomo, intuitivo y seguro.</p>
         </div>
         <img src="/images/Fondo_Azul_Smart_Learn_logo.png" alt="Logo">
       </div>
