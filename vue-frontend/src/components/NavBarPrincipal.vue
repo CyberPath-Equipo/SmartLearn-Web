@@ -35,7 +35,7 @@
         <div class="footer-col">
           <h3>Recursos</h3>
           <p><a href="/privacidad">Aviso de privacidad</a></p>
-          <p><a href="#">¿Qué es Smart Learn?</a></p>
+          <p><a router-link to="/smartlearn">¿Qué es Smart Learn?</a></p>
         </div>
         <div class="footer-col">
           <p><strong>Redes Sociales</strong></p>
