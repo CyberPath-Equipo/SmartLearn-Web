@@ -1,11 +1,49 @@
 <template>
   <div class="content-view">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+      <router-link to="/dashboard" class="breadcrumb-item">Inicio</router-link>
+      <span class="breadcrumb-separator">/</span>
+      <router-link to="/materias" class="breadcrumb-item">Materias</router-link>
+      <span class="breadcrumb-separator">/</span>
+      <router-link
+        v-if="materia.id"
+        :to="{ name: 'tema', params: { idMateria: materia.id, nombreMateria: materia.nombre } }"
+        class="breadcrumb-item"
+      >
+        {{ materia.nombre }}
+      </router-link>
+      <span v-else class="breadcrumb-item">Materia</span>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-item active">{{ nombreTema }}</span>
+    </div>
 
-    <div class="topbar">
-      <div class="topbar-left">
-        <h2>Subtemas de: <span class="tag-info">{{ nombreTema }}</span></h2>
+    <!-- Header del Tema Activo (con sus acciones de Editar/Eliminar) -->
+    <div class="tema-header-card animate-slide-up">
+      <div class="tema-info">
+        <span class="tema-badge">Tema Seleccionado</span>
+        <h2 class="tema-title">{{ tema.nombre || nombreTema }}</h2>
+        <p class="tema-desc">Gestiona los subtemas contenidos en esta unidad de estudio.</p>
       </div>
-      <button class="btn-primary" @click="mostrarFormAdd">+ Nuevo Subtema</button>
+      <div class="tema-actions">
+        <button class="btn-action-edit" @click="mostrarFormEditTema">
+          <span class="btn-icon">✏️</span> Editar Tema
+        </button>
+        <button class="btn-action-delete" @click="eliminarTemaActivo">
+          <span class="btn-icon">🗑️</span> Eliminar Tema
+        </button>
+      </div>
+    </div>
+
+    <!-- Topbar para Subtemas -->
+    <div class="topbar">
+      <div>
+        <h3 class="section-title">Subtemas Registrados</h3>
+        <p class="section-subtitle">Selecciona un subtema para ver su teoría y ejercicios o agrega uno nuevo.</p>
+      </div>
+      <button class="btn-primary-blue" @click="mostrarFormAdd">
+        <span class="btn-icon">+</span> Nuevo Subtema
+      </button>
     </div>
 
     <!-- Mensaje de estado -->
@@ -13,72 +51,80 @@
       {{ mensaje }}
     </div>
 
-    <!-- Formulario: crear subtema -->
-    <div v-if="formAddVisible" class="form-inline card">
-      <h3>Nuevo subtema</h3>
-      <form @submit.prevent="crearSubtema" class="form-grid">
-        <div class="form-group">
-          <label for="nombreSubtema">Nombre del subtema</label>
-          <input id="nombreSubtema" type="text" v-model="formAdd.nombre" placeholder="Nombre del subtema" required />
+    <!-- Modal: Editar Tema -->
+    <div v-if="formEditTemaVisible" class="modal-overlay" @click.self="ocultarFormEditTema">
+      <div class="modal-card animate-slide-up">
+        <div class="modal-header">
+          <h3>Editar Tema</h3>
+          <button class="btn-close" @click="ocultarFormEditTema">&times;</button>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn-primary" :disabled="guardando">
-            {{ guardando ? 'Guardando...' : 'Guardar' }}
-          </button>
-          <button type="button" class="btn-secondary" @click="ocultarFormAdd">Cancelar</button>
-        </div>
-      </form>
+        <form @submit.prevent="guardarEdicionTema" class="form-grid">
+          <div class="form-group">
+            <label for="editTemaNombre">Nombre del Tema</label>
+            <input id="editTemaNombre" type="text" v-model="formEditTema.nombre" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary-blue" :disabled="guardando">
+              {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+            <button type="button" class="btn-secondary" @click="ocultarFormEditTema">Cancelar</button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <!-- Formulario: editar subtema -->
-    <div v-if="formEditVisible" class="form-inline card">
-      <h3>Editar subtema</h3>
-      <form @submit.prevent="editarSubtema" class="form-grid">
-        <div class="form-group">
-          <label for="editNombreSubtema">Nombre</label>
-          <input id="editNombreSubtema" type="text" v-model="formEdit.nombre" required />
+    <!-- Modal: Crear Subtema -->
+    <div v-if="formAddVisible" class="modal-overlay" @click.self="ocultarFormAdd">
+      <div class="modal-card animate-slide-up">
+        <div class="modal-header">
+          <h3>Nuevo Subtema</h3>
+          <button class="btn-close" @click="ocultarFormAdd">&times;</button>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn-primary" :disabled="guardando">
-            {{ guardando ? 'Guardando...' : 'Actualizar' }}
-          </button>
-          <button type="button" class="btn-secondary" @click="ocultarFormEdit">Cancelar</button>
-        </div>
-      </form>
+        <form @submit.prevent="crearSubtema" class="form-grid">
+          <div class="form-group">
+            <label for="nombreSubtema">Nombre del Subtema</label>
+            <input id="nombreSubtema" type="text" v-model="formAdd.nombre" placeholder="Ej. Declaración de variables" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary-blue" :disabled="guardando">
+              {{ guardando ? 'Guardando...' : 'Crear Subtema' }}
+            </button>
+            <button type="button" class="btn-secondary" @click="ocultarFormAdd">Cancelar</button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <!-- Tabla de subtemas -->
-    <div class="table-container">
-      <div v-if="cargando" class="estado-carga">Cargando subtemas...</div>
-      <table v-else class="tabla-crud">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="subtemas.length === 0">
-            <td colspan="3" class="sin-datos">No hay subtemas registrados</td>
-          </tr>
-          <!-- ID clickeable navega a la teoria del subtema -->
-          <tr v-for="subtema in subtemas" :key="subtema.id">
-            <td
-              class="id-link"
-              @click="irATeoria(subtema)"
-              :title="'Ver teoria de ' + subtema.nombre"
-            >{{ subtema.id }}</td>
-            <td>{{ subtema.nombre }}</td>
-            <td class="acciones">
-              <button class="btn-edit" @click="mostrarFormEdit(subtema)">Editar</button>
-              <button class="btn-delete" @click="eliminarSubtema(subtema.id)">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- Grid de Subtemas -->
+    <div class="cards-grid">
+      <div v-if="cargando" class="estado-carga">
+        <div class="spinner"></div>
+        <p>Cargando subtemas...</p>
+      </div>
 
+      <template v-else>
+        <div v-if="subtemas.length === 0" class="no-data-card">
+          <p class="sin-datos">No hay subtemas registrados para este tema. ¡Comienza creando uno!</p>
+        </div>
+
+        <div
+          v-else
+          v-for="(subtema, index) in subtemas"
+          :key="subtema.id"
+          class="subtema-card"
+          :style="{ background: getGradient(index) }"
+          @click="irATeoria(subtema)"
+        >
+          <div class="subtema-card-content">
+            <h4 class="subtema-title">{{ subtema.nombre }}</h4>
+          </div>
+          <div class="subtema-card-footer">
+            <span class="subtema-id">ID: {{ subtema.id }}</span>
+            <span class="subtema-action-link">Ver Contenido &rarr;</span>
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -95,6 +141,8 @@ const idTema = route.params.idTema;
 const nombreTema = route.params.nombreTema;
 
 // Estado
+const tema = ref({ id: idTema, nombre: nombreTema, idMateria: null });
+const materia = ref({ id: null, nombre: '' });
 const subtemas = ref([]);
 const cargando = ref(true);
 const guardando = ref(false);
@@ -102,16 +150,46 @@ const mensaje = ref('');
 const mensajeTipo = ref('');
 
 const formAddVisible = ref(false);
-const formEditVisible = ref(false);
-const subtemaIdEditando = ref(null);
-
 const formAdd = reactive({ nombre: '' });
-const formEdit = reactive({ nombre: '' });
+
+const formEditTemaVisible = ref(false);
+const formEditTema = reactive({ nombre: '' });
+
+const gradients = [
+  'linear-gradient(135deg, #10b981, #059669)', // Emerald
+  'linear-gradient(135deg, #0ea5e9, #2563eb)', // Sky/Blue
+  'linear-gradient(135deg, #8b5cf6, #5b21b6)', // Violet
+  'linear-gradient(135deg, #ec4899, #db2777)', // Pink
+  'linear-gradient(135deg, #f59e0b, #d97706)', // Amber
+  'linear-gradient(135deg, #06b6d4, #0891b2)', // Cyan
+];
+
+function getGradient(index) {
+  return gradients[index % gradients.length];
+}
 
 function mostrarMensaje(texto, tipo = 'exito') {
   mensaje.value = texto;
   mensajeTipo.value = tipo === 'exito' ? 'msg-exito' : 'msg-error';
   setTimeout(() => { mensaje.value = ''; }, 2500);
+}
+
+// Cargar detalles del tema y su materia padre
+async function cargarDatosPadre() {
+  try {
+    const { data: datosTema } = await api.get(`/tema/${idTema}`);
+    if (datosTema) {
+      tema.value = datosTema;
+      if (datosTema.idMateria) {
+        const { data: datosMateria } = await api.get(`/materia/${datosTema.idMateria}`);
+        if (datosMateria) {
+          materia.value = datosMateria;
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error al cargar datos del tema/materia padre:', error);
+  }
 }
 
 // Cargar subtemas: GET /tema/{idTema}/subtemas
@@ -121,11 +199,9 @@ async function cargarSubtemas() {
   try {
     const { data } = await api.get(`/tema/${idTema}/subtemas`);
     subtemas.value = Array.isArray(data) ? data : [];
-    if (subtemas.value.length === 0) mostrarMensaje('No hay subtemas aun');
   } catch (error) {
     if (error.response?.status === 404) {
       subtemas.value = [];
-      mostrarMensaje('No hay subtemas aun');
     } else {
       mostrarMensaje('Error cargando subtemas', 'error');
     }
@@ -134,122 +210,321 @@ async function cargarSubtemas() {
   }
 }
 
-onMounted(cargarSubtemas);
+onMounted(() => {
+  cargarDatosPadre();
+  cargarSubtemas();
+});
 
+// Modales
 function mostrarFormAdd() {
   formAdd.nombre = '';
   formAddVisible.value = true;
-  formEditVisible.value = false;
 }
 function ocultarFormAdd() { formAddVisible.value = false; }
 
-function mostrarFormEdit(subtema) {
-  subtemaIdEditando.value = subtema.id;
-  formEdit.nombre = subtema.nombre;
-  formEditVisible.value = true;
-  formAddVisible.value = false;
+function mostrarFormEditTema() {
+  formEditTema.nombre = tema.value.nombre;
+  formEditTemaVisible.value = true;
 }
-function ocultarFormEdit() {
-  formEditVisible.value = false;
-  subtemaIdEditando.value = null;
-}
+function ocultarFormEditTema() { formEditTemaVisible.value = false; }
 
-// Crear: POST /subtema — JSON: { nombre, idTema }
+// Crear Subtema
 async function crearSubtema() {
+  if (!formAdd.nombre.trim()) return;
   guardando.value = true;
   try {
     await api.post('/subtema', {
       nombre: formAdd.nombre,
-      idTema: idTema
+      idTema: parseInt(idTema)
     });
     mostrarMensaje('Subtema creado');
     ocultarFormAdd();
     await cargarSubtemas();
   } catch {
-    mostrarMensaje('No se pudo guardar', 'error');
+    mostrarMensaje('No se pudo guardar el subtema', 'error');
   } finally {
     guardando.value = false;
   }
 }
 
-// Editar: PUT /subtema/{id} — JSON: { nombre, idTema }
-async function editarSubtema() {
-  if (!subtemaIdEditando.value) return;
+// Guardar Edición del Tema: PUT /tema/{id}
+async function guardarEdicionTema() {
+  if (!formEditTema.nombre.trim()) return;
   guardando.value = true;
   try {
-    await api.put(`/subtema/${subtemaIdEditando.value}`, {
-      nombre: formEdit.nombre,
-      idTema: parseInt(idTema)
+    const { data } = await api.put(`/tema/${idTema}`, {
+      nombre: formEditTema.nombre.trim(),
+      idMateria: tema.value.idMateria
     });
-    mostrarMensaje('Subtema actualizado');
-    ocultarFormEdit();
-    await cargarSubtemas();
+    tema.value.nombre = data.nombre;
+    mostrarMensaje('Tema actualizado correctamente');
+    ocultarFormEditTema();
   } catch {
-    mostrarMensaje('No se pudo actualizar', 'error');
+    mostrarMensaje('Error al actualizar el tema', 'error');
   } finally {
     guardando.value = false;
   }
 }
 
-// Eliminar: DELETE /subtema/{id}
-async function eliminarSubtema(id) {
-  if (!confirm('Eliminar este subtema?')) return;
+// Eliminar Tema: DELETE /tema/{id}
+async function eliminarTemaActivo() {
+  if (!confirm('¿Seguro que deseas eliminar este tema? Se eliminarán todos sus subtemas.')) return;
   try {
-    await api.delete(`/subtema/${id}`);
-    mostrarMensaje('Subtema eliminado');
-    await cargarSubtemas();
+    await api.delete(`/tema/${idTema}`);
+    mostrarMensaje('Tema eliminado correctamente');
+    router.push({
+      name: 'tema',
+      params: {
+        idMateria: materia.value.id || tema.value.idMateria,
+        nombreMateria: materia.value.nombre || 'Materia'
+      }
+    });
   } catch {
-    mostrarMensaje('Error al eliminar', 'error');
+    mostrarMensaje('Error al eliminar el tema', 'error');
   }
 }
 
-// Navegar a la teoria del subtema seleccionado
+// Navegar a la teoría
 function irATeoria(subtema) {
   router.push({ name: 'teoria', params: { idSubtema: subtema.id, nombreSubtema: subtema.nombre } });
 }
 </script>
 
 <style scoped>
+/* Breadcrumbs */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #718096;
+  margin-bottom: 12px;
+}
+.breadcrumb-item {
+  text-decoration: none;
+  color: #718096;
+  transition: color 0.2s;
+}
+.breadcrumb-item:hover:not(.active) {
+  color: #2b6cb0;
+}
+.breadcrumb-item.active {
+  color: #2d3748;
+  font-weight: 500;
+}
+.breadcrumb-separator {
+  color: #cbd5e0;
+}
+
+/* Layout principal */
 .content-view {
-  padding: 24px;
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Tarjeta del header del Tema */
+.tema-header-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.tema-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 70%;
+}
+
+.tema-badge {
+  align-self: flex-start;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tema-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.tema-desc {
+  font-size: 0.98rem;
+  color: #4a5568;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.tema-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.btn-action-edit, .btn-action-delete {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s, color 0.2s;
+  width: 100%;
+}
+
+.btn-action-edit {
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+.btn-action-edit:hover {
+  background: #edf2f7;
+  color: #1a202c;
+}
+
+.btn-action-delete {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #fed7d7;
+}
+.btn-action-delete:hover {
+  background: #fed7d7;
+  color: #9b2c2c;
+}
+
+/* Secciones de subtemas */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 12px;
+  border-top: 1px solid #edf2f7;
+  padding-top: 24px;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 4px 0;
+}
+
+.section-subtitle {
+  font-size: 0.9rem;
+  color: #718096;
+  margin: 0;
+}
+
+/* Botón azul principal */
+.btn-primary-blue {
+  padding: 11px 22px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary-blue:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+.btn-primary-blue:active {
+  transform: translateY(1px);
+}
+.btn-primary-blue:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #a0aec0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.btn-close:hover {
+  color: #4a5568;
+}
+
+.form-grid {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.topbar {
+.form-group {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
 }
-
-.topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.topbar-left h2 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin: 0;
-}
-
-.tag-info { color: #2563eb; font-weight: 700; }
-
-.form-inline { padding: 24px; }
-
-.form-inline h3 {
-  margin: 0 0 16px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-
-.form-grid { display: flex; flex-direction: column; gap: 16px; }
-
-.form-group { display: flex; flex-direction: column; gap: 6px; }
 
 .form-group label {
   font-size: 0.875rem;
@@ -258,138 +533,197 @@ function irATeoria(subtema) {
 }
 
 .form-group input {
-  padding: 9px 12px;
+  padding: 12px 14px;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.95rem;
   color: #2d3748;
   background: #f7fafc;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #4a90e2;
-  background: #fff;
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.form-actions { display: flex; gap: 10px; }
-
-.table-container {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  overflow: hidden;
-  border: 1px solid #edf2f7;
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
 }
-
-.tabla-crud { width: 100%; border-collapse: collapse; }
-.tabla-crud thead { background: #f7fafc; }
-
-.tabla-crud th {
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #718096;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.tabla-crud td {
-  padding: 13px 16px;
-  font-size: 0.95rem;
-  color: #2d3748;
-  border-bottom: 1px solid #f0f4f8;
-}
-
-.tabla-crud tbody tr:hover { background: #f7fafc; }
-.tabla-crud tbody tr:last-child td { border-bottom: none; }
-
-.id-link { cursor: pointer; color: #2563eb; font-weight: 700; }
-.id-link:hover { text-decoration: underline; }
-
-.sin-datos { text-align: center; color: #a0aec0; padding: 24px !important; }
-.acciones { display: flex; gap: 8px; }
-
-.card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  border: 1px solid #edf2f7;
-}
-
-.btn-primary {
-  padding: 9px 18px;
-  background: linear-gradient(135deg, #4a90e2, #357abd);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.btn-primary:hover:not(:disabled) { opacity: 0.88; }
-.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .btn-secondary {
-  padding: 9px 18px;
+  padding: 11px 22px;
   background: #edf2f7;
   color: #4a5568;
   border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s;
 }
-.btn-secondary:hover { background: #e2e8f0; }
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
 
-.btn-ghost {
-  padding: 8px 16px;
-  background: transparent;
-  color: #718096;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
+/* Grid de tarjetas de subtemas */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.subtema-card {
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
   cursor: pointer;
+  color: #ffffff;
+  box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, filter 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
-.btn-ghost:hover { background: #f7fafc; color: #2d3748; }
 
-.btn-edit {
-  padding: 6px 12px;
-  background: #ebf4ff;
-  color: #2b6cb0;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.85rem;
+.subtema-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.subtema-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 20px -5px rgba(0, 0, 0, 0.12);
+  filter: brightness(1.05);
+}
+
+.subtema-card:hover::before {
+  opacity: 1;
+}
+
+.subtema-card-content {
+  z-index: 1;
+}
+
+.subtema-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.subtema-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  font-size: 0.8rem;
   font-weight: 600;
-  cursor: pointer;
+  opacity: 0.95;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 12px;
 }
-.btn-edit:hover { background: #bee3f8; }
 
-.btn-delete {
-  padding: 6px 12px;
-  background: #fff5f5;
-  color: #c53030;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
+.subtema-id {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 6px;
+  border-radius: 4px;
 }
-.btn-delete:hover { background: #fed7d7; }
 
+.subtema-action-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.2s;
+}
+
+.subtema-card:hover .subtema-action-link {
+  transform: translateX(4px);
+}
+
+/* Mensajes */
 .mensaje-estado {
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 0.95rem;
   font-weight: 500;
+  animation: fadeIn 0.3s ease;
 }
-.msg-exito { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
-.msg-error { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; }
+.msg-exito {
+  background: #f0fff4;
+  color: #1c6239;
+  border: 1px solid #c6f6d5;
+}
+.msg-error {
+  background: #fff5f5;
+  color: #9b2c2c;
+  border: 1px solid #fed7d7;
+}
 
-.estado-carga { padding: 24px; text-align: center; color: #718096; }
+/* Carga */
+.estado-carga {
+  grid-column: 1 / -1;
+  padding: 50px;
+  text-align: center;
+  color: #718096;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(37, 99, 235, 0.1);
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+.no-data-card {
+  grid-column: 1 / -1;
+  background: #f7fafc;
+  border: 2px dashed #e2e8f0;
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+}
+
+.sin-datos {
+  color: #718096;
+  margin: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
 </style>

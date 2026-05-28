@@ -1,11 +1,40 @@
 <template>
   <div class="content-view">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+      <router-link to="/dashboard" class="breadcrumb-item">Inicio</router-link>
+      <span class="breadcrumb-separator">/</span>
+      <router-link to="/materias" class="breadcrumb-item">Materias</router-link>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-item active">{{ nombreMateria }}</span>
+    </div>
 
-    <div class="topbar">
-      <div class="topbar-left">
-        <h2>Temas de: <span class="tag-info">{{ nombreMateria }}</span></h2>
+    <!-- Header de la Materia Activa (con sus acciones de Editar/Eliminar) -->
+    <div class="materia-header-card animate-slide-up">
+      <div class="materia-info">
+        <span class="materia-badge">Materia Seleccionada</span>
+        <h2 class="materia-title">{{ materia.nombre || nombreMateria }}</h2>
+        <p class="materia-desc">{{ materia.descripcion || 'Sin descripción disponible para esta materia.' }}</p>
       </div>
-      <button class="btn-primary" @click="mostrarFormAdd">+ Nuevo Tema</button>
+      <div class="materia-actions">
+        <button class="btn-action-edit" @click="mostrarFormEditMateria">
+          <span class="btn-icon">✏️</span> Editar Materia
+        </button>
+        <button class="btn-action-delete" @click="eliminarMateriaActiva">
+          <span class="btn-icon">🗑️</span> Eliminar Materia
+        </button>
+      </div>
+    </div>
+
+    <!-- Topbar para Temas -->
+    <div class="topbar">
+      <div>
+        <h3 class="section-title">Temas de la Materia</h3>
+        <p class="section-subtitle">Selecciona un tema para ver sus subtemas o agrega uno nuevo.</p>
+      </div>
+      <button class="btn-primary-blue" @click="mostrarFormAdd">
+        <span class="btn-icon">+</span> Nuevo Tema
+      </button>
     </div>
 
     <!-- Mensaje de estado -->
@@ -13,72 +42,84 @@
       {{ mensaje }}
     </div>
 
-    <!-- Formulario: crear tema -->
-    <div v-if="formAddVisible" class="form-inline card">
-      <h3>Nuevo tema</h3>
-      <form @submit.prevent="crearTema" class="form-grid">
-        <div class="form-group">
-          <label for="nombreTema">Nombre del tema</label>
-          <input id="nombreTema" type="text" v-model="formAdd.nombre" placeholder="Nombre del tema" required />
+    <!-- Modal: Editar Materia -->
+    <div v-if="formEditMateriaVisible" class="modal-overlay" @click.self="ocultarFormEditMateria">
+      <div class="modal-card animate-slide-up">
+        <div class="modal-header">
+          <h3>Editar Materia</h3>
+          <button class="btn-close" @click="ocultarFormEditMateria">&times;</button>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn-primary" :disabled="guardando">
-            {{ guardando ? 'Guardando...' : 'Guardar' }}
-          </button>
-          <button type="button" class="btn-secondary" @click="ocultarFormAdd">Cancelar</button>
-        </div>
-      </form>
+        <form @submit.prevent="guardarEdicionMateria" class="form-grid">
+          <div class="form-group">
+            <label for="editMateriaNombre">Nombre de la Materia</label>
+            <input id="editMateriaNombre" type="text" v-model="formEditMateria.nombre" required />
+          </div>
+          <div class="form-group">
+            <label for="editMateriaDesc">Descripción</label>
+            <textarea id="editMateriaDesc" v-model="formEditMateria.descripcion" rows="3" required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary-blue" :disabled="guardando">
+              {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+            <button type="button" class="btn-secondary" @click="ocultarFormEditMateria">Cancelar</button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <!-- Formulario: editar tema -->
-    <div v-if="formEditVisible" class="form-inline card">
-      <h3>Editar tema</h3>
-      <form @submit.prevent="editarTema" class="form-grid">
-        <div class="form-group">
-          <label for="editNombreTema">Nombre</label>
-          <input id="editNombreTema" type="text" v-model="formEdit.nombre" required />
+    <!-- Modal: Crear Tema -->
+    <div v-if="formAddVisible" class="modal-overlay" @click.self="ocultarFormAdd">
+      <div class="modal-card animate-slide-up">
+        <div class="modal-header">
+          <h3>Nuevo Tema</h3>
+          <button class="btn-close" @click="ocultarFormAdd">&times;</button>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn-primary" :disabled="guardando">
-            {{ guardando ? 'Guardando...' : 'Actualizar' }}
-          </button>
-          <button type="button" class="btn-secondary" @click="ocultarFormEdit">Cancelar</button>
-        </div>
-      </form>
+        <form @submit.prevent="crearTema" class="form-grid">
+          <div class="form-group">
+            <label for="nombreTema">Nombre del Tema</label>
+            <input id="nombreTema" type="text" v-model="formAdd.nombre" placeholder="Ej. Introducción al álgebra" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary-blue" :disabled="guardando">
+              {{ guardando ? 'Guardando...' : 'Crear Tema' }}
+            </button>
+            <button type="button" class="btn-secondary" @click="ocultarFormAdd">Cancelar</button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <!-- Tabla de temas -->
-    <div class="table-container">
-      <div v-if="cargando" class="estado-carga">Cargando temas...</div>
-      <table v-else class="tabla-crud">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="temas.length === 0">
-            <td colspan="3" class="sin-datos">No hay temas registrados</td>
-          </tr>
-          <!-- ID clickeable navega a subtemas de ese tema -->
-          <tr v-for="tema in temas" :key="tema.id">
-            <td
-              class="id-link"
-              @click="irASubtemas(tema)"
-              :title="'Ver subtemas de ' + tema.nombre"
-            >{{ tema.id }}</td>
-            <td>{{ tema.nombre }}</td>
-            <td class="acciones">
-              <button class="btn-edit" @click="mostrarFormEdit(tema)">Editar</button>
-              <button class="btn-delete" @click="eliminarTema(tema.id)">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- Grid de Temas -->
+    <div class="cards-grid">
+      <div v-if="cargando" class="estado-carga">
+        <div class="spinner"></div>
+        <p>Cargando temas...</p>
+      </div>
 
+      <template v-else>
+        <div v-if="temas.length === 0" class="no-data-card">
+          <p class="sin-datos">No hay temas registrados para esta materia. ¡Comienza creando uno!</p>
+        </div>
+
+        <div
+          v-else
+          v-for="(tema, index) in temas"
+          :key="tema.id"
+          class="tema-card"
+          :style="{ background: getGradient(index) }"
+          @click="irASubtemas(tema)"
+        >
+          <div class="tema-card-content">
+            <h4 class="tema-title">{{ tema.nombre }}</h4>
+          </div>
+          <div class="tema-card-footer">
+            <span class="tema-id">ID: {{ tema.id }}</span>
+            <span class="tema-action-link">Ver Subtemas &rarr;</span>
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -95,6 +136,7 @@ const idMateria = route.params.idMateria;
 const nombreMateria = route.params.nombreMateria;
 
 // Estado
+const materia = ref({ id: idMateria, nombre: nombreMateria, descripcion: '' });
 const temas = ref([]);
 const cargando = ref(true);
 const guardando = ref(false);
@@ -102,16 +144,40 @@ const mensaje = ref('');
 const mensajeTipo = ref('');
 
 const formAddVisible = ref(false);
-const formEditVisible = ref(false);
-const temaIdEditando = ref(null);
-
 const formAdd = reactive({ nombre: '' });
-const formEdit = reactive({ nombre: '' });
+
+const formEditMateriaVisible = ref(false);
+const formEditMateria = reactive({ nombre: '', descripcion: '' });
+
+const gradients = [
+  'linear-gradient(135deg, #6366f1, #4f46e5)', // Indigo
+  'linear-gradient(135deg, #0ea5e9, #2563eb)', // Sky/Blue
+  'linear-gradient(135deg, #10b981, #059669)', // Emerald
+  'linear-gradient(135deg, #ec4899, #db2777)', // Pink
+  'linear-gradient(135deg, #f59e0b, #d97706)', // Amber
+  'linear-gradient(135deg, #06b6d4, #0891b2)', // Cyan
+];
+
+function getGradient(index) {
+  return gradients[index % gradients.length];
+}
 
 function mostrarMensaje(texto, tipo = 'exito') {
   mensaje.value = texto;
   mensajeTipo.value = tipo === 'exito' ? 'msg-exito' : 'msg-error';
   setTimeout(() => { mensaje.value = ''; }, 2500);
+}
+
+// Cargar detalles de la materia
+async function cargarMateriaDetalles() {
+  try {
+    const { data } = await api.get(`/materia/${idMateria}`);
+    if (data) {
+      materia.value = data;
+    }
+  } catch (error) {
+    console.error('Error al cargar detalles de la materia:', error);
+  }
 }
 
 // Cargar temas: GET /materia/{idMateria}/temas
@@ -125,35 +191,35 @@ async function cargarTemas() {
     if (error.response?.status === 404) {
       temas.value = [];
     } else {
-      mostrarMensaje('Error de conexion con el servidor', 'error');
+      mostrarMensaje('Error de conexión con el servidor', 'error');
     }
   } finally {
     cargando.value = false;
   }
 }
 
-onMounted(cargarTemas);
+onMounted(() => {
+  cargarMateriaDetalles();
+  cargarTemas();
+});
 
+// Modales
 function mostrarFormAdd() {
   formAdd.nombre = '';
   formAddVisible.value = true;
-  formEditVisible.value = false;
 }
 function ocultarFormAdd() { formAddVisible.value = false; }
 
-function mostrarFormEdit(tema) {
-  temaIdEditando.value = tema.id;
-  formEdit.nombre = tema.nombre;
-  formEditVisible.value = true;
-  formAddVisible.value = false;
+function mostrarFormEditMateria() {
+  formEditMateria.nombre = materia.value.nombre;
+  formEditMateria.descripcion = materia.value.descripcion ?? '';
+  formEditMateriaVisible.value = true;
 }
-function ocultarFormEdit() {
-  formEditVisible.value = false;
-  temaIdEditando.value = null;
-}
+function ocultarFormEditMateria() { formEditMateriaVisible.value = false; }
 
-// Crear: POST /tema — JSON: { nombre, idMateria }
+// Crear Tema: POST /tema
 async function crearTema() {
+  if (!formAdd.nombre.trim()) return;
   guardando.value = true;
   try {
     await api.post('/tema', {
@@ -170,34 +236,34 @@ async function crearTema() {
   }
 }
 
-// Editar: PUT /tema/{id} — JSON: { nombre, idMateria }
-async function editarTema() {
-  if (!temaIdEditando.value) return;
+// Guardar Edición de Materia: PUT /materia/{id}
+async function guardarEdicionMateria() {
+  if (!formEditMateria.nombre.trim()) return;
   guardando.value = true;
   try {
-    await api.put(`/tema/${temaIdEditando.value}`, {
-      nombre: formEdit.nombre,
-      idMateria: parseInt(idMateria)
+    const { data } = await api.put(`/materia/${idMateria}`, {
+      nombre: formEditMateria.nombre.trim(),
+      descripcion: formEditMateria.descripcion.trim()
     });
-    mostrarMensaje('Tema actualizado correctamente');
-    ocultarFormEdit();
-    await cargarTemas();
+    materia.value = data;
+    mostrarMensaje('Materia actualizada correctamente');
+    ocultarFormEditMateria();
   } catch {
-    mostrarMensaje('Error al actualizar el tema', 'error');
+    mostrarMensaje('Error al actualizar la materia', 'error');
   } finally {
     guardando.value = false;
   }
 }
 
-// Eliminar: DELETE /tema/{id}
-async function eliminarTema(id) {
-  if (!confirm('Deseas eliminar este tema?')) return;
+// Eliminar Materia: DELETE /materia/{id}
+async function eliminarMateriaActiva() {
+  if (!confirm('¿Seguro que deseas eliminar esta materia? Se eliminarán todos sus temas y subtemas.')) return;
   try {
-    await api.delete(`/tema/${id}`);
-    mostrarMensaje('Tema eliminado');
-    await cargarTemas();
+    await api.delete(`/materia/${idMateria}`);
+    mostrarMensaje('Materia eliminada correctamente');
+    router.push('/materias');
   } catch {
-    mostrarMensaje('Error al eliminar el tema', 'error');
+    mostrarMensaje('Error al eliminar la materia', 'error');
   }
 }
 
@@ -208,58 +274,239 @@ function irASubtemas(tema) {
 </script>
 
 <style scoped>
-.content-view {
-  padding: 24px;
+/* Breadcrumbs */
+.breadcrumbs {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #718096;
+  margin-bottom: 12px;
+}
+.breadcrumb-item {
+  text-decoration: none;
+  color: #718096;
+  transition: color 0.2s;
+}
+.breadcrumb-item:hover:not(.active) {
+  color: #2b6cb0;
+}
+.breadcrumb-item.active {
+  color: #2d3748;
+  font-weight: 500;
+}
+.breadcrumb-separator {
+  color: #cbd5e0;
 }
 
-.topbar {
+/* Layout principal */
+.content-view {
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Tarjeta del header de la Materia */
+.materia-header-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 24px;
 }
 
-.topbar-left {
+.materia-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 70%;
+}
+
+.materia-badge {
+  align-self: flex-start;
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.materia-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.materia-desc {
+  font-size: 0.98rem;
+  color: #4a5568;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.materia-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.btn-action-edit, .btn-action-delete {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  transition: background-color 0.2s, color 0.2s;
+  width: 100%;
 }
 
-.topbar-left h2 {
+.btn-action-edit {
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+.btn-action-edit:hover {
+  background: #edf2f7;
+  color: #1a202c;
+}
+
+.btn-action-delete {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #fed7d7;
+}
+.btn-action-delete:hover {
+  background: #fed7d7;
+  color: #9b2c2c;
+}
+
+/* Secciones de temas */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 12px;
+  border-top: 1px solid #edf2f7;
+  padding-top: 24px;
+}
+
+.section-title {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #1a202c;
+  margin: 0 0 4px 0;
+}
+
+.section-subtitle {
+  font-size: 0.9rem;
+  color: #718096;
   margin: 0;
 }
 
-.tag-info {
-  color: #2563eb;
-  font-weight: 700;
-}
-
-.form-inline {
-  padding: 24px;
-}
-
-.form-inline h3 {
-  margin: 0 0 16px;
-  font-size: 1.1rem;
+/* Botón azul principal */
+.btn-primary-blue {
+  padding: 11px 22px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #2d3748;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary-blue:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+.btn-primary-blue:active {
+  transform: translateY(1px);
+}
+.btn-primary-blue:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #a0aec0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.btn-close:hover {
+  color: #4a5568;
 }
 
 .form-grid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .form-group label {
@@ -268,141 +515,198 @@ function irASubtemas(tema) {
   color: #4a5568;
 }
 
-.form-group input {
-  padding: 9px 12px;
+.form-group input, .form-group textarea {
+  padding: 12px 14px;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.95rem;
   color: #2d3748;
   background: #f7fafc;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.form-group input:focus {
+.form-group input:focus, .form-group textarea:focus {
   outline: none;
-  border-color: #4a90e2;
-  background: #fff;
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.form-actions { display: flex; gap: 10px; }
-
-.table-container {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  overflow: hidden;
-  border: 1px solid #edf2f7;
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
 }
-
-.tabla-crud { width: 100%; border-collapse: collapse; }
-
-.tabla-crud thead { background: #f7fafc; }
-
-.tabla-crud th {
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #718096;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.tabla-crud td {
-  padding: 13px 16px;
-  font-size: 0.95rem;
-  color: #2d3748;
-  border-bottom: 1px solid #f0f4f8;
-}
-
-.tabla-crud tbody tr:hover { background: #f7fafc; }
-.tabla-crud tbody tr:last-child td { border-bottom: none; }
-
-.id-link { cursor: pointer; color: #2563eb; font-weight: 700; }
-.id-link:hover { text-decoration: underline; }
-
-.sin-datos { text-align: center; color: #a0aec0; padding: 24px !important; }
-
-.acciones { display: flex; gap: 8px; }
-
-.card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  border: 1px solid #edf2f7;
-}
-
-.btn-primary {
-  padding: 9px 18px;
-  background: linear-gradient(135deg, #4a90e2, #357abd);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.btn-primary:hover:not(:disabled) { opacity: 0.88; }
-.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .btn-secondary {
-  padding: 9px 18px;
+  padding: 11px 22px;
   background: #edf2f7;
   color: #4a5568;
   border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s;
 }
-.btn-secondary:hover { background: #e2e8f0; }
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
 
-.btn-ghost {
-  padding: 8px 16px;
-  background: transparent;
-  color: #718096;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
+/* Grid de tarjetas de temas */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.tema-card {
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
   cursor: pointer;
+  color: #ffffff;
+  box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, filter 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
-.btn-ghost:hover { background: #f7fafc; color: #2d3748; }
 
-.btn-edit {
-  padding: 6px 12px;
-  background: #ebf4ff;
-  color: #2b6cb0;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.85rem;
+.tema-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tema-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 20px -5px rgba(0, 0, 0, 0.12);
+  filter: brightness(1.05);
+}
+
+.tema-card:hover::before {
+  opacity: 1;
+}
+
+.tema-card-content {
+  z-index: 1;
+}
+
+.tema-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.tema-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  font-size: 0.8rem;
   font-weight: 600;
-  cursor: pointer;
+  opacity: 0.95;
+  z-index: 1;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 12px;
 }
-.btn-edit:hover { background: #bee3f8; }
 
-.btn-delete {
-  padding: 6px 12px;
-  background: #fff5f5;
-  color: #c53030;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
+.tema-id {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 6px;
+  border-radius: 4px;
 }
-.btn-delete:hover { background: #fed7d7; }
 
+.tema-action-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.2s;
+}
+
+.tema-card:hover .tema-action-link {
+  transform: translateX(4px);
+}
+
+/* Mensajes */
 .mensaje-estado {
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 0.95rem;
   font-weight: 500;
+  animation: fadeIn 0.3s ease;
 }
-.msg-exito { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
-.msg-error { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; }
+.msg-exito {
+  background: #f0fff4;
+  color: #1c6239;
+  border: 1px solid #c6f6d5;
+}
+.msg-error {
+  background: #fff5f5;
+  color: #9b2c2c;
+  border: 1px solid #fed7d7;
+}
 
-.estado-carga { padding: 24px; text-align: center; color: #718096; }
+/* Carga */
+.estado-carga {
+  grid-column: 1 / -1;
+  padding: 50px;
+  text-align: center;
+  color: #718096;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(37, 99, 235, 0.1);
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+.no-data-card {
+  grid-column: 1 / -1;
+  background: #f7fafc;
+  border: 2px dashed #e2e8f0;
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+}
+
+.sin-datos {
+  color: #718096;
+  margin: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
 </style>
