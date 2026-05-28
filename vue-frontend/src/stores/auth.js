@@ -1,6 +1,20 @@
 import { defineStore } from 'pinia';
 import api from '../api/axios';
 
+function decodeJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error("Error decoding JWT:", e);
+    return null;
+  }
+}
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token') || null,
@@ -17,6 +31,15 @@ export const useAuthStore = defineStore('auth', {
         
         const data = response.data;
 
+        if (data.requires2fa) {
+          return {
+            success: true,
+            requires2fa: true,
+            twoFactorTransactionId: data.twoFactorTransactionId,
+            twoFactorChannel: data.twoFactorChannel
+          };
+        }
+
         this.token = data.token;
         // Se guarda parcialmente antes de obtener el perfil completo
         this.user = {
@@ -26,12 +49,15 @@ export const useAuthStore = defineStore('auth', {
         };
 
         localStorage.setItem('token', this.token);
+        if (data.refreshToken) {
+          localStorage.setItem('refreshToken', data.refreshToken);
+        }
         localStorage.setItem('user', JSON.stringify(this.user));
 
         // Obtener el perfil completo del usuario
         await this.getProfile(this.user.idUsuario);
 
-        return { success: true };
+        return { success: true, requires2fa: false };
       } catch (error) {
         console.error(error);
         return {
@@ -40,6 +66,60 @@ export const useAuthStore = defineStore('auth', {
             error.response?.data?.error ||
             error.response?.data ||
             error.message
+        };
+      }
+    },
+
+    async verify2fa(transactionId, code, rememberDevice = false) {
+      try {
+        const response = await api.post('/usuario/2fa/verify', {
+          transactionId,
+          code,
+          rememberDevice,
+          deviceInfo: window.navigator?.userAgent || "Web Client"
+        });
+
+        const data = response.data;
+        this.token = data.token;
+        
+        let idUsuario = data.idUsuario;
+        let nombreCuenta = data.nombreCuenta;
+        let idRol = data.idRol;
+
+        if (!idUsuario && data.token) {
+          const decoded = decodeJwt(data.token);
+          if (decoded) {
+            idUsuario = decoded.idUsuario || decoded.userId || decoded.id;
+            nombreCuenta = decoded.nombreCuenta || decoded.sub;
+            idRol = decoded.idRol || decoded.role || (decoded.roles && decoded.roles[0]);
+          }
+        }
+
+        this.user = {
+          idUsuario,
+          nombreCuenta,
+          idRol
+        };
+
+        localStorage.setItem('token', this.token);
+        if (data.refreshToken) {
+          localStorage.setItem('refreshToken', data.refreshToken);
+        }
+        if (data.trustedDeviceToken) {
+          localStorage.setItem('trustedDeviceToken', data.trustedDeviceToken);
+        }
+        localStorage.setItem('user', JSON.stringify(this.user));
+
+        if (idUsuario) {
+          await this.getProfile(idUsuario);
+        }
+
+        return { success: true };
+      } catch (error) {
+        console.error('Error verifying 2FA:', error);
+        return {
+          success: false,
+          message: error.response?.data?.error || error.response?.data || error.message
         };
       }
     },
@@ -101,6 +181,8 @@ export const useAuthStore = defineStore('auth', {
       this.token = null;
       this.user = null;
       localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('trustedDeviceToken');
       localStorage.removeItem('user');
     }
   },

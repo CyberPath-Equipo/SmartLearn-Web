@@ -52,7 +52,18 @@ const handleRegister = async () => {
     });
 
     if (!response.data.error) {
-      router.push('/login');
+      if (response.data.requiresVerification) {
+        router.push({
+          name: 'autenticacion',
+          query: {
+            type: 'registration',
+            tx: response.data.transactionId,
+            correo: response.data.correo || correo.value
+          }
+        });
+      } else {
+        router.push('/login');
+      }
     } else {
       errorMessage.value = 'Error en el registro. Por favor, intenta nuevamente.';
     }

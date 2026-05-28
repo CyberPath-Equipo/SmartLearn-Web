@@ -27,6 +27,12 @@ const router = createRouter({
           meta: { requiresGuest: true }
         },
         {
+          path: '/autenticacion',
+          name: 'autenticacion',
+          component: () => import('../views/AutenticacionView.vue'),
+          meta: { requiresGuest: true }
+        },
+        {
           path: '/privacidad',
           name: 'privacidad',
           component: () => import('../views/AvisoprivacidadView.vue')

@@ -52,7 +52,18 @@ const handleLogin = async () => {
   loading.value = false;
   
   if (result.success) {
-    router.push('/dashboard');
+    if (result.requires2fa) {
+      router.push({
+        name: 'autenticacion',
+        query: {
+          type: '2fa',
+          tx: result.twoFactorTransactionId,
+          correo: correo.value
+        }
+      });
+    } else {
+      router.push('/dashboard');
+    }
   } else {
     errorMessage.value = result.message;
   }
