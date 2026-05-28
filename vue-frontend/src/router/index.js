@@ -30,7 +30,6 @@ const router = createRouter({
           path: '/autenticacion',
           name: 'autenticacion',
           component: () => import('../views/AutenticacionView.vue'),
-          meta: { requiresGuest: true }
         },
         {
           path: '/privacidad',

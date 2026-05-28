@@ -22,6 +22,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     async login(correo, contrasena) {
+      this.logout(); // Limpiar estado antes de intentar login
       try {
         const response = await api.post('/usuario/login/docente', {
           correo,
