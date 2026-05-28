@@ -92,7 +92,6 @@
           >
             <div class="question-card-header">
               <span class="question-number">Pregunta {{ index + 1 }}</span>
-              <span class="question-id-tag">ID: {{ pregunta.id }}</span>
             </div>
             
             <p class="question-statement">{{ pregunta.enunciado }}</p>
@@ -447,11 +446,6 @@ function volverATeoria() {
   font-size: 0.95rem;
   font-weight: 700;
   color: #2563eb;
-}
-
-.question-id-tag {
-  font-size: 0.8rem;
-  color: #a0aec0;
 }
 
 .question-statement {

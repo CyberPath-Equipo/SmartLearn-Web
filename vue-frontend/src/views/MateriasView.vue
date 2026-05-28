@@ -74,7 +74,7 @@
             <p class="materia-desc">{{ materia.descripcion ?? 'Sin descripción disponible' }}</p>
           </div>
           <div class="materia-card-footer">
-            <span class="materia-id">ID: {{ materia.id }}</span>
+
             <span class="materia-action-link">Ver Temas &rarr;</span>
           </div>
         </div>
@@ -465,12 +465,6 @@ function irATemas(materia) {
   z-index: 1;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   padding-top: 12px;
-}
-
-.materia-id {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 4px 8px;
-  border-radius: 6px;
 }
 
 .materia-action-link {

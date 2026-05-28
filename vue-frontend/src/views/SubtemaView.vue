@@ -119,7 +119,7 @@
             <h4 class="subtema-title">{{ subtema.nombre }}</h4>
           </div>
           <div class="subtema-card-footer">
-            <span class="subtema-id">ID: {{ subtema.id }}</span>
+
             <span class="subtema-action-link">Ver Contenido &rarr;</span>
           </div>
         </div>
@@ -639,12 +639,6 @@ function irATeoria(subtema) {
   z-index: 1;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   padding-top: 12px;
-}
-
-.subtema-id {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 3px 6px;
-  border-radius: 4px;
 }
 
 .subtema-action-link {

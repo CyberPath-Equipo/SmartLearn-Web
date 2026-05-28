@@ -165,7 +165,6 @@
               <span class="ejercicio-icon-badge">📝</span>
               <div>
                 <h4 class="ejercicio-title">{{ ejercicio.nombre }}</h4>
-                <p class="ejercicio-id-tag">ID: {{ ejercicio.id }}</p>
               </div>
             </div>
             <span class="ejercicio-arrow-link">Gestionar &rarr;</span>
@@ -750,12 +749,6 @@ function irAVerEjercicio(ejercicio) {
   font-weight: 700;
   color: #2d3748;
   margin: 0 0 2px 0;
-}
-
-.ejercicio-id-tag {
-  font-size: 0.75rem;
-  color: #a0aec0;
-  margin: 0;
 }
 
 .ejercicio-arrow-link {

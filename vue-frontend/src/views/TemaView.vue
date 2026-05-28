@@ -114,7 +114,7 @@
             <h4 class="tema-title">{{ tema.nombre }}</h4>
           </div>
           <div class="tema-card-footer">
-            <span class="tema-id">ID: {{ tema.id }}</span>
+
             <span class="tema-action-link">Ver Subtemas &rarr;</span>
           </div>
         </div>
@@ -622,12 +622,6 @@ function irASubtemas(tema) {
   z-index: 1;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   padding-top: 12px;
-}
-
-.tema-id {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 3px 6px;
-  border-radius: 4px;
 }
 
 .tema-action-link {
