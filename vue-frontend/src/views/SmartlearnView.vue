@@ -12,7 +12,7 @@
       <div class="topics-carousel" ref="carousel">
         <a href="#que-es" class="topic-card">
           <img src="/images/Fondo_Azul_Smart_Learn_logo copy.png" alt="¿Qué es?" class="carousel-img">
-          <h3>¿Qué es?</h3>
+          <h3>¿Qué?</h3>
         </a>
         <a href="#mision" class="topic-card">
           <img src="/images/mision_vector.png" alt="Misión" class="carousel-img">
