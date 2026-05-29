@@ -10,6 +10,8 @@
       <p>Cargando datos del ejercicio...</p>
     </div>
 
+    <div v-else-if="noData" class="no-data-chart">Datos insuficientes o inexistentes.</div>
+
     <div v-else class="chart-card">
       <apexchart type="scatter" height="350" :options="chartC1Options" :series="chartC1Series"></apexchart>
     </div>
@@ -28,6 +30,7 @@ const props = defineProps({
 });
 
 const cargando = ref(true);
+const noData = ref(false);
 
 const chartC1Series = ref([{ name: 'Intentos', data: [] }]);
 const chartC1Options = ref({
@@ -58,7 +61,8 @@ async function cargarEstadisticasEjercicio() {
   if (!props.idEjercicio) return;
   cargando.value = true;
   try {
-    const { data: intentos } = await api.get('/intento-ejercicio').catch(() => ({ data: [] }));
+    let intentos = [];
+    try { const res = await api.get('/intento-ejercicio'); intentos = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
     
     // Filtrar para el ejercicio actual
     const intentosEjercicio = intentos.filter(i => String(i.idEjercicio) === String(props.idEjercicio));

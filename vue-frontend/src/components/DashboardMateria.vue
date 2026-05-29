@@ -10,6 +10,8 @@
       <p>Calculando estadísticas...</p>
     </div>
 
+    <div v-else-if="noData" class="no-data-chart">Datos insuficientes o inexistentes.</div>
+
     <div v-else class="dashboard-grid">
       <!-- B1: Ejercicios con más errores -->
       <div class="chart-card">
@@ -49,6 +51,7 @@ const props = defineProps({
 
 const router = useRouter();
 const cargando = ref(true);
+const noData = ref(false);
 
 const chartB1Series = ref([{ name: 'Tasa de Error (%)', data: [] }]);
 const chartB1Options = ref({
@@ -101,11 +104,17 @@ async function cargarEstadisticasMateria() {
   if (!props.idMateria) return;
   cargando.value = true;
   try {
-    const { data: todosTemas } = await api.get('/tema').catch(() => ({ data: [] }));
-    const { data: todosSubtemas } = await api.get('/subtema').catch(() => ({ data: [] }));
-    const { data: todosEjercicios } = await api.get('/ejercicio').catch(() => ({ data: [] }));
-    const { data: intentos } = await api.get('/intento-ejercicio').catch(() => ({ data: [] }));
-    const { data: progresos } = await api.get('/progreso-subtema').catch(() => ({ data: [] }));
+    let todosTemas = [];
+    let todosSubtemas = [];
+    let todosEjercicios = [];
+    let intentos = [];
+    let progresos = [];
+
+    try { const res = await api.get('/tema'); todosTemas = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
+    try { const res = await api.get('/subtema'); todosSubtemas = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
+    try { const res = await api.get('/ejercicio'); todosEjercicios = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
+    try { const res = await api.get('/intento-ejercicio'); intentos = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
+    try { const res = await api.get('/progreso-subtema'); progresos = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
 
     const temasMateria = todosTemas.filter(t => String(t.idMateria) === String(props.idMateria));
     const idsTemasMateria = temasMateria.map(t => t.id);

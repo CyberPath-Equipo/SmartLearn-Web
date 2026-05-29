@@ -16,12 +16,14 @@
       <p>Procesando estadísticas...</p>
     </div>
 
+    <div v-else-if="noDataGeneral" class="no-data-chart">Datos insuficientes o inexistentes.</div>
+
     <div v-else class="dashboard-grid">
       <!-- Dashboard A1: Tarjetas de Materias -->
       <section class="dashboard-section" style="grid-column: 1 / -1;">
         <h3>Resumen por Materia</h3>
         <div class="cards-grid">
-          <div v-for="(mat, idx) in materiasStats" :key="mat.id" class="stat-card" :style="{ background: getGradient(idx) }">
+          <div v-for="(mat, idx) in materiasStats" :key="mat.id" class="stat-card stat-card-clickable" :style="{ background: getGradient(idx) }" @click="irAMateria(mat)">
             <h4 class="materia-title">{{ mat.nombre }}</h4>
             <div class="materia-metrics">
               <div class="metric">
@@ -43,19 +45,22 @@
       <!-- Dashboard A2: Contenido Académico Generado -->
       <section class="dashboard-section chart-card">
         <h3>Contenido Generado (Últimos Meses)</h3>
-        <apexchart type="line" height="350" :options="chartA2Options" :series="chartA2Series"></apexchart>
+        <div v-if="noDataA2" class="no-data-chart">No hay contenido generado aún.</div>
+        <apexchart v-else type="line" height="350" :options="chartA2Options" :series="chartA2Series"></apexchart>
       </section>
 
       <!-- Dashboard A3: Temas Más Activos -->
       <section class="dashboard-section chart-card">
         <h3>Temas con Más Actividad</h3>
-        <apexchart type="bar" height="350" :options="chartA3Options" :series="chartA3Series"></apexchart>
+        <div v-if="noDataA3" class="no-data-chart">No hay intentos de ejercicios aún.</div>
+        <apexchart v-else type="bar" height="350" :options="chartA3Options" :series="chartA3Series"></apexchart>
       </section>
 
       <!-- Dashboard A4: Usuarios Activos vs Inactivos -->
       <section class="dashboard-section chart-card">
         <h3>Estado de Usuarios</h3>
-        <apexchart type="donut" height="350" :options="chartA4Options" :series="chartA4Series"></apexchart>
+        <div v-if="noDataA4" class="no-data-chart">No hay datos de conexión de usuarios aún.</div>
+        <apexchart v-else type="donut" height="350" :options="chartA4Options" :series="chartA4Series"></apexchart>
       </section>
     </div>
   </div>
@@ -63,13 +68,19 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import api from '../api/axios';
 
+const router = useRouter();
 const authStore = useAuthStore();
 const idUsuario = authStore.user?.idUsuario;
 
 const cargando = ref(true);
+const noDataA2 = ref(false);
+const noDataA3 = ref(false);
+const noDataA4 = ref(false);
+const noDataGeneral = ref(false);
 
 // Datos procesados para A1
 const materiasStats = ref([]);
@@ -151,8 +162,18 @@ async function cargarDatosGenerales() {
     });
 
     // 3. Procesar A2 (Contenido Generado)
-    const { data: teorias } = await api.get(`/teoria`).catch(() => ({ data: [] }));
-    const { data: ejercicios } = await api.get(`/ejercicio`).catch(() => ({ data: [] }));
+    const { data: teorias } = await api.get(`/teoria`).catch((error) => {
+      if (error.response?.status === 404) noDataA2.value = true;
+      return { data: [] };
+    });
+    const { data: ejercicios } = await api.get(`/ejercicio`).catch((error) => {
+      if (error.response?.status === 404) noDataA2.value = true;
+      return { data: [] };
+    });
+    
+    if ((teorias?.length ?? 0) === 0 && (ejercicios?.length ?? 0) === 0) {
+      noDataA2.value = true;
+    }
     
     // Agruparemos por mes usando updated_at para teorias, simularemos para el resto si no hay fecha.
     const mesesMap = {};
@@ -183,7 +204,14 @@ async function cargarDatosGenerales() {
     ];
 
     // 4. Procesar A3 (Temas más activos)
-    const { data: intentos } = await api.get(`/intento-ejercicio`).catch(() => ({ data: [] }));
+    const { data: intentos } = await api.get(`/intento-ejercicio`).catch((error) => {
+      if (error.response?.status === 404) noDataA3.value = true;
+      return { data: [] };
+    });
+    
+    if ((intentos?.length ?? 0) === 0) {
+      noDataA3.value = true;
+    }
     
     // Mapear ejercicio -> subtema -> tema
     const ejDict = {}; ejercicios.forEach(e => ejDict[e.id] = e.idSubtema);
@@ -205,7 +233,14 @@ async function cargarDatosGenerales() {
     chartA3Series.value = [{ name: 'Intentos', data: sortedTemas.map(t => t[1]) }];
 
     // 5. Procesar A4 (Usuarios Activos vs Inactivos)
-    const { data: conexiones } = await api.get(`/ultima-conexion`).catch(() => ({ data: [] }));
+    const { data: conexiones } = await api.get(`/ultima-conexion`).catch((error) => {
+      if (error.response?.status === 404) noDataA4.value = true;
+      return { data: [] };
+    });
+    
+    if ((conexiones?.length ?? 0) === 0) {
+      noDataA4.value = true;
+    }
     
     // Asumir que cada registro es un usuario o debemos agrupar por usuario
     // Agrupar por idUsuario para obtener la más reciente
@@ -229,11 +264,20 @@ async function cargarDatosGenerales() {
     if(activos === 0 && inactivos === 0) { activos = 1; inactivos = 0; }
     chartA4Series.value = [activos, inactivos];
 
+    // Determinar si no hay datos relevantes en todo el dashboard
+    noDataGeneral.value = (materiasStats.value.length === 0) && noDataA2.value && noDataA3.value && noDataA4.value;
+
   } catch (error) {
     console.error("Error cargando dashboard general", error);
   } finally {
     cargando.value = false;
   }
+}
+
+function irAMateria(materia) {
+  const mensaje = `¿Deseas entrar a la materia "${materia.nombre}"?`;
+  if (!window.confirm(mensaje)) return;
+  router.push({ name: 'tema', params: { idMateria: materia.id, nombreMateria: materia.nombre } });
 }
 
 onMounted(() => {
@@ -300,11 +344,25 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  transition: transform 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
+}
+
+.stat-card-clickable {
+  cursor: pointer;
+}
+
+.no-data-chart {
+  padding: 28px 16px;
+  text-align: center;
+  color: #4a5568;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e0;
+  font-weight: 600;
 }
 
 .materia-title {
