@@ -120,6 +120,10 @@
         </div>
       </template>
     </div>
+
+    <!-- Dashboard Analítico de Materia (MÓDULO B) -->
+    <DashboardMateria v-if="idMateria" :idMateria="idMateria" />
+
   </div>
 </template>
 
@@ -127,6 +131,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import api from '../api/axios';
+import DashboardMateria from '../components/DashboardMateria.vue';
 
 const router = useRouter();
 const route = useRoute();

@@ -113,6 +113,9 @@
           </div>
         </div>
       </div>
+
+      <!-- Dashboard Analítico del Ejercicio (MÓDULO C) -->
+      <DashboardEjercicio v-if="idEjercicio" :idEjercicio="idEjercicio" />
       
     </div>
 
@@ -137,6 +140,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import api from '../api/axios';
+import DashboardEjercicio from '../components/DashboardEjercicio.vue';
 
 const router = useRouter();
 const route = useRoute();
