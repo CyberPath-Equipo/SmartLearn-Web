@@ -31,8 +31,8 @@
                 <span class="metric-label">Alumnos</span>
               </div>
               <div class="metric">
-                <span class="metric-value">{{ mat.progresoPromedio }}%</span>
-                <span class="metric-label">Progreso Medio</span>
+                <span class="metric-value">{{ mat.totalTemas }}</span>
+                <span class="metric-label">Temas</span>
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@ const authStore = useAuthStore();
 const idUsuario = authStore.user?.idUsuario;
 
 const cargando = ref(true);
-const noDataA2 = ref(false);
+const noDataA2 = ref(false); // ahora significa "sin recursos por materia"
 const noDataA3 = ref(false);
 const noDataA4 = ref(false);
 const noDataGeneral = ref(false);
@@ -85,11 +85,11 @@ const noDataGeneral = ref(false);
 // Datos procesados para A1
 const materiasStats = ref([]);
 
-// Datos para A2
+// Datos para A2 (Distribución por materia)
 const chartA2Series = ref([]);
 const chartA2Options = ref({
-  chart: { type: 'line', toolbar: { show: false }, zoom: { enabled: false } },
-  stroke: { curve: 'smooth', width: 3 },
+  chart: { type: 'bar', toolbar: { show: false } },
+  plotOptions: { bar: { horizontal: false, columnWidth: '55%' } },
   xaxis: { categories: [] },
   colors: ['#2563eb', '#10b981', '#f59e0b'],
   legend: { position: 'top' },
@@ -125,150 +125,145 @@ const getGradient = (index) => gradients[index % gradients.length];
 async function cargarDatosGenerales() {
   cargando.value = true;
   try {
-    // 1. Obtener materias del usuario
+    // 1. Obtener materias del docente
     const { data: materiasUser } = await api.get(`/usuario-materia/usuario/${idUsuario}/materias`).catch(() => ({ data: [] }));
-    
-    // 2. Obtener todas las relaciones usuario-materia y progresos (A1)
+
+    // Obtener todas las relaciones usuario-materia (para contar alumnos inscritos)
     const { data: todosUsuarioMateria } = await api.get(`/usuario-materia`).catch(() => ({ data: [] }));
-    const { data: todosProgresos } = await api.get(`/progreso-subtema`).catch(() => ({ data: [] }));
-    
-    // Obtener temas y subtemas para relacionar progresos con materias
-    const { data: todosTemas } = await api.get(`/tema`).catch(() => ({ data: [] }));
-    const { data: todosSubtemas } = await api.get(`/subtema`).catch(() => ({ data: [] }));
 
-    // Procesar A1
-    materiasStats.value = materiasUser.map(mat => {
-      // Alumnos inscritos en esta materia
+    // Mapeos auxiliares para A2/A3
+    const ejToSubtema = {}; // ejercicio.id -> subtemaId
+    const subToTema = {}; // subtema.id -> temaId
+    const temaIdToNombre = {}; // temaId -> nombre
+
+    const materiasStatsTemp = [];
+
+    // Variables para la gráfica A2
+    const nombresMaterias = [];
+    const temasPorMateria = [];
+    const teoriasPorMateria = [];
+    const ejerciciosPorMateria = [];
+
+    // Recorremos materias y contamos temas, teorías y ejercicios por materia
+    for (const mat of materiasUser) {
+      nombresMaterias.push(mat.nombre || `Materia ${mat.id}`);
+
+      // Contar alumnos inscritos (fallback: filtrar por relaciones)
       const inscritos = todosUsuarioMateria.filter(um => um.idMateria === mat.id).length;
-      
-      // Progresos de esta materia
-      // Buscar temas de la materia
-      const temasMateria = todosTemas.filter(t => t.idMateria === mat.id).map(t => t.id);
-      // Buscar subtemas de esos temas
-      const subtemasMateria = todosSubtemas.filter(s => temasMateria.includes(s.idTema)).map(s => s.id);
-      
-      // Progresos en esos subtemas
-      const progresosMateria = todosProgresos.filter(p => subtemasMateria.includes(p.idSubtema));
-      const promProgreso = progresosMateria.length 
-        ? progresosMateria.reduce((acc, curr) => acc + curr.porcentaje, 0) / progresosMateria.length 
-        : 0;
 
-      return {
+      // Temas de la materia
+      const { data: temasMateria } = await api.get(`/materia/${mat.id}/temas`).catch(() => ({ data: [] }));
+      const totalTemas = temasMateria.length;
+
+      let totalTeorias = 0;
+      let totalEjercicios = 0;
+
+      for (const tema of temasMateria) {
+        temaIdToNombre[tema.id] = tema.nombre || tema.titulo || `Tema ${tema.id}`;
+
+        // Subtemas del tema
+        const { data: subtemas } = await api.get(`/tema/${tema.id}/subtemas`).catch(() => ({ data: [] }));
+
+        for (const sub of subtemas) {
+          subToTema[sub.id] = tema.id;
+
+          // Teorías del subtema
+          const { data: teorias } = await api.get(`/subetema/${sub.id}/teoria`).catch(() => ({ data: [] }));
+          totalTeorias += teorias.length;
+
+          // Ejercicios del subtema
+          const { data: ejercicios } = await api.get(`/subetema/${sub.id}/ejercicio`).catch(() => ({ data: [] }));
+          totalEjercicios += ejercicios.length;
+
+          // Mapear ejercicios a subtema para A3
+          ejercicios.forEach(e => { if (e?.id) ejToSubtema[e.id] = sub.id; });
+        }
+      }
+
+      materiasStatsTemp.push({
         id: mat.id,
         nombre: mat.nombre,
         alumnosInscritos: inscritos,
-        progresoPromedio: promProgreso.toFixed(1)
-      };
-    });
+        totalTemas: totalTemas
+      });
 
-    // 3. Procesar A2 (Contenido Generado)
-    const { data: teorias } = await api.get(`/teoria`).catch((error) => {
-      if (error.response?.status === 404) noDataA2.value = true;
-      return { data: [] };
-    });
-    const { data: ejercicios } = await api.get(`/ejercicio`).catch((error) => {
-      if (error.response?.status === 404) noDataA2.value = true;
-      return { data: [] };
-    });
-    
-    if ((teorias?.length ?? 0) === 0 && (ejercicios?.length ?? 0) === 0) {
-      noDataA2.value = true;
+      temasPorMateria.push(totalTemas);
+      teoriasPorMateria.push(totalTeorias);
+      ejerciciosPorMateria.push(totalEjercicios);
     }
-    
-    // Agruparemos por mes usando updated_at para teorias, simularemos para el resto si no hay fecha.
-    const mesesMap = {};
-    const getMonthLabel = (dateStr) => {
-      if (!dateStr) return 'Actual';
-      const d = new Date(dateStr);
-      if (isNaN(d)) return 'Actual';
-      return d.toLocaleString('default', { month: 'short', year: 'numeric' });
-    };
 
-    teorias.forEach(t => {
-      const lbl = getMonthLabel(t.updated_at || t.fechaActualizacion || new Date().toISOString());
-      if(!mesesMap[lbl]) mesesMap[lbl] = { teorias: 0, ejercicios: 0 };
-      mesesMap[lbl].teorias++;
-    });
+    materiasStats.value = materiasStatsTemp;
 
-    ejercicios.forEach(e => {
-      const lbl = 'Actual'; // Ejercicios no tienen fecha en DTO según context
-      if(!mesesMap[lbl]) mesesMap[lbl] = { teorias: 0, ejercicios: 0 };
-      mesesMap[lbl].ejercicios++;
-    });
+    // A2: Distribución de Recursos Académicos por materia
+    if (nombresMaterias.length === 0) {
+      noDataA2.value = true;
+    } else {
+      noDataA2.value = temasPorMateria.every(v => v === 0) && teoriasPorMateria.every(v => v === 0) && ejerciciosPorMateria.every(v => v === 0);
+      chartA2Options.value = { ...chartA2Options.value, xaxis: { categories: nombresMaterias } };
+      chartA2Series.value = [
+        { name: 'Temas', data: temasPorMateria },
+        { name: 'Teorías', data: teoriasPorMateria },
+        { name: 'Ejercicios', data: ejerciciosPorMateria }
+      ];
+    }
 
-    const labelsA2 = Object.keys(mesesMap);
-    chartA2Options.value = { ...chartA2Options.value, xaxis: { categories: labelsA2 } };
-    chartA2Series.value = [
-      { name: 'Teorías', data: labelsA2.map(lbl => mesesMap[lbl].teorias) },
-      { name: 'Ejercicios', data: labelsA2.map(lbl => mesesMap[lbl].ejercicios) }
-    ];
-
-    // 4. Procesar A3 (Temas más activos)
-    const { data: intentos } = await api.get(`/intento-ejercicio`).catch((error) => {
-      if (error.response?.status === 404) noDataA3.value = true;
-      return { data: [] };
-    });
-    
+    // A3: Temas con más actividad (usa intentos)
+    const { data: intentos } = await api.get(`/intento-ejercicio`).catch(() => ({ data: [] }));
     if ((intentos?.length ?? 0) === 0) {
       noDataA3.value = true;
-    }
-    
-    // Mapear ejercicio -> subtema -> tema
-    const ejDict = {}; ejercicios.forEach(e => ejDict[e.id] = e.idSubtema);
-    const subDict = {}; todosSubtemas.forEach(s => subDict[s.id] = s.idTema);
-    const temaDict = {}; todosTemas.forEach(t => temaDict[t.id] = t.nombre);
+    } else {
+      const temaActivity = {};
+      intentos.forEach(intento => {
+        const idEj = intento.idEjercicio ?? intento.id_ejercicio ?? intento.ejercicioId;
+        const idSub = ejToSubtema[idEj];
+        const idTema = idSub ? subToTema[idSub] : null;
+        if (idTema) {
+          const nombreTema = temaIdToNombre[idTema] || `Tema ${idTema}`;
+          temaActivity[nombreTema] = (temaActivity[nombreTema] || 0) + 1;
+        }
+      });
 
-    const temaActivity = {};
-    intentos.forEach(intento => {
-      const idSub = ejDict[intento.idEjercicio];
-      const idTema = subDict[idSub];
-      if (idTema) {
-        const nombreTema = temaDict[idTema] || `Tema ${idTema}`;
-        temaActivity[nombreTema] = (temaActivity[nombreTema] || 0) + 1;
+      const sortedTemas = Object.entries(temaActivity).sort((a,b) => b[1] - a[1]).slice(0, 5);
+      if (sortedTemas.length === 0) {
+        noDataA3.value = true;
+      } else {
+        noDataA3.value = false;
+        chartA3Options.value = { ...chartA3Options.value, xaxis: { categories: sortedTemas.map(t => t[0]) } };
+        chartA3Series.value = [{ name: 'Intentos', data: sortedTemas.map(t => t[1]) }];
       }
-    });
+    }
 
-    const sortedTemas = Object.entries(temaActivity).sort((a,b) => b[1] - a[1]).slice(0, 5);
-    chartA3Options.value = { ...chartA3Options.value, xaxis: { categories: sortedTemas.map(t => t[0]) } };
-    chartA3Series.value = [{ name: 'Intentos', data: sortedTemas.map(t => t[1]) }];
-
-    // 5. Procesar A4 (Usuarios Activos vs Inactivos)
-    const { data: conexiones } = await api.get(`/ultima-conexion`).catch((error) => {
-      if (error.response?.status === 404) noDataA4.value = true;
-      return { data: [] };
-    });
-    
+    // A4: Usuarios Activos vs Inactivos
+    const { data: conexiones } = await api.get(`/ultima-conexion`).catch(() => ({ data: [] }));
     if ((conexiones?.length ?? 0) === 0) {
       noDataA4.value = true;
+    } else {
+      noDataA4.value = false;
+      const userUltimaConexion = {};
+      conexiones.forEach(c => {
+        if (!userUltimaConexion[c.idUsuario] || new Date(c.ultimaConexion) > new Date(userUltimaConexion[c.idUsuario])) {
+          userUltimaConexion[c.idUsuario] = c.ultimaConexion;
+        }
+      });
+
+      const limiteInactivo = new Date();
+      limiteInactivo.setDate(limiteInactivo.getDate() - 7);
+
+      let activos = 0, inactivos = 0;
+      Object.values(userUltimaConexion).forEach(fecha => {
+        if (new Date(fecha) >= limiteInactivo) activos++;
+        else inactivos++;
+      });
+
+      if (activos === 0 && inactivos === 0) { activos = 1; inactivos = 0; }
+      chartA4Series.value = [activos, inactivos];
     }
-    
-    // Asumir que cada registro es un usuario o debemos agrupar por usuario
-    // Agrupar por idUsuario para obtener la más reciente
-    const userUltimaConexion = {};
-    conexiones.forEach(c => {
-      if (!userUltimaConexion[c.idUsuario] || new Date(c.ultimaConexion) > new Date(userUltimaConexion[c.idUsuario])) {
-        userUltimaConexion[c.idUsuario] = c.ultimaConexion;
-      }
-    });
-
-    const limiteInactivo = new Date();
-    limiteInactivo.setDate(limiteInactivo.getDate() - 7);
-
-    let activos = 0, inactivos = 0;
-    Object.values(userUltimaConexion).forEach(fecha => {
-      if (new Date(fecha) >= limiteInactivo) activos++;
-      else inactivos++;
-    });
-
-    // Si no hay datos, mostrar algo por defecto
-    if(activos === 0 && inactivos === 0) { activos = 1; inactivos = 0; }
-    chartA4Series.value = [activos, inactivos];
 
     // Determinar si no hay datos relevantes en todo el dashboard
     noDataGeneral.value = (materiasStats.value.length === 0) && noDataA2.value && noDataA3.value && noDataA4.value;
 
   } catch (error) {
-    console.error("Error cargando dashboard general", error);
+    console.error('Error cargando dashboard general', error);
   } finally {
     cargando.value = false;
   }

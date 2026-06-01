@@ -10,28 +10,44 @@
       <p>Calculando estadísticas...</p>
     </div>
 
-    <div v-else-if="noData" class="no-data-chart">Datos insuficientes o inexistentes.</div>
-
     <div v-else class="dashboard-grid">
       <!-- B1: Ejercicios con más errores -->
       <div class="chart-card">
         <h4>Ejercicios Problemáticos</h4>
         <p class="chart-desc">Ejercicios con mayor tasa de error o abandono.</p>
-        <apexchart type="bar" height="250" :options="chartB1Options" :series="chartB1Series"></apexchart>
+        <template v-if="hasB1Data">
+          <apexchart type="bar" height="250" :options="chartB1Options" :series="chartB1Series"></apexchart>
+        </template>
+        <div v-else class="no-data-msg">
+          <span class="no-data-icon">📊</span>
+          <span>No hay intentos de ejercicios aún.</span>
+        </div>
       </div>
 
       <!-- B2: Temas más activos -->
       <div class="chart-card">
         <h4>Actividad por Tema</h4>
         <p class="chart-desc">Cantidad de intentos realizados por los alumnos.</p>
-        <apexchart type="bar" height="250" :options="chartB2Options" :series="chartB2Series"></apexchart>
+        <template v-if="hasB2Data">
+          <apexchart type="bar" height="250" :options="chartB2Options" :series="chartB2Series"></apexchart>
+        </template>
+        <div v-else class="no-data-msg">
+          <span class="no-data-icon">📊</span>
+          <span>No hay actividad registrada en los temas.</span>
+        </div>
       </div>
 
-      <!-- B3: Progreso promedio -->
-      <div class="chart-card radial-card">
-        <h4>Avance Global</h4>
-        <p class="chart-desc">Progreso promedio de los alumnos en la materia.</p>
-        <apexchart type="radialBar" height="280" :options="chartB3Options" :series="chartB3Series"></apexchart>
+      <!-- B3: Distribución de Recursos de la Materia -->
+      <div class="chart-card">
+        <h4>Distribución de Recursos</h4>
+        <p class="chart-desc">Volumen de contenido existente en la materia.</p>
+        <template v-if="hasB3Data">
+          <apexchart type="bar" height="250" :options="chartB3Options" :series="chartB3Series"></apexchart>
+        </template>
+        <div v-else class="no-data-msg">
+          <span class="no-data-icon">📦</span>
+          <span>No hay recursos registrados en esta materia.</span>
+        </div>
       </div>
     </div>
   </div>
@@ -51,31 +67,54 @@ const props = defineProps({
 
 const router = useRouter();
 const cargando = ref(true);
-const noData = ref(false);
 
+// --- Flags de datos por dashboard ---
+const hasB1Data = ref(false);
+const hasB2Data = ref(false);
+const hasB3Data = ref(false);
+
+// --- B1: Ejercicios Problemáticos ---
 const chartB1Series = ref([{ name: 'Tasa de Error (%)', data: [] }]);
+// Mapa de índice → { idEjercicio, idSubtema, nombreSubtema } para la navegación
+const ejercicioNavMap = ref({});
+
 const chartB1Options = ref({
-  chart: { 
-    type: 'bar', 
+  chart: {
+    type: 'bar',
     toolbar: { show: false },
     events: {
       dataPointSelection: (event, chartContext, config) => {
         const index = config.dataPointIndex;
-        if(index >= 0 && idEjerciciosMap.value[index]) {
-          // Navegar al ejercicio
-          // Nota: Sería necesario contar con idSubtema etc, pero a falta de ellos, se puede ir a ver ejercicio general.
+        const nav = ejercicioNavMap.value[index];
+        if (nav) {
+          router.push({
+            name: 'ejercicio',
+            query: {
+              idEjercicio: nav.idEjercicio,
+              idSubtema: nav.idSubtema,
+              nombreSubtema: nav.nombreSubtema
+            }
+          });
         }
       }
     }
   },
-  plotOptions: { bar: { horizontal: true, borderRadius: 4, colors: { ranges: [{ from: 0, to: 100, color: '#ef4444' }] } } },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      borderRadius: 4,
+      colors: {
+        ranges: [{ from: 0, to: 100, color: '#ef4444' }]
+      }
+    }
+  },
   xaxis: { categories: [], max: 100 },
   tooltip: {
     y: { formatter: (val) => val.toFixed(1) + '%' }
   }
 });
-const idEjerciciosMap = ref({});
 
+// --- B2: Actividad por Tema ---
 const chartB2Series = ref([{ name: 'Intentos', data: [] }]);
 const chartB2Options = ref({
   chart: { type: 'bar', toolbar: { show: false } },
@@ -84,56 +123,74 @@ const chartB2Options = ref({
   colors: ['#3b82f6']
 });
 
-const chartB3Series = ref([0]);
+// --- B3: Distribución de Recursos ---
+const chartB3Series = ref([{ name: 'Cantidad', data: [] }]);
 const chartB3Options = ref({
-  chart: { type: 'radialBar' },
+  chart: { type: 'bar', toolbar: { show: false } },
   plotOptions: {
-    radialBar: {
-      hollow: { size: '65%' },
-      dataLabels: {
-        name: { show: false },
-        value: { fontSize: '2rem', fontWeight: 700, color: '#10b981', formatter: (val) => val.toFixed(1) + '%' }
-      }
+    bar: {
+      borderRadius: 6,
+      columnWidth: '45%',
+      distributed: true
     }
   },
-  colors: ['#10b981'],
-  stroke: { lineCap: 'round' }
+  xaxis: {
+    categories: ['Temas', 'Subtemas', 'Teorías', 'Ejercicios']
+  },
+  colors: ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'],
+  legend: { show: false },
+  tooltip: {
+    y: { formatter: (val) => val + ' elementos' }
+  }
 });
 
+// --- Carga de datos ---
 async function cargarEstadisticasMateria() {
   if (!props.idMateria) return;
   cargando.value = true;
+  hasB1Data.value = false;
+  hasB2Data.value = false;
+  hasB3Data.value = false;
+
   try {
     let todosTemas = [];
     let todosSubtemas = [];
     let todosEjercicios = [];
     let intentos = [];
-    let progresos = [];
+    let todasTeorias = [];
 
-    try { const res = await api.get('/tema'); todosTemas = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
-    try { const res = await api.get('/subtema'); todosSubtemas = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
-    try { const res = await api.get('/ejercicio'); todosEjercicios = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
-    try { const res = await api.get('/intento-ejercicio'); intentos = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
-    try { const res = await api.get('/progreso-subtema'); progresos = res.data || []; } catch (e) { if (e.response?.status === 404) { noData.value = true; return; } }
+    try { const res = await api.get('/tema'); todosTemas = res.data || []; } catch (e) { /* 404 o error → array vacío */ }
+    try { const res = await api.get('/subtema'); todosSubtemas = res.data || []; } catch (e) { /* vacío */ }
+    try { const res = await api.get('/ejercicio'); todosEjercicios = res.data || []; } catch (e) { /* vacío */ }
+    try { const res = await api.get('/intento-ejercicio'); intentos = res.data || []; } catch (e) { /* vacío */ }
+    try { const res = await api.get('/teoria'); todasTeorias = res.data || []; } catch (e) { /* vacío */ }
 
+    // Filtrado jerárquico: Materia → Temas → Subtemas → Ejercicios/Teorías
     const temasMateria = todosTemas.filter(t => String(t.idMateria) === String(props.idMateria));
     const idsTemasMateria = temasMateria.map(t => t.id);
-    
+
     const subtemasMateria = todosSubtemas.filter(s => idsTemasMateria.includes(s.idTema));
     const idsSubtemasMateria = subtemasMateria.map(s => s.id);
 
     const ejerciciosMateria = todosEjercicios.filter(e => idsSubtemasMateria.includes(e.idSubtema));
     const idsEjerciciosMateria = ejerciciosMateria.map(e => e.id);
 
-    // B1: Ejercicios con más errores (puntaje < 70 o estado abandonado)
+    const teoriasMateria = todasTeorias.filter(t => idsSubtemasMateria.includes(t.idSubtema));
+
+    // Mapas auxiliares para navegación B1
+    const subDict = {};
+    subtemasMateria.forEach(s => { subDict[s.id] = { idTema: s.idTema, nombre: s.nombre }; });
+    const ejDict = {};
+    ejerciciosMateria.forEach(e => { ejDict[e.id] = e.idSubtema; });
+
+    // ========== B1: Ejercicios con más errores ==========
     const statsEjercicios = {};
     ejerciciosMateria.forEach(e => statsEjercicios[e.id] = { nombre: e.nombre, intentos: 0, errores: 0 });
 
     const intentosMateria = intentos.filter(i => idsEjerciciosMateria.includes(i.idEjercicio));
     intentosMateria.forEach(i => {
-      if(statsEjercicios[i.idEjercicio]) {
+      if (statsEjercicios[i.idEjercicio]) {
         statsEjercicios[i.idEjercicio].intentos++;
-        // Definición de error acordada: puntaje < 70 o estado 'abandonado' (insensible a mayúsculas)
         const estadoLower = (i.estado || '').toLowerCase();
         if (i.puntaje < 70 || estadoLower === 'abandonado') {
           statsEjercicios[i.idEjercicio].errores++;
@@ -142,50 +199,80 @@ async function cargarEstadisticasMateria() {
     });
 
     const errorRates = Object.entries(statsEjercicios)
-      .filter(([id, data]) => data.intentos > 0)
-      .map(([id, data]) => {
-        return { 
-          id, 
-          nombre: data.nombre, 
-          tasa: (data.errores / data.intentos) * 100 
+      .filter(([, data]) => data.intentos > 0)
+      .map(([id, data]) => ({
+        id,
+        nombre: data.nombre,
+        tasa: (data.errores / data.intentos) * 100
+      }))
+      .sort((a, b) => b.tasa - a.tasa)
+      .slice(0, 5);
+
+    if (errorRates.length > 0) {
+      hasB1Data.value = true;
+      chartB1Options.value = {
+        ...chartB1Options.value,
+        xaxis: { ...chartB1Options.value.xaxis, categories: errorRates.map(er => er.nombre) }
+      };
+      chartB1Series.value = [{ name: 'Tasa de Error (%)', data: errorRates.map(er => er.tasa) }];
+
+      // Construir mapa de navegación para cada barra
+      const navMap = {};
+      errorRates.forEach((er, idx) => {
+        const idSub = ejDict[er.id];
+        const subInfo = subDict[idSub] || {};
+        navMap[idx] = {
+          idEjercicio: er.id,
+          idSubtema: idSub,
+          nombreSubtema: subInfo.nombre || 'Subtema'
         };
-      })
-      .sort((a,b) => b.tasa - a.tasa)
-      .slice(0, 5); // Top 5 problemáticos
+      });
+      ejercicioNavMap.value = navMap;
+    }
 
-    chartB1Options.value = { ...chartB1Options.value, xaxis: { ...chartB1Options.value.xaxis, categories: errorRates.map(er => er.nombre) } };
-    chartB1Series.value = [{ name: 'Tasa de Error (%)', data: errorRates.map(er => er.tasa) }];
-    errorRates.forEach((er, idx) => { idEjerciciosMap.value[idx] = er.id; });
-
-    // B2: Temas más activos
+    // ========== B2: Temas más activos ==========
     const actividadTemas = {};
     temasMateria.forEach(t => actividadTemas[t.id] = { nombre: t.nombre, intentos: 0 });
 
-    const subDict = {}; subtemasMateria.forEach(s => subDict[s.id] = s.idTema);
-    const ejDict = {}; ejerciciosMateria.forEach(e => ejDict[e.id] = e.idSubtema);
-
     intentosMateria.forEach(i => {
       const idSub = ejDict[i.idEjercicio];
-      const idTema = subDict[idSub];
-      if(idTema && actividadTemas[idTema]) {
+      const subInfo = subDict[idSub];
+      const idTema = subInfo?.idTema;
+      if (idTema && actividadTemas[idTema]) {
         actividadTemas[idTema].intentos++;
       }
     });
 
-    const sortedTemas = Object.values(actividadTemas).sort((a,b) => b.intentos - a.intentos).slice(0, 5);
-    chartB2Options.value = { ...chartB2Options.value, xaxis: { categories: sortedTemas.map(t => t.nombre) } };
-    chartB2Series.value = [{ name: 'Intentos', data: sortedTemas.map(t => t.intentos) }];
+    const sortedTemas = Object.values(actividadTemas)
+      .filter(t => t.intentos > 0)
+      .sort((a, b) => b.intentos - a.intentos)
+      .slice(0, 5);
 
-    // B3: Progreso promedio
-    const progresosMateria = progresos.filter(p => idsSubtemasMateria.includes(p.idSubtema));
-    const promProgreso = progresosMateria.length 
-      ? progresosMateria.reduce((acc, curr) => acc + curr.porcentaje, 0) / progresosMateria.length 
-      : 0;
-    
-    chartB3Series.value = [promProgreso];
+    if (sortedTemas.length > 0) {
+      hasB2Data.value = true;
+      chartB2Options.value = {
+        ...chartB2Options.value,
+        xaxis: { categories: sortedTemas.map(t => t.nombre) }
+      };
+      chartB2Series.value = [{ name: 'Intentos', data: sortedTemas.map(t => t.intentos) }];
+    }
+
+    // ========== B3: Distribución de Recursos ==========
+    const totalTemas = temasMateria.length;
+    const totalSubtemas = subtemasMateria.length;
+    const totalTeorias = teoriasMateria.length;
+    const totalEjercicios = ejerciciosMateria.length;
+
+    if (totalTemas + totalSubtemas + totalTeorias + totalEjercicios > 0) {
+      hasB3Data.value = true;
+      chartB3Series.value = [{
+        name: 'Cantidad',
+        data: [totalTemas, totalSubtemas, totalTeorias, totalEjercicios]
+      }];
+    }
 
   } catch (error) {
-    console.error("Error calculando estadisticas de la materia", error);
+    console.error('Error calculando estadísticas de la materia', error);
   } finally {
     cargando.value = false;
   }
@@ -193,7 +280,6 @@ async function cargarEstadisticasMateria() {
 
 onMounted(cargarEstadisticasMateria);
 watch(() => props.idMateria, cargarEstadisticasMateria);
-
 </script>
 
 <style scoped>
@@ -215,7 +301,7 @@ watch(() => props.idMateria, cargarEstadisticasMateria);
 }
 
 .dashboard-header p {
-  color: #718096;
+  color: #c7dbef;
   margin: 0;
   font-size: 0.95rem;
 }
@@ -245,10 +331,23 @@ watch(() => props.idMateria, cargarEstadisticasMateria);
   margin: 0 0 16px 0;
 }
 
-.radial-card {
+.no-data-msg {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px 16px;
+  color: #a0aec0;
+  font-size: 0.95rem;
+  text-align: center;
+  background: #f1f5f9;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+}
+
+.no-data-icon {
+  font-size: 1.8rem;
 }
 
 .estado-carga {
