@@ -1,13 +1,9 @@
 <template>
-  <div class="content-view">
-    <div class="breadcrumbs">
-      <span class="breadcrumb-item active">Dashboard Principal</span>
-    </div>
-    
+  <div class="content-view">    
     <div class="topbar">
       <div>
-        <h2 class="view-title">Dashboard General Docente</h2>
-        <p class="view-subtitle">Métricas y estadísticas globales de tu actividad académica.</p>
+        <h2 class="view-title">Dashboard General</h2>
+        <p class="view-subtitle">Métricas y estadísticas globales de tus recursos académicos.</p>
       </div>
     </div>
 
@@ -21,7 +17,7 @@
     <div v-else class="dashboard-grid">
       <!-- Dashboard A1: Tarjetas de Materias -->
       <section class="dashboard-section" style="grid-column: 1 / -1;">
-        <h3>Resumen por Materia</h3>
+        <h3>Tus materias</h3>
         <div class="cards-grid">
           <div v-for="(mat, idx) in materiasStats" :key="mat.id" class="stat-card stat-card-clickable" :style="{ background: getGradient(idx) }" @click="irAMateria(mat)">
             <h4 class="materia-title">{{ mat.nombre }}</h4>
@@ -319,7 +315,7 @@ onMounted(() => {
 }
 
 .dashboard-section h3 {
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   color: #2d3748;
   margin-bottom: 16px;
   font-weight: 700;
