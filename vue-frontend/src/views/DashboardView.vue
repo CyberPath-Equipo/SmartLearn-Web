@@ -49,9 +49,9 @@
           </div>
         </section>
 
-        <!-- Dashboard A3: Temas Más Activos -->
+        <!-- Dashboard A3: Materias Más Activas -->
         <section class="chart-card chart-a3">
-          <h3 class="chart-title">Temas con Más Actividad</h3>
+          <h3 class="chart-title">Materias con Más Actividad</h3>
           <div v-if="noDataA3" class="no-data-chart-inner">No hay intentos de ejercicios aún.</div>
           <div v-else class="chart-container">
             <apexchart type="bar" height="100%" :options="chartA3Options" :series="chartA3Series"></apexchart>
@@ -214,38 +214,39 @@ async function cargarDatosGenerales() {
       ];
     }
 
-    // A3: Temas con más actividad (usa intentos)
+    // A3: Materias con más actividad (usa intentos)
     const { data: intentos } = await api.get(`/intento-ejercicio`).catch(() => ({ data: [] }));
     if ((intentos?.length ?? 0) === 0) {
       noDataA3.value = true;
     } else {
-      // Inicializar actividad sólo para los temas pertenecientes a las materias del usuario
-      const actividadTemas = {};
-      Object.keys(temaToMateria).forEach(tid => {
-        actividadTemas[tid] = { nombre: temaIdToNombre[tid] || `Tema ${tid}`, intentos: 0 };
+      // Inicializar actividad sólo para las materias del usuario
+      const actividadMaterias = {};
+      materiasUser.forEach(mat => {
+        actividadMaterias[mat.id] = { nombre: mat.nombre || `Materia ${mat.id}`, intentos: 0 };
       });
 
-      // Contar intentos únicamente si el tema pertenece a las materias del docente
+      // Contar intentos únicamente si pertenecen a las materias del docente
       intentos.forEach(intento => {
         const idEj = intento.idEjercicio;
         const idSub = ejToSubtema[idEj];
         const idTema = idSub ? subToTema[idSub] : null;
-        if (idTema && actividadTemas[idTema]) {
-          actividadTemas[idTema].intentos++;
+        const idMat = idTema ? temaToMateria[idTema] : null;
+        if (idMat && actividadMaterias[idMat]) {
+          actividadMaterias[idMat].intentos++;
         }
       });
 
-      const sortedTemas = Object.values(actividadTemas)
-        .filter(t => t.intentos > 0)
+      const sortedMaterias = Object.values(actividadMaterias)
+        .filter(m => m.intentos > 0)
         .sort((a, b) => b.intentos - a.intentos)
         .slice(0, 5);
 
-      if (sortedTemas.length === 0) {
+      if (sortedMaterias.length === 0) {
         noDataA3.value = true;
       } else {
         noDataA3.value = false;
-        chartA3Options.value = { ...chartA3Options.value, xaxis: { categories: sortedTemas.map(t => t.nombre) } };
-        chartA3Series.value = [{ name: 'Intentos', data: sortedTemas.map(t => t.intentos) }];
+        chartA3Options.value = { ...chartA3Options.value, xaxis: { categories: sortedMaterias.map(m => m.nombre) } };
+        chartA3Series.value = [{ name: 'Intentos', data: sortedMaterias.map(m => m.intentos) }];
       }
     }
 
