@@ -137,17 +137,17 @@ async function cargarEstadisticasEjercicio() {
     );
 
     // Mínimo 3 intentos válidos para mostrar estadísticas
-    if (intentosValidos.length < 3) {
+    if (intentosEjercicio.length < 3) {
       noData.value = true;
       return;
     }
 
     // ===== C1: Tiempo Promedio vs Puntaje Promedio =====
     const tiempoPromedio =
-      intentosValidos.reduce((acc, i) => acc + (i.duracionSeg || 0), 0) / intentosValidos.length;
+      intentosEjercicio.reduce((acc, i) => acc + (i.duracionSeg || 0), 0) / intentosEjercicio.length;
 
     const puntajePromedio =
-      intentosValidos.reduce((acc, i) => acc + (i.puntaje || 0), 0) / intentosValidos.length;
+      intentosEjercicio.reduce((acc, i) => acc + (i.puntaje || 0), 0) / intentosEjercicio.length;
 
     // Ajustar el eje Y al mayor valor para mejor visualización
     const maxVal = Math.max(tiempoPromedio, puntajePromedio, 100) * 1.15;
