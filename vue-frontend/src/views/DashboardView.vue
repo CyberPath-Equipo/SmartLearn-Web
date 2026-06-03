@@ -12,13 +12,13 @@
       <p>Procesando estadísticas...</p>
     </div>
 
-    <div v-else-if="noDataGeneral" class="no-data-chart-global">Datos insuficientes o inexistentes.</div>
+    <div v-else-if="noDataGeneral" class="no-data-chart">Datos insuficientes o inexistentes.</div>
 
-    <div v-else class="dashboard-layout">
-      <!-- Dashboard A1: Tarjetas de Materias (Columna Izquierda) -->
-      <aside class="materias-sidebar">
-        <h3 class="section-title">Tus materias</h3>
-        <div class="cards-vertical">
+    <div v-else class="dashboard-grid">
+      <!-- Dashboard A1: Tarjetas de Materias -->
+      <section class="dashboard-section" style="grid-column: 1 / -1;">
+        <h3>Tus materias</h3>
+        <div class="cards-grid">
           <div v-for="(mat, idx) in materiasStats" :key="mat.id" class="stat-card stat-card-clickable" :style="{ background: getGradient(idx) }" @click="irAMateria(mat)">
             <h4 class="materia-title">{{ mat.nombre }}</h4>
             <div class="materia-metrics">
@@ -32,41 +32,32 @@
               </div>
             </div>
           </div>
-          <div v-if="materiasStats.length === 0" class="no-data-chart-inner">
+          <div v-if="materiasStats.length === 0" class="no-data">
             No tienes materias registradas o con datos suficientes.
           </div>
         </div>
-      </aside>
+      </section>
 
-      <!-- Gráficos (Columna Derecha) -->
-      <div class="charts-grid">
-        <!-- Dashboard A2: Contenido Académico Generado -->
-        <section class="chart-card chart-a2">
-          <h3 class="chart-title">Contenido Generado (Últimos Meses)</h3>
-          <div v-if="noDataA2" class="no-data-chart-inner">No hay contenido generado aún.</div>
-          <div v-else class="chart-container">
-            <apexchart type="line" height="100%" :options="chartA2Options" :series="chartA2Series"></apexchart>
-          </div>
-        </section>
+      <!-- Dashboard A2: Contenido Académico Generado -->
+      <section class="dashboard-section chart-card">
+        <h3>Contenido Generado (Últimos Meses)</h3>
+        <div v-if="noDataA2" class="no-data-chart">No hay contenido generado aún.</div>
+        <apexchart v-else type="line" height="350" :options="chartA2Options" :series="chartA2Series"></apexchart>
+      </section>
 
-        <!-- Dashboard A3: Temas Más Activos -->
-        <section class="chart-card chart-a3">
-          <h3 class="chart-title">Temas con Más Actividad</h3>
-          <div v-if="noDataA3" class="no-data-chart-inner">No hay intentos de ejercicios aún.</div>
-          <div v-else class="chart-container">
-            <apexchart type="bar" height="100%" :options="chartA3Options" :series="chartA3Series"></apexchart>
-          </div>
-        </section>
+      <!-- Dashboard A3: Temas Más Activos -->
+      <section class="dashboard-section chart-card">
+        <h3>Temas con Más Actividad</h3>
+        <div v-if="noDataA3" class="no-data-chart">No hay intentos de ejercicios aún.</div>
+        <apexchart v-else type="bar" height="350" :options="chartA3Options" :series="chartA3Series"></apexchart>
+      </section>
 
-        <!-- Dashboard A4: Usuarios Activos vs Inactivos -->
-        <section class="chart-card chart-a4">
-          <h3 class="chart-title">Estado de Usuarios</h3>
-          <div v-if="noDataA4" class="no-data-chart-inner">No hay datos de conexión de usuarios aún.</div>
-          <div v-else class="chart-container">
-            <apexchart type="donut" height="100%" :options="chartA4Options" :series="chartA4Series"></apexchart>
-          </div>
-        </section>
-      </div>
+      <!-- Dashboard A4: Usuarios Activos vs Inactivos -->
+      <section class="dashboard-section chart-card">
+        <h3>Estado de Usuarios</h3>
+        <div v-if="noDataA4" class="no-data-chart">No hay datos de conexión de usuarios aún.</div>
+        <apexchart v-else type="donut" height="350" :options="chartA4Options" :series="chartA4Series"></apexchart>
+      </section>
     </div>
   </div>
 </template>
@@ -287,177 +278,76 @@ onMounted(() => {
 
 <style scoped>
 .content-view {
-  padding: 16px 24px;
+  padding: 10px 40px;
   display: flex;
   flex-direction: column;
-  /* Altura total viewport menos tamaño estimado del nav superior */
-  height: calc(100vh - 72px); 
-  overflow: hidden; /* Evita el scroll global */
-  gap: 16px;
-  box-sizing: border-box;
+  gap: 24px;
 }
 
-.topbar {
-  flex-shrink: 0;
+.breadcrumbs {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-bottom: 8px;
+}
+.breadcrumb-item.active {
+  color: #2d3748;
+  font-weight: 600;
 }
 
 .view-title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 800;
   color: #1a202c;
-  margin: 0 0 2px 0;
+  margin: 0 0 6px 0;
   letter-spacing: -0.025em;
 }
 
 .view-subtitle {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: #718096;
   margin: 0;
 }
 
-.dashboard-layout {
+.dashboard-grid {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 20px;
-  flex-grow: 1;
-  min-height: 0; /* Crítico para que los hijos flex/grid con 100% height funcionen */
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
 }
 
-.materias-sidebar {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.section-title {
-  font-size: 1.2rem;
+.dashboard-section h3 {
+  font-size: 1.6rem;
   color: #2d3748;
-  margin: 0 0 12px 0;
+  margin-bottom: 16px;
   font-weight: 700;
-  flex-shrink: 0;
 }
 
-.cards-vertical {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow-y: auto;
-  padding-right: 4px;
-  flex-grow: 1;
-}
-
-.cards-vertical::-webkit-scrollbar {
-  width: 6px;
-}
-.cards-vertical::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 4px;
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
 }
 
 .stat-card {
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 16px;
+  padding: 24px;
   color: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  flex-shrink: 0;
+  gap: 16px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
 }
 
 .stat-card-clickable {
   cursor: pointer;
 }
 
-.materia-title {
-  font-size: 1.1rem;
-  margin: 0;
-  font-weight: 700;
-}
-
-.materia-metrics {
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 8px;
-}
-
-.metric {
-  display: flex;
-  flex-direction: column;
-}
-
-.metric-value {
-  font-size: 1.2rem;
-  font-weight: 800;
-}
-
-.metric-label {
-  font-size: 0.7rem;
-  opacity: 0.9;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.charts-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 16px;
-  min-height: 0;
-}
-
-.chart-a2 {
-  grid-column: 1 / -1;
-}
-
-.chart-card {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.chart-title {
-  font-size: 1rem;
-  color: #2d3748;
-  margin: 0 0 8px 0;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.chart-container {
-  flex-grow: 1;
-  min-height: 0;
-  position: relative;
-}
-
-.no-data-chart-inner {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #a0aec0;
-  font-size: 0.9rem;
-  text-align: center;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px dashed #cbd5e1;
-  padding: 20px;
-}
-
-.no-data-chart-global {
-  padding: 40px 16px;
+.no-data-chart {
+  padding: 28px 16px;
   text-align: center;
   color: #4a5568;
   background: #f8fafc;
@@ -466,13 +356,51 @@ onMounted(() => {
   font-weight: 600;
 }
 
+.materia-title {
+  font-size: 1.25rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.materia-metrics {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 12px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.chart-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
 .estado-carga {
-  flex-grow: 1;
+  padding: 60px;
+  text-align: center;
+  color: #718096;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  color: #718096;
   gap: 16px;
 }
 
@@ -487,40 +415,5 @@ onMounted(() => {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-@media (max-width: 1024px) {
-  .content-view {
-    height: auto;
-    overflow-y: auto;
-    padding: 16px;
-  }
-  
-  .dashboard-layout {
-    grid-template-columns: 1fr;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .cards-vertical {
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 8px;
-  }
-  
-  .stat-card {
-    min-width: 220px;
-  }
-  
-  .charts-grid {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .chart-card {
-    height: 320px; /* Tamaño fijo en móvil */
-    flex-shrink: 0;
-  }
 }
 </style>
