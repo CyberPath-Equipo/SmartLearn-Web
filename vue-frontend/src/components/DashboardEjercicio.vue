@@ -120,7 +120,7 @@ async function cargarEstadisticasEjercicio() {
   try {
     let intentos = [];
     try {
-      const res = await api.get('/intento-ejercicio/{idEjercicio}', {
+      const res = await api.get('/intento-ejercicio', {
         params: { idEjercicio: props.idEjercicio }
       });
       intentos = res.data || [];
