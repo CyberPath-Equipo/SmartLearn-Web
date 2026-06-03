@@ -120,7 +120,9 @@ async function cargarEstadisticasEjercicio() {
   try {
     let intentos = [];
     try {
-      const res = await api.get('/intento-ejercicio');
+      const res = await api.get('/intento-ejercicio/{idEjercicio}', {
+        params: { idEjercicio: props.idEjercicio }
+      });
       intentos = res.data || [];
     } catch (e) {
       if (e.response?.status === 404) {
@@ -132,11 +134,6 @@ async function cargarEstadisticasEjercicio() {
     // Filtrar por el ejercicio actual
     const intentosEjercicio = intentos.filter(
       i => String(i.idEjercicio) === String(props.idEjercicio)
-    );
-
-    // Validar: solo considerar intentos con datos completos (sin nulos)
-    const intentosValidos = intentosEjercicio.filter(
-      i => i.duracionSeg != null && i.puntaje != null
     );
 
     // Mínimo 3 intentos válidos para mostrar estadísticas

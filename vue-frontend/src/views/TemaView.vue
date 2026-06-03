@@ -18,28 +18,66 @@
       </div>
       <div class="materia-actions">
         <button class="btn-action-edit" @click="mostrarFormEditMateria">
-          <span class="btn-icon">✏️</span> Editar Materia
+          Editar Materia
         </button>
         <button class="btn-action-delete" @click="eliminarMateriaActiva">
-          <span class="btn-icon">🗑️</span> Eliminar Materia
+          Eliminar Materia
         </button>
       </div>
-    </div>
-
-    <!-- Topbar para Temas -->
-    <div class="topbar">
-      <div>
-        <h3 class="section-title">Temas de la Materia</h3>
-        <p class="section-subtitle">Selecciona un tema para ver sus subtemas o agrega uno nuevo.</p>
-      </div>
-      <button class="btn-primary-blue" @click="mostrarFormAdd">
-        <span class="btn-icon">+</span> Nuevo Tema
-      </button>
     </div>
 
     <!-- Mensaje de estado -->
     <div v-if="mensaje" :class="['mensaje-estado', mensajeTipo]" role="status">
       {{ mensaje }}
+    </div>
+
+    <!-- Layout Principal: Temas (Sidebar) + Dashboard (Main) -->
+    <div class="main-layout">
+      
+      <!-- Columna Izquierda: Temas -->
+      <aside class="temas-sidebar">
+        <div class="sidebar-header">
+          <h3 class="section-title">Temas</h3>
+          <button class="btn-primary-blue btn-sm" @click="mostrarFormAdd">
+            <span class="btn-icon">+</span> Nuevo
+          </button>
+        </div>
+
+        <div class="temas-list">
+          <div v-if="cargando" class="estado-carga">
+            <div class="spinner"></div>
+            <p>Cargando temas...</p>
+          </div>
+
+          <template v-else>
+            <div v-if="temas.length === 0" class="no-data-card">
+              <p class="sin-datos">No hay temas registrados para esta materia.</p>
+            </div>
+
+            <div
+              v-else
+              v-for="(tema, index) in temas"
+              :key="tema.id"
+              class="tema-card"
+              :style="{ background: getGradient(index) }"
+              @click="irASubtemas(tema)"
+            >
+              <div class="tema-card-content">
+                <h4 class="tema-title">{{ tema.nombre }}</h4>
+              </div>
+              <div class="tema-card-footer">
+                <span class="tema-action-link">Ver Subtemas &rarr;</span>
+              </div>
+            </div>
+          </template>
+        </div>
+      </aside>
+
+      <!-- Columna Derecha: Dashboard Analítico -->
+      <section class="dashboard-area">
+        <DashboardMateria v-if="idMateria" :idMateria="idMateria" />
+      </section>
+
     </div>
 
     <!-- Modal: Editar Materia -->
@@ -89,40 +127,6 @@
         </form>
       </div>
     </div>
-
-    <!-- Grid de Temas -->
-    <div class="cards-grid">
-      <div v-if="cargando" class="estado-carga">
-        <div class="spinner"></div>
-        <p>Cargando temas...</p>
-      </div>
-
-      <template v-else>
-        <div v-if="temas.length === 0" class="no-data-card">
-          <p class="sin-datos">No hay temas registrados para esta materia. ¡Comienza creando uno!</p>
-        </div>
-
-        <div
-          v-else
-          v-for="(tema, index) in temas"
-          :key="tema.id"
-          class="tema-card"
-          :style="{ background: getGradient(index) }"
-          @click="irASubtemas(tema)"
-        >
-          <div class="tema-card-content">
-            <h4 class="tema-title">{{ tema.nombre }}</h4>
-          </div>
-          <div class="tema-card-footer">
-
-            <span class="tema-action-link">Ver Subtemas &rarr;</span>
-          </div>
-        </div>
-      </template>
-    </div>
-
-    <!-- Dashboard Analítico de Materia (MÓDULO B) -->
-    <DashboardMateria v-if="idMateria" :idMateria="idMateria" />
 
   </div>
 </template>
@@ -306,29 +310,33 @@ function irASubtemas(tema) {
 
 /* Layout principal */
 .content-view {
-  padding: 32px 40px;
+  padding: 16px 24px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  height: calc(100vh - 72px);
+  overflow: hidden;
+  gap: 16px;
+  box-sizing: border-box;
 }
 
 /* Tarjeta del header de la Materia */
 .materia-header-card {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 32px;
+  border-radius: 12px;
+  padding: 16px 24px;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 24px;
+  flex-shrink: 0;
 }
 
 .materia-info {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   max-width: 70%;
 }
 
@@ -336,16 +344,16 @@ function irASubtemas(tema) {
   align-self: flex-start;
   background: rgba(37, 99, 235, 0.1);
   color: #2563eb;
-  padding: 4px 10px;
+  padding: 2px 8px;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .materia-title {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: #1a202c;
   margin: 0;
@@ -353,30 +361,31 @@ function irASubtemas(tema) {
 }
 
 .materia-desc {
-  font-size: 0.98rem;
+  font-size: 0.9rem;
   color: #4a5568;
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .materia-actions {
   display: flex;
-  flex-direction: column;
   gap: 10px;
-  min-width: 180px;
+  min-width: fit-content;
 }
 
 .btn-action-edit, .btn-action-delete {
-  padding: 10px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
   transition: background-color 0.2s, color 0.2s;
-  width: 100%;
 }
 
 .btn-action-edit {
@@ -399,27 +408,65 @@ function irASubtemas(tema) {
   color: #9b2c2c;
 }
 
-/* Secciones de temas */
-.topbar {
+/* Layout Secundario: Temas + Dashboard */
+.main-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.temas-sidebar {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid #e2e8f0;
+  padding-right: 20px;
+}
+
+.sidebar-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 12px;
-  border-top: 1px solid #edf2f7;
-  padding-top: 24px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-shrink: 0;
 }
 
 .section-title {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: #1a202c;
-  margin: 0 0 4px 0;
+  margin: 0;
 }
 
-.section-subtitle {
-  font-size: 0.9rem;
-  color: #718096;
-  margin: 0;
+.btn-sm {
+  padding: 6px 12px !important;
+  font-size: 0.8rem !important;
+}
+
+.temas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-right: 6px;
+}
+
+.temas-list::-webkit-scrollbar {
+  width: 6px;
+}
+.temas-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+
+.dashboard-area {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Botón azul principal */
@@ -561,26 +608,21 @@ function irASubtemas(tema) {
 }
 
 /* Grid de tarjetas de temas */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-}
-
 .tema-card {
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 140px;
+  min-height: 100px;
   cursor: pointer;
   color: #ffffff;
-  box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, filter 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
 }
 
 .tema-card::before {
@@ -610,7 +652,7 @@ function irASubtemas(tema) {
 }
 
 .tema-title {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   margin: 0;
   line-height: 1.3;
@@ -707,5 +749,44 @@ function irASubtemas(tema) {
 }
 .animate-slide-up {
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 1024px) {
+  .content-view {
+    height: auto;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  .materia-header-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .materia-info {
+    max-width: 100%;
+  }
+  .materia-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  .main-layout {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+  }
+  .temas-sidebar {
+    border-right: none;
+    padding-right: 0;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 20px;
+  }
+  .temas-list {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+  }
+  .tema-card {
+    min-width: 220px;
+  }
 }
 </style>

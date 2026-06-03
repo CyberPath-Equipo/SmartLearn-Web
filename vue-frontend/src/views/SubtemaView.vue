@@ -27,10 +27,10 @@
       </div>
       <div class="tema-actions">
         <button class="btn-action-edit" @click="mostrarFormEditTema">
-          <span class="btn-icon">✏️</span> Editar Tema
+          Editar Tema
         </button>
         <button class="btn-action-delete" @click="eliminarTemaActivo">
-          <span class="btn-icon">🗑️</span> Eliminar Tema
+          Eliminar Tema
         </button>
       </div>
     </div>

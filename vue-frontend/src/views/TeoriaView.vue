@@ -36,10 +36,10 @@
       </div>
       <div class="subtema-actions">
         <button class="btn-action-edit" @click="mostrarFormEditSubtema">
-          <span class="btn-icon">✏️</span> Editar Subtema
+          Editar Subtema
         </button>
         <button class="btn-action-delete" @click="eliminarSubtemaActivo">
-          <span class="btn-icon">🗑️</span> Eliminar Subtema
+          Eliminar Subtema
         </button>
       </div>
     </div>
@@ -116,10 +116,10 @@
             </div>
             <div class="teoria-display-actions">
               <button class="btn-action-edit btn-sm" @click="prepararEdicion">
-                ✏️ Editar
+                Editar
               </button>
               <button class="btn-action-delete btn-sm" @click="eliminarTeoria">
-                🗑️ Eliminar
+                Eliminar
               </button>
             </div>
           </div>

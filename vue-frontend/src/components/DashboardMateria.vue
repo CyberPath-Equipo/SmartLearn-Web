@@ -12,11 +12,15 @@
 
     <div v-else class="dashboard-grid">
       <!-- B1: Ejercicios con más errores -->
-      <div class="chart-card">
-        <h4>Ejercicios Problemáticos</h4>
-        <p class="chart-desc">Ejercicios con mayor tasa de error o abandono.</p>
+      <div class="chart-card chart-b1">
+        <div class="chart-header">
+          <h4>Ejercicios Problemáticos</h4>
+          <p class="chart-desc">Ejercicios con mayor tasa de error o abandono.</p>
+        </div>
         <template v-if="hasB1Data">
-          <apexchart type="bar" height="250" :options="chartB1Options" :series="chartB1Series"></apexchart>
+          <div class="chart-container">
+            <apexchart type="bar" height="100%" :options="chartB1Options" :series="chartB1Series"></apexchart>
+          </div>
         </template>
         <div v-else class="no-data-msg">
           <span class="no-data-icon">📊</span>
@@ -25,11 +29,15 @@
       </div>
 
       <!-- B2: Temas más activos -->
-      <div class="chart-card">
-        <h4>Actividad por Tema</h4>
-        <p class="chart-desc">Cantidad de intentos realizados por los alumnos.</p>
+      <div class="chart-card chart-b2">
+        <div class="chart-header">
+          <h4>Actividad por Tema</h4>
+          <p class="chart-desc">Cantidad de intentos realizados por los alumnos.</p>
+        </div>
         <template v-if="hasB2Data">
-          <apexchart type="bar" height="250" :options="chartB2Options" :series="chartB2Series"></apexchart>
+          <div class="chart-container">
+            <apexchart type="bar" height="100%" :options="chartB2Options" :series="chartB2Series"></apexchart>
+          </div>
         </template>
         <div v-else class="no-data-msg">
           <span class="no-data-icon">📊</span>
@@ -38,11 +46,15 @@
       </div>
 
       <!-- B3: Distribución de Recursos de la Materia -->
-      <div class="chart-card">
-        <h4>Distribución de Recursos</h4>
-        <p class="chart-desc">Volumen de contenido existente en la materia.</p>
+      <div class="chart-card chart-b3">
+        <div class="chart-header">
+          <h4>Distribución de Recursos</h4>
+          <p class="chart-desc">Volumen de contenido existente en la materia.</p>
+        </div>
         <template v-if="hasB3Data">
-          <apexchart type="bar" height="250" :options="chartB3Options" :series="chartB3Series"></apexchart>
+          <div class="chart-container">
+            <apexchart type="bar" height="100%" :options="chartB3Options" :series="chartB3Series"></apexchart>
+          </div>
         </template>
         <div v-else class="no-data-msg">
           <span class="no-data-icon">📦</span>
@@ -104,7 +116,7 @@ const chartB1Options = ref({
       horizontal: true,
       borderRadius: 4,
       colors: {
-        ranges: [{ from: 0, to: 100, color: '#ef4444' }]
+        ranges: [{ from: 0, to: 100, color: '#475569' }]
       }
     }
   },
@@ -120,7 +132,7 @@ const chartB2Options = ref({
   chart: { type: 'bar', toolbar: { show: false } },
   plotOptions: { bar: { borderRadius: 4, columnWidth: '50%' } },
   xaxis: { categories: [] },
-  colors: ['#3b82f6']
+  colors: ['#334155']
 });
 
 // --- B3: Distribución de Recursos ---
@@ -137,7 +149,7 @@ const chartB3Options = ref({
   xaxis: {
     categories: ['Temas', 'Subtemas', 'Teorías', 'Ejercicios']
   },
-  colors: ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'],
+  colors: ['#1e293b', '#334155', '#475569', '#64748b'],
   legend: { show: false },
   tooltip: {
     y: { formatter: (val) => val + ' elementos' }
@@ -284,51 +296,76 @@ watch(() => props.idMateria, cargarEstadisticasMateria);
 
 <style scoped>
 .dashboard-materia-container {
-  margin-top: 32px;
-  border-top: 1px solid #e2e8f0;
-  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .dashboard-header {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
 }
 
 .dashboard-header h3 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #1a202c;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
   margin: 0 0 4px 0;
 }
 
 .dashboard-header p {
-  color: #c7dbef;
+  color: #64748b;
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+/* El B1 ocupa toda la fila superior */
+.chart-b1 {
+  grid-column: 1 / -1;
 }
 
 .chart-card {
-  background: #f8fafc;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px; /* Más sobrio */
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chart-header {
+  flex-shrink: 0;
+  margin-bottom: 12px;
 }
 
 .chart-card h4 {
-  margin: 0 0 4px 0;
-  color: #2d3748;
-  font-size: 1.1rem;
+  margin: 0 0 2px 0;
+  color: #334155;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .chart-desc {
-  font-size: 0.85rem;
-  color: #718096;
-  margin: 0 0 16px 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.chart-container {
+  flex-grow: 1;
+  min-height: 0;
+  position: relative;
 }
 
 .no-data-msg {
@@ -337,39 +374,50 @@ watch(() => props.idMateria, cargarEstadisticasMateria);
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 32px 16px;
-  color: #a0aec0;
-  font-size: 0.95rem;
+  flex-grow: 1;
+  color: #94a3b8;
+  font-size: 0.85rem;
   text-align: center;
-  background: #f1f5f9;
-  border-radius: 8px;
+  background: #f8fafc;
+  border-radius: 6px;
   border: 1px dashed #cbd5e1;
 }
 
 .no-data-icon {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
 }
 
 .estado-carga {
-  padding: 40px;
-  text-align: center;
-  color: #718096;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  color: #64748b;
   gap: 12px;
 }
 
 .spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid rgba(37, 99, 235, 0.1);
-  border-top-color: #2563eb;
+  border: 3px solid rgba(71, 85, 105, 0.1);
+  border-top-color: #475569;
   border-radius: 50%;
   animation: spin 1s infinite linear;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    display: flex;
+    flex-direction: column;
+  }
+  .chart-card {
+    height: 300px;
+    flex-shrink: 0;
+  }
 }
 </style>
