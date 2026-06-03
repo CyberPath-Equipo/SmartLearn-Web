@@ -140,6 +140,7 @@ async function cargarDatosGenerales() {
     const ejToSubtema = {}; // ejercicio.id -> subtemaId
     const subToTema = {}; // subtema.id -> temaId
     const temaIdToNombre = {}; // temaId -> nombre
+    const temaToMateria = {}; // temaId -> materiaId
 
     const materiasStatsTemp = [];
 
@@ -165,6 +166,7 @@ async function cargarDatosGenerales() {
 
       for (const tema of temasMateria) {
         temaIdToNombre[tema.id] = tema.nombre || tema.titulo || `Tema ${tema.id}`;
+        temaToMateria[tema.id] = mat.id;
 
         // Subtemas del tema
         const { data: subtemas } = await api.get(`/tema/${tema.id}/subtemas`).catch(() => ({ data: [] }));
@@ -217,24 +219,33 @@ async function cargarDatosGenerales() {
     if ((intentos?.length ?? 0) === 0) {
       noDataA3.value = true;
     } else {
-      const temaActivity = {};
+      // Inicializar actividad sólo para los temas pertenecientes a las materias del usuario
+      const actividadTemas = {};
+      Object.keys(temaToMateria).forEach(tid => {
+        actividadTemas[tid] = { nombre: temaIdToNombre[tid] || `Tema ${tid}`, intentos: 0 };
+      });
+
+      // Contar intentos únicamente si el tema pertenece a las materias del docente
       intentos.forEach(intento => {
-        const idEj = intento.idEjercicio ?? intento.id_ejercicio ?? intento.ejercicioId;
+        const idEj = intento.idEjercicio;
         const idSub = ejToSubtema[idEj];
         const idTema = idSub ? subToTema[idSub] : null;
-        if (idTema) {
-          const nombreTema = temaIdToNombre[idTema] || `Tema ${idTema}`;
-          temaActivity[nombreTema] = (temaActivity[nombreTema] || 0) + 1;
+        if (idTema && actividadTemas[idTema]) {
+          actividadTemas[idTema].intentos++;
         }
       });
 
-      const sortedTemas = Object.entries(temaActivity).sort((a,b) => b[1] - a[1]).slice(0, 5);
+      const sortedTemas = Object.values(actividadTemas)
+        .filter(t => t.intentos > 0)
+        .sort((a, b) => b.intentos - a.intentos)
+        .slice(0, 5);
+
       if (sortedTemas.length === 0) {
         noDataA3.value = true;
       } else {
         noDataA3.value = false;
-        chartA3Options.value = { ...chartA3Options.value, xaxis: { categories: sortedTemas.map(t => t[0]) } };
-        chartA3Series.value = [{ name: 'Intentos', data: sortedTemas.map(t => t[1]) }];
+        chartA3Options.value = { ...chartA3Options.value, xaxis: { categories: sortedTemas.map(t => t.nombre) } };
+        chartA3Series.value = [{ name: 'Intentos', data: sortedTemas.map(t => t.intentos) }];
       }
     }
 
