@@ -39,6 +39,47 @@
             <label for="descripcionMateria">Descripción</label>
             <textarea id="descripcionMateria" v-model="formAdd.descripcion" placeholder="Ej. Curso introductorio de álgebra y geometría" rows="3" required></textarea>
           </div>
+
+          <!-- Sección de carga de imagen -->
+          <div class="form-group">
+            <label>Imagen de la Materia <span class="label-optional">(opcional)</span></label>
+            <div
+              class="upload-dropzone"
+              :class="{ 'dropzone-active': isDragging, 'dropzone-has-file': imagePreview }"
+              @dragenter.prevent="isDragging = true"
+              @dragover.prevent="isDragging = true"
+              @dragleave.prevent="isDragging = false"
+              @drop.prevent="handleDrop"
+              @click="$refs.fileInput.click()"
+            >
+              <input
+                ref="fileInput"
+                type="file"
+                accept="image/*"
+                class="file-input-hidden"
+                @change="handleFileChange"
+              />
+
+              <!-- Vista previa -->
+              <div v-if="imagePreview" class="preview-wrapper">
+                <img :src="imagePreview" alt="Vista previa" class="preview-image" />
+                <div class="preview-overlay">
+                  <span class="preview-change-text">Cambiar imagen</span>
+                </div>
+                <button type="button" class="btn-remove-image" @click.stop="removeImage" title="Quitar imagen">&times;</button>
+              </div>
+
+              <!-- Placeholder -->
+              <div v-else class="dropzone-placeholder">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p class="dropzone-text">Arrastra una imagen aquí o <span class="dropzone-link">selecciónala</span></p>
+                <p class="dropzone-hint">PNG, JPG o WEBP · Máx. 5 MB</p>
+              </div>
+            </div>
+          </div>
+
           <div class="form-actions">
             <button type="submit" class="btn-primary-blue" :disabled="guardando">
               {{ guardando ? 'Guardando...' : 'Crear Materia' }}
@@ -66,9 +107,11 @@
           v-for="(materia, index) in materias"
           :key="materia.id"
           class="materia-card"
-          :style="{ background: getGradient(index) }"
+          :style="{ background: materia.slug ? `url(${materia.slug}) center/cover no-repeat` : getGradient(index) }"
           @click="irATemas(materia)"
         >
+          <!-- Overlay oscuro para legibilidad cuando hay imagen de fondo -->
+          <div v-if="materia.slug" class="materia-card-img-overlay"></div>
           <div class="materia-card-content">
             <h3 class="materia-title">{{ materia.nombre }}</h3>
             <p class="materia-desc">{{ materia.descripcion ?? 'Sin descripción disponible' }}</p>
@@ -88,6 +131,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import api from '../api/axios';
+import { subirImagenMateria } from '../services/imagenService';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -102,6 +146,12 @@ const mensajeTipo = ref('');
 
 const formAddVisible = ref(false);
 const formAdd = reactive({ nombre: '', descripcion: '' });
+
+// Estado para imagen
+const selectedFile = ref(null);
+const imagePreview = ref(null);
+const isDragging = ref(false);
+const fileInput = ref(null);
 
 const gradients = [
   'linear-gradient(135deg, #3b82f6, #1d4ed8)', // Azul
@@ -147,9 +197,46 @@ onMounted(cargarMaterias);
 function mostrarFormAdd() {
   formAdd.nombre = '';
   formAdd.descripcion = '';
+  removeImage();
   formAddVisible.value = true;
 }
-function ocultarFormAdd() { formAddVisible.value = false; }
+function ocultarFormAdd() {
+  formAddVisible.value = false;
+  removeImage();
+}
+
+// Manejo de imagen
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  processFile(file);
+}
+
+function handleDrop(event) {
+  isDragging.value = false;
+  const file = event.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    processFile(file);
+  }
+}
+
+function processFile(file) {
+  if (!file) return;
+  // Validar tamaño (5 MB)
+  if (file.size > 5 * 1024 * 1024) {
+    mostrarMensaje('La imagen no debe superar los 5 MB', 'error');
+    return;
+  }
+  selectedFile.value = file;
+  imagePreview.value = URL.createObjectURL(file);
+}
+
+function removeImage() {
+  selectedFile.value = null;
+  if (imagePreview.value) {
+    URL.revokeObjectURL(imagePreview.value);
+    imagePreview.value = null;
+  }
+}
 
 // Crear: POST /materia + POST /usuario-materia
 async function crearMateria() {
@@ -170,6 +257,19 @@ async function crearMateria() {
       idUsuario: idUsuario,
       idMateria: materiaCreada.id
     });
+
+    // Subir imagen si se seleccionó una
+    if (selectedFile.value) {
+      try {
+        await subirImagenMateria(selectedFile.value, materiaCreada.id);
+      } catch (imgError) {
+        console.warn('Materia creada pero la imagen no se pudo subir:', imgError);
+        mostrarMensaje('Materia creada, pero hubo un error al subir la imagen', 'error');
+        ocultarFormAdd();
+        await cargarMaterias();
+        return;
+      }
+    }
 
     mostrarMensaje('Materia registrada y asignada correctamente');
     ocultarFormAdd();
@@ -405,6 +505,13 @@ function irATemas(materia) {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.materia-card-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.65) 100%);
+  z-index: 0;
+}
+
 /* Brillo en hover */
 .materia-card::before {
   content: '';
@@ -547,5 +654,139 @@ function irATemas(materia) {
 }
 .animate-slide-up {
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Upload Dropzone ── */
+.label-optional {
+  font-weight: 400;
+  color: #a0aec0;
+  font-size: 0.8rem;
+}
+
+.upload-dropzone {
+  border: 2px dashed #cbd5e0;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+  background: #f7fafc;
+  position: relative;
+}
+
+.upload-dropzone:hover {
+  border-color: #90cdf4;
+  background: #ebf8ff;
+}
+
+.dropzone-active {
+  border-color: #3182ce;
+  background: #ebf8ff;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+}
+
+.dropzone-has-file {
+  padding: 8px;
+  border-style: solid;
+  border-color: #90cdf4;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+/* Placeholder */
+.dropzone-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload-icon {
+  width: 40px;
+  height: 40px;
+  color: #a0aec0;
+  margin-bottom: 4px;
+}
+
+.dropzone-text {
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin: 0;
+}
+
+.dropzone-link {
+  color: #3182ce;
+  font-weight: 600;
+}
+
+.dropzone-hint {
+  font-size: 0.78rem;
+  color: #a0aec0;
+  margin: 0;
+}
+
+/* Preview */
+.preview-wrapper {
+  position: relative;
+  display: inline-block;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.preview-image {
+  display: block;
+  max-height: 160px;
+  max-width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s;
+  border-radius: 10px;
+}
+
+.preview-wrapper:hover .preview-overlay {
+  opacity: 1;
+}
+
+.preview-change-text {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.btn-remove-image {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 2;
+}
+
+.btn-remove-image:hover {
+  background: #e53e3e;
 }
 </style>
