@@ -179,7 +179,7 @@ async function cargarDatosGenerales() {
           totalTeorias += teorias.length;
 
           // Ejercicios del subtema
-          const { data: ejercicios } = await api.get(`/subtema/${sub.id}/ejercicio`).catch(() => ({ data: [] }));
+          const { data: ejercicios } = await api.get(`/subtema/${sub.id}/ejercicios`).catch(() => ({ data: [] }));
           totalEjercicios += ejercicios.length;
 
           // Mapear ejercicios a subtema para A3
