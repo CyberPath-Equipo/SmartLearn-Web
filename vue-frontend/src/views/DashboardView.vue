@@ -175,11 +175,11 @@ async function cargarDatosGenerales() {
           subToTema[sub.id] = tema.id;
 
           // Teorías del subtema
-          const { data: teorias } = await api.get(`/subetema/${sub.id}/teoria`).catch(() => ({ data: [] }));
+          const { data: teorias } = await api.get(`/subtema/${sub.id}/teoria`).catch(() => ({ data: [] }));
           totalTeorias += teorias.length;
 
           // Ejercicios del subtema
-          const { data: ejercicios } = await api.get(`/subetema/${sub.id}/ejercicio`).catch(() => ({ data: [] }));
+          const { data: ejercicios } = await api.get(`/subtema/${sub.id}/ejercicio`).catch(() => ({ data: [] }));
           totalEjercicios += ejercicios.length;
 
           // Mapear ejercicios a subtema para A3
