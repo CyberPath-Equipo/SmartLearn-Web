@@ -107,7 +107,7 @@
           v-for="(materia, index) in materias"
           :key="materia.id"
           class="materia-card"
-          :style="{ background: materia.slug ? `url(${materia.slug}) center/cover no-repeat` : getGradient(index) }"
+          :style="{ background: getGradient(index) }"
           @click="irATemas(materia)"
         >
           <!-- Overlay oscuro para legibilidad cuando hay imagen de fondo -->
