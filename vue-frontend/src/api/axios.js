@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://marco-des.mexicocentral.cloudapp.azure.com/smartlearn/api',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'X-Client-Type': 'mobile'
   }
@@ -48,7 +48,7 @@ api.interceptors.response.use(
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
-        window.location.href = '/web/login'; // Forzar logout
+        window.location.href = '/login'; // Forzar logout
       }
     }
     return Promise.reject(error);

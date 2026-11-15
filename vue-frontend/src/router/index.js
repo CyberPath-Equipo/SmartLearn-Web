@@ -4,7 +4,7 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import { useAuthStore } from '../stores/auth';
 
 const router = createRouter({
-  history: createWebHistory('web'),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
