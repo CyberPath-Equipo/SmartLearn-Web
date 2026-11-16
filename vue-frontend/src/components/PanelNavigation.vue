@@ -18,13 +18,6 @@
       >
         Ejercicios
       </router-link>
-      <router-link
-        v-if="authStore.isAdmin"
-        to="/usuario"
-        :class="['panel-navigation-link', { active: isSectionActive('usuarios') }]"
-      >
-        Usuarios
-      </router-link>
     </div>
   </nav>
 </template>
@@ -38,8 +31,7 @@ const route = useRoute();
 
 const sectionRoutes = {
   materias: ['materias', 'tema', 'subtema', 'teoria'],
-  ejercicios: ['ejercicio', 'crear-ejercicio', 'crear-preguntas', 'editar-ejercicio', 'editar-pregunta'],
-  usuarios: ['usuario']
+  ejercicios: ['ejercicio', 'crear-ejercicio', 'crear-preguntas', 'editar-ejercicio', 'editar-pregunta']
 };
 
 function isSectionActive(section) {
