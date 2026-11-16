@@ -2,9 +2,9 @@
 //   CONFIGURACIÓN
 // ===============================
 
-const API_EJERCICIO = "http://localhost:8080/smartlearn/api/ejercicio";
-const API_PREGUNTA  = "http://localhost:8080/smartlearn/api/pregunta";
-const API_OPCION    = "http://localhost:8080/smartlearn/api/opcion";
+const API_EJERCICIO = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/ejercicio";
+const API_PREGUNTA  = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/pregunta";
+const API_OPCION    = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/opcion";
 
 const idEjercicio = localStorage.getItem("idEjercicio");
 const nombreEjercicio = localStorage.getItem("nombreEjercicio");

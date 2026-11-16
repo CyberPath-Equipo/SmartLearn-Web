@@ -1,7 +1,7 @@
 // =============================
 //  Inicialización de variables
 // =============================
-const API_BASE = "http://localhost:8080/smartlearn/api";
+const API_BASE = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api";
 
 let idMateria = localStorage.getItem("idMateria");
 let nombreMateria = localStorage.getItem("nombreMateria");

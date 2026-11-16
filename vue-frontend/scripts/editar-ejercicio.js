@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080/smartlearn/api";
+const API_BASE = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api";
 const API_PREGUNTA = `${API_BASE}/pregunta`;
 
 

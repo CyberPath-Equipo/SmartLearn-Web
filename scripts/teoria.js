@@ -2,9 +2,9 @@
 //   CONFIGURACIÓN
 // ===============================
 
-const API_TEORIA = "http://localhost:8080/smartlearn/api/teoria/docente";
-const API_SUBTEMA = "http://localhost:8080/smartlearn/api/subtema";
-const API_BASE = "http://localhost:8080/smartlearn/api";
+const API_TEORIA = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/teoria/docente";
+const API_SUBTEMA = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/subtema";
+const API_BASE = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api";
 
 const subtemaId = localStorage.getItem("idSubtema");
 var idTeoria;

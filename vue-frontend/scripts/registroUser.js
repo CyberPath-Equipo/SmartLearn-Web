@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/smartlearn/api/usuario/registro", {
+            const response = await fetch("https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/usuario/registro", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(loginData)

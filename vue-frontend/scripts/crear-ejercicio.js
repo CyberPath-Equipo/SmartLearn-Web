@@ -1,4 +1,4 @@
-const API_EJERCICIO = "http://localhost:8080/smartlearn/api/ejercicio";
+const API_EJERCICIO = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/ejercicio";
 
 const idTeoria = localStorage.getItem("idTeoria");
 

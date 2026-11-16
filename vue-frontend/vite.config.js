@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/backend': {
-          target: env.VITE_API_PROXY_TARGET || 'http://localhost:8080',
+          target: env.VITE_API_PROXY_TARGET || 'https://smartlearn.westus.cloudapp.azure.com',
           changeOrigin: true,
           secure: false
         }

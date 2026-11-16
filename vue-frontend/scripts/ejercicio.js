@@ -1,7 +1,7 @@
 /* =========================
    VARIABLES GLOBALES
 ========================= */
-const API_BASE = "http://localhost:8080/smartlearn/api";
+const API_BASE = "https://smartlearn.westus.cloudapp.azure.com/smartlearn/api";
 let ejercicioActual = null;
 const idTeoria = localStorage.getItem("idTeoria");
 

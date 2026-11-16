@@ -12,7 +12,7 @@ async function cargarMaterias() {
         alert("Usuario no autenticado");
         window.location.href = "login.html";
     }
-    const API_URL = `http://localhost:8080/smartlearn/api/usuario-materia/usuario/${idUsuario}/materias`;
+    const API_URL = `https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/usuario-materia/usuario/${idUsuario}/materias`;
 
     try {
         const response = await fetch(API_URL, {
@@ -134,7 +134,7 @@ formularioMateria.addEventListener("submit", async (e) => {
 
     try {
         // Crear la materia
-        const response = await fetch("http://localhost:8080/smartlearn/api/materia", {
+        const response = await fetch("https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/materia", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -158,7 +158,7 @@ formularioMateria.addEventListener("submit", async (e) => {
             idMateria: idMateria
         };
 
-        const relResponse = await fetch("http://localhost:8080/smartlearn/api/usuario-materia", {
+        const relResponse = await fetch("https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/usuario-materia", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(relacion)
@@ -216,7 +216,7 @@ formularioEdit.addEventListener("submit", async (e) => {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/smartlearn/api/materia/${materiaIdEditando}`,
+            `https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/materia/${materiaIdEditando}`,
             {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -253,7 +253,7 @@ async function eliminarMateria(id) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/smartlearn/api/materia/${id}`, {
+        const response = await fetch(`https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/materia/${id}`, {
             method: "DELETE"
         });
 

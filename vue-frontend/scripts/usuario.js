@@ -1,5 +1,5 @@
 let idUsr = localStorage.getItem("idUsuario");
-const API_URL = `http://localhost:8080/smartlearn/api/usuario/${idUsr}`;
+const API_URL = `https://smartlearn.westus.cloudapp.azure.com/smartlearn/api/usuario/${idUsr}`;
 
 document.addEventListener("DOMContentLoaded", () => {
     if(!idUsr){

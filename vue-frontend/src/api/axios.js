@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const productionApiUrl = 'https://smartlearn.westus.cloudapp.azure.com/smartlearn/api';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || productionApiUrl,
   headers: {
     'X-Client-Type': 'mobile'
   }
