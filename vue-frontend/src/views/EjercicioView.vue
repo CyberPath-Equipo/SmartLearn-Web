@@ -59,10 +59,10 @@
         </div>
         <div class="exercise-actions">
           <button class="btn-action-edit" @click="irAEditarEjercicio">
-            <span class="btn-icon">✏️</span> Editar Ejercicio / Preguntas
+            <span class="btn-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#edit" /></svg></span> Editar Ejercicio / Preguntas
           </button>
           <button class="btn-action-delete" @click="eliminarEjercicioActivo">
-            <span class="btn-icon">🗑️</span> Eliminar Ejercicio
+            <span class="btn-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#trash" /></svg></span> Eliminar Ejercicio
           </button>
           <button class="btn-action-back" @click="volverATeoria">
             &larr; Volver a Teoría
@@ -122,7 +122,7 @@
     <!-- ========== MODO: GENERAL / SIN ID ========== -->
     <div v-else class="general-exercises-container animate-slide-up">
       <div class="no-id-card">
-        <div class="no-id-icon">🎯</div>
+        <div class="no-id-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#target" /></svg></div>
         <h2>Gestión de Ejercicios</h2>
         <p>
           La creación, edición y administración de los ejercicios se realiza de forma contextual dentro de los 

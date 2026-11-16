@@ -14,7 +14,7 @@
         <p class="view-subtitle">Explora tus materias y gestiona sus contenidos académicos.</p>
       </div>
       <button class="btn-primary-blue" @click="mostrarFormAdd">
-        <span class="btn-icon">+</span> Nueva materia
+        <svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#plus" /></svg> Nueva materia
       </button>
     </div>
 

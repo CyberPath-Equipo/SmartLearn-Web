@@ -11,7 +11,7 @@
     </div>
 
     <div v-else-if="noData" class="no-data-msg">
-      <span class="no-data-icon">📊</span>
+      <span class="no-data-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#chart" /></svg></span>
       <span>Datos insuficientes o inexistentes.<br>Se necesitan al menos 3 intentos para mostrar estadísticas.</span>
     </div>
 
@@ -22,7 +22,7 @@
         <p class="chart-desc">Comportamiento general de los alumnos en el ejercicio.</p>
         <apexchart type="bar" height="280" :options="chartC1Options" :series="chartC1Series"></apexchart>
         <div class="interpretacion" v-if="interpretacion">
-          <span class="interp-icon">💡</span>
+          <span class="interp-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#bulb" /></svg></span>
           <span>{{ interpretacion }}</span>
         </div>
       </div>

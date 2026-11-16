@@ -42,7 +42,7 @@
         <p class="section-subtitle">Selecciona un subtema para ver su teoría y ejercicios o agrega uno nuevo.</p>
       </div>
       <button class="btn-primary-blue" @click="mostrarFormAdd">
-        <span class="btn-icon">+</span> Nuevo Subtema
+        <svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#plus" /></svg> Nuevo Subtema
       </button>
     </div>
 

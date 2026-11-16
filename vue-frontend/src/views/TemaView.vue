@@ -18,10 +18,10 @@
       </div>
       <div class="materia-actions">
         <button class="btn-action-edit" @click="mostrarFormEditMateria">
-          <span class="btn-icon">✏️</span> Editar Materia
+          <span class="btn-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#edit" /></svg></span> Editar Materia
         </button>
         <button class="btn-action-delete" @click="eliminarMateriaActiva">
-          <span class="btn-icon">🗑️</span> Eliminar Materia
+          <span class="btn-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#trash" /></svg></span> Eliminar Materia
         </button>
       </div>
     </div>
@@ -33,7 +33,7 @@
         <p class="section-subtitle">Selecciona un tema para ver sus subtemas o agrega uno nuevo.</p>
       </div>
       <button class="btn-primary-blue" @click="mostrarFormAdd">
-        <span class="btn-icon">+</span> Nuevo Tema
+        <svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#plus" /></svg> Nuevo Tema
       </button>
     </div>
 

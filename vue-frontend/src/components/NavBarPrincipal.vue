@@ -1,6 +1,8 @@
 <template>
   <div class="auth-layout-container">
-    <header id="main-header" :class="{ 'scrolled': isScrolled }">
+    <header id="main-header" class="public-header" :class="{ scrolled: isScrolled, 'menu-open': menuOpen, 'keyboard-navigation': keyboardNavigation }"
+      @keydown="keyboardNavigation = true" @pointerdown="keyboardNavigation = false"
+      @keydown.esc="closeMenu" @focusout="handleFocusOut">
       <div class="header-top">
         <div class="navbar-logo">
           <img src="/images/Blanco_sin_fondo_Smart_Learn_logo.png" alt="Logo de Smart Learn" height="80">
@@ -11,12 +13,17 @@
         </div>
       </div>
 
+      <button ref="menuButton" class="menu-toggle" type="button" :aria-expanded="menuOpen"
+        aria-controls="navegacion" :aria-label="menuOpen ? 'Cerrar menú' : 'Abrir menú'"
+        @click="menuOpen = !menuOpen">
+        <span></span><span></span><span></span>
+      </button>
       <nav id="navegacion" role="navigation" aria-label="Navegación principal">
          <ul>
-           <li><router-link to="/login">Inicio de sesión</router-link></li>
-           <li><router-link to="/registro">Registro de usuario</router-link></li>
-           <li><router-link to="/smartlearn">Sobre Smart Learn</router-link></li>
-           <li><router-link to="/smartlearn/movil">Sobre Smart Learn Móvil</router-link></li>
+           <li class="nav-about"><router-link to="/smartlearn" @click="menuOpen = false">Sobre Smart Learn</router-link></li>
+           <li class="nav-mobile"><router-link to="/smartlearn/movil" @click="menuOpen = false"><svg class="sl-icon" aria-hidden="true"><use href="/smartlearn-icons.svg#phone" /></svg>Sobre Smart Learn Móvil</router-link></li>
+           <li class="nav-login"><router-link to="/login" @click="menuOpen = false"><svg class="sl-icon" aria-hidden="true"><use href="/smartlearn-icons.svg#login" /></svg>Inicio de sesión</router-link></li>
+           <li class="nav-register"><router-link to="/registro" @click="menuOpen = false"><svg class="sl-icon" aria-hidden="true"><use href="/smartlearn-icons.svg#user" /></svg>Registro de usuario</router-link></li>
          </ul>
        </nav>
     </header>
@@ -56,6 +63,21 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+
+// Presentation state for the responsive navigation disclosure.
+const menuOpen = ref(false);
+const menuButton = ref(null);
+const keyboardNavigation = ref(false);
+const closeMenu = () => {
+  if (!menuOpen.value) return;
+  menuOpen.value = false;
+  menuButton.value?.focus();
+};
+const handleFocusOut = (event) => {
+  if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) {
+    menuOpen.value = false;
+  }
+};
 
 const isScrolled = ref(false);
 const handleScroll = () => {

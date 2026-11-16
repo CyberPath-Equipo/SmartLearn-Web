@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-layout-container">
+  <div class="auth-layout-container auth-shell">
     <header id="main-header" class="header-top" role="banner">
       <h1 id="pageTitle">Smart Learn</h1>
       <p class="subtitle">Plataforma Educativa</p>

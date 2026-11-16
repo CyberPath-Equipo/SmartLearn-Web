@@ -78,7 +78,7 @@
       <div class="teoria-section">
         <!-- Estado: Crear Teoría -->
         <div v-if="estado === 'crear'" class="card no-theory-card animate-slide-up">
-          <div class="no-theory-icon">📖</div>
+          <div class="no-theory-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#book" /></svg></div>
           <h3>Sin Teoría Registrada</h3>
           <p>Este subtema aún no cuenta con material pedagógico. Agrega teoría para guiar a tus alumnos.</p>
           <button class="btn-primary-blue" @click="mostrarCrearTeoriaForm">
@@ -162,7 +162,7 @@
             @click="irAVerEjercicio(ejercicio)"
           >
             <div class="ejercicio-card-info">
-              <span class="ejercicio-icon-badge">📝</span>
+              <span class="ejercicio-icon-badge"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#edit" /></svg></span>
               <div>
                 <h4 class="ejercicio-title">{{ ejercicio.nombre }}</h4>
               </div>

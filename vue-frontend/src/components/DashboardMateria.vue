@@ -23,7 +23,7 @@
           </div>
         </template>
         <div v-else class="no-data-msg">
-          <span class="no-data-icon">📊</span>
+          <span class="no-data-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#chart" /></svg></span>
           <span>No hay intentos de ejercicios aún.</span>
         </div>
       </div>
@@ -40,7 +40,7 @@
           </div>
         </template>
         <div v-else class="no-data-msg">
-          <span class="no-data-icon">📊</span>
+          <span class="no-data-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#chart" /></svg></span>
           <span>No hay actividad registrada en los temas.</span>
         </div>
       </div>
@@ -57,7 +57,7 @@
           </div>
         </template>
         <div v-else class="no-data-msg">
-          <span class="no-data-icon">📦</span>
+          <span class="no-data-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#layers" /></svg></span>
           <span>No hay recursos registrados en esta materia.</span>
         </div>
       </div>

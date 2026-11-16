@@ -3,11 +3,13 @@
 
     <!-- HERO / BIENVENIDA -->
     <section class="hero-movil" aria-labelledby="hero-title">
-      <div class="hero-overlay"></div>
       <div class="hero-content">
         <h2 id="hero-title">Smart Learn en tu Bolsillo</h2>
         <p>Lleva tu educación accesible a cualquier lugar. Diseñada específicamente para ser intuitiva, rápida y 100% compatible con tecnologías de asistencia en dispositivos móviles.</p>
-        <a href="#video-demo" class="hero-btn-movil">Ver demostración</a>
+        <a href="#video-demo" class="hero-btn-movil"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#play" /></svg>Ver demostración</a>
+      </div>
+      <div class="mobile-hero-preview" aria-hidden="true">
+        <img src="/images/movil_main-screnn.png" alt="" />
       </div>
     </section>
 
