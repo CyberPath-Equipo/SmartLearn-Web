@@ -72,6 +72,7 @@
           <li>Contenido totalmente accesible.</li>
           <li>Compatibilidad con dispositivos Braille.</li>
           <li>Seguimiento académico personalizado.</li>
+          </ul>
         </div>
         <img src="/images/tecnologiaInclusiva.jpeg" alt="Tecnología">
       </div>
