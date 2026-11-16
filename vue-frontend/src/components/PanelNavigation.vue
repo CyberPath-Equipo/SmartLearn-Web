@@ -5,14 +5,12 @@
         Dashboard
       </router-link>
       <router-link
-        v-if="authStore.isDocente || authStore.isAdmin"
         to="/materias"
         :class="['panel-navigation-link', { active: isSectionActive('materias') }]"
       >
         Materias
       </router-link>
       <router-link
-        v-if="authStore.isDocente || authStore.isAdmin"
         to="/ejercicio"
         :class="['panel-navigation-link', { active: isSectionActive('ejercicios') }]"
       >
@@ -23,10 +21,8 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '../stores/auth';
 import { useRoute } from 'vue-router';
 
-const authStore = useAuthStore();
 const route = useRoute();
 
 const sectionRoutes = {
