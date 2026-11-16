@@ -1,6 +1,11 @@
 <template>
   <div class="smartLearn-view">
 
+    <section class="hero" aria-labelledby="hero-title">
+      <h2 id="hero-title">Aprende sin límites</h2>
+      <p style="color: #324378;">Una plataforma educativa 100% accesible diseñada para personas con discapacidad visual.</p>
+    </section>
+
     <section 
       class="topics-carousel-container" 
       aria-label="Navegación de Temas"
@@ -35,10 +40,7 @@
       <button @click="handleManualNext" class="carousel-btn next-btn" aria-label="Siguiente">&#10095;</button>
     </section>
 
-    <section class="hero" aria-labelledby="hero-title">
-      <h2 id="hero-title">Aprende sin límites</h2>
-      <p style="color: #324378;">Una plataforma educativa 100% accesible diseñada para personas con discapacidad visual.</p>
-    </section>
+
     <section aria-labelledby="que-es">
       <h2 id="que-es">¿Qué es Smart Learn?</h2>
       <div class="card info-block">
@@ -64,11 +66,12 @@
       <div class="card info-block">
         <div class="info-text">
           <p><i>Smart Learn ofrece:</i> </p>
-          <p><li>Lectura en voz alta y navegación mediante audio.</li></p>
-          <p><li>Reconocimiento y control por voz.</li></p>
-          <p><li>Contenido totalmente accesible.</li></p>
-          <p><li>Compatibilidad con dispositivos Braille.</li></p>
-          <p><li>Seguimiento académico personalizado.</li></p>
+          <ul>
+          <li>Lectura en voz alta y navegación mediante audio.</li>
+          <li>Reconocimiento y control por voz.</li>
+          <li>Contenido totalmente accesible.</li>
+          <li>Compatibilidad con dispositivos Braille.</li>
+          <li>Seguimiento académico personalizado.</li>
         </div>
         <img src="/images/tecnologiaInclusiva.jpeg" alt="Tecnología">
       </div>

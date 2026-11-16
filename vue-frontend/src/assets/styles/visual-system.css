@@ -1,0 +1,160 @@
+/* Smart Learn: shared presentation layer. Functional state remains in Vue. */
+:root {
+  --primary: #087f9f;
+  --secondary: #254ca8;
+  --accent: #005fcc;
+  --text: #203449;
+  --light-bg: #f5f8fb;
+  --card-bg: #fff;
+  --sl-ink: #163451;
+  --sl-muted: #526579;
+  --sl-line: #d7e2ec;
+  --sl-wash: #eaf5f8;
+  --sl-blue-wash: #edf3fc;
+  --sl-cyan: #07acda;
+  --radius: 14px;
+  --sl-ease: cubic-bezier(.22, 1, .36, 1);
+  --transition: 160ms var(--sl-ease);
+}
+
+/* Typography and browser affordances */
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--light-bg); transition: none; }
+#app, #app * { font-family: inherit; }
+#app { color: var(--text); line-height: 1.65; }
+#app :is(h1, h2, h3, h4) { line-height: 1.2; text-wrap: balance; }
+#app :is(h1, h2) { letter-spacing: -.025em; }
+#app :is(p, li, .valor, .breadcrumb-item) { overflow-wrap: anywhere; }
+#app :is(img, video) { max-width: 100%; }
+#app :is(input, textarea, select, button) { font: inherit; }
+#app :is(input, textarea) { caret-color: var(--accent); }
+#app ::selection { background: #c8eaf5; color: #163451; }
+#app a { text-underline-offset: .22em; }
+#app :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+#app :is(input, textarea, select):focus-visible { outline-offset: 2px; box-shadow: none; }
+#app :is(button, a, input, textarea, select):focus-visible { transition: none; }
+#app :is(button, [role='button']) { touch-action: manipulation; }
+#app :is(button, .hero-btn-movil) { min-height: 44px; }
+#app button:disabled { cursor: not-allowed; opacity: .6; transform: none; }
+#app :is(.topics-carousel, .cards-vertical, .modal-card) { scrollbar-color: #97adbf transparent; scrollbar-width: thin; }
+#app :is(h2[id], section[id]) { scroll-margin-top: 150px; }
+
+/* Page frames and flat, readable surfaces */
+#app main { width: min(100% - 64px, 1240px); margin: 32px auto 64px; padding-bottom: 0; min-width: 0; }
+#app .auth-main { width: 100%; margin: 0; padding: 56px 32px 80px; min-height: 65vh; }
+#app section { background: white; box-shadow: none; transition: none; }
+#app section:hover { transform: none; box-shadow: none; }
+#app .card { box-shadow: none; border: 1px solid var(--sl-line); border-radius: var(--radius); }
+#app .card:hover { transform: none; }
+#app section h2 { border: 0; padding-left: 0; color: var(--sl-ink); }
+
+/* Brand header: original white mark on the established blue */
+#app #main-header { background: var(--secondary); box-shadow: none; overflow: visible; transition: none; will-change: auto; transform: none; }
+#app #main-header .header-top { max-width: 1240px; margin: auto; justify-content: flex-start; padding: 16px 32px; gap: 16px; transition: none; }
+#app .navbar-logo img { display: block; height: 58px; width: auto; }
+#app .brand-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+#app #main-header h1 { font-size: 1.75rem; line-height: 1.15; font-weight: 650; transition: none; }
+#app #main-header .subtitle { font-size: .9rem; font-style: normal; color: #eef5ff; white-space: normal; opacity: 1; transition: none; }
+#app #main-header.scrolled .header-top { padding: 0; margin: 0 auto; max-height: 0; overflow: hidden; }
+#app #navegacion { background: white; padding: 0 24px; border: 0; border-bottom: 1px solid var(--sl-line); transition: none; }
+#app #navegacion ul { max-width: 1176px; margin: auto; padding: 8px 0; justify-content: flex-start; gap: 8px; }
+#app #navegacion a { display: block; color: var(--sl-muted); border-radius: 8px; font-size: .94rem; font-weight: 600; padding: 10px 16px; transition: color 160ms var(--sl-ease), background-color 160ms var(--sl-ease); }
+#app #navegacion a.router-link-exact-active { background: var(--sl-blue-wash); color: var(--secondary); }
+#app #navegacion a:hover { color: var(--secondary); background: var(--sl-blue-wash); }
+#app #main-header.header-top { padding: 24px max(24px, calc((100% - 1176px) / 2)); text-align: left; display: grid; grid-template-columns: 1fr auto; column-gap: 24px; }
+#app #main-header.header-top .subtitle { grid-column: 1; }
+#app #main-header.header-top .btn-ghost { position: static; grid-column: 2; grid-row: 1 / 3; align-self: center; margin: 0; border: 1px solid #a8c4eb; }
+
+/* Home: the promise first, followed by the existing topic navigator */
+#app .smartLearn-view { width: 100%; max-width: 1176px; min-width: 0; }
+#app .smartLearn-view .hero { min-height: 340px; margin: 0 0 24px; padding: clamp(32px, 5vw, 64px); padding-right: 48%; align-items: flex-start; text-align: left; border: 0; border-radius: 16px; background: var(--sl-wash); position: relative; isolation: isolate; overflow: hidden; }
+#app .smartLearn-view .hero::after { content: ''; position: absolute; z-index: -1; inset: 0 0 0 60%; background: url('/images/misionEducativa.jpg') center / cover no-repeat; }
+#app .smartLearn-view .hero h2 { font-size: clamp(2.4rem, 4.3vw, 4rem); max-width: 10ch; color: var(--sl-ink); margin: 0 0 24px; }
+#app .smartLearn-view .hero p { font-size: 1.15rem; max-width: 40ch; line-height: 1.7; }
+#app .topics-carousel-container { margin: 0 0 64px; padding: 0 52px; min-width: 0; }
+#app .topics-carousel { width: 100%; min-width: 0; padding: 12px 0; gap: 20px; }
+#app .topic-card { flex: 0 0 calc((100% - 40px) / 3); min-width: 0; min-height: 108px; padding: 16px; justify-content: flex-start; gap: 16px; background: white; border: 1px solid var(--sl-line); border-radius: 12px; box-shadow: none; transition: border-color 160ms var(--sl-ease); }
+#app .topic-card .carousel-img { flex: 0 0 64px; width: 64px; height: 64px; object-fit: contain; background: transparent; border-radius: 8px; filter: none; transform: none; transition: none; }
+#app .topic-card h3 { position: static; padding: 0; color: var(--sl-ink); font-size: 1rem; text-shadow: none; text-align: left; }
+#app .topic-card:hover { box-shadow: none; transform: none; border-color: var(--primary); }
+#app .carousel-btn { width: 44px; height: 44px; border: 1px solid var(--sl-line); border-radius: 50%; background: white; color: var(--secondary); box-shadow: none; font-size: 1rem; }
+#app .smartLearn-view > section:not(.hero):not(.topics-carousel-container) { padding: 40px 0; margin: 0; border-radius: 0; background: transparent; border-top: 1px solid var(--sl-line); }
+#app .smartLearn-view > section > h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); margin: 0 0 28px; }
+#app .smartLearn-view .info-block { padding: 0; margin: 0; border: 0; border-radius: 0; background: transparent; gap: clamp(28px, 5vw, 72px); }
+#app .smartLearn-view .info-text { color: var(--sl-muted); min-width: 0; }
+#app .smartLearn-view .info-text p { font-size: 1.1rem; line-height: 1.85; max-width: 68ch; }
+#app .smartLearn-view .info-block img { width: 36%; max-width: 380px; max-height: 280px; object-fit: contain; border-radius: 12px; box-shadow: none; }
+#app .smartLearn-view .info-text ul { margin: 16px 0 0; padding-left: 22px; }
+#app .smartLearn-view .info-text li { padding-left: 6px; }
+#app .smartLearn-view .info-text li::marker { color: var(--primary); }
+
+/* Authentication: calm surfaces and consistent controls */
+#app .auth-card { max-width: 480px; margin: 0; padding: 40px; background: white; border: 1px solid var(--sl-line); border-radius: 16px; }
+#app .auth-card-header { text-align: left; margin-bottom: 32px; }
+#app .auth-card-header h2 { color: var(--sl-ink); font-size: clamp(1.75rem, 3vw, 2.1rem); margin-bottom: 10px; }
+#app .auth-card-header p { color: var(--sl-muted); font-size: 1rem; }
+#app .auth-form .form-group { margin-bottom: 24px; }
+#app :is(.auth-form, .form-group, .form-usuario) label { color: var(--sl-ink); font-size: .95rem; font-weight: 600; }
+#app :is(.auth-form, .form-group, .form-usuario) :is(input:not([type='checkbox']):not([type='radio']), textarea, select) { min-width: 0; width: 100%; min-height: 48px; padding: 12px 14px; margin-top: 0; border: 1px solid #a9bdce; border-radius: 8px; background: #fff; color: var(--text); font-size: 1rem; box-shadow: none; transition: border-color 160ms var(--sl-ease); }
+#app :is(input, textarea)::placeholder { color: #607286; opacity: 1; }
+#app input:is([type='checkbox'], [type='radio']) { accent-color: var(--accent); }
+#app :is(.btn-primary, .btn-primary-blue, .auth-submit) { background: var(--secondary); color: white; box-shadow: none; border-radius: 8px; font-weight: 600; }
+#app .auth-submit { padding: 13px 20px; margin-top: 8px; font-size: 1rem; }
+#app .auth-footer { border-color: var(--sl-line); padding-top: 24px; margin-top: 28px; }
+#app .auth-footer p { color: var(--sl-muted); }
+#app .auth-link { color: var(--accent); }
+#app .verification-card { max-width: 540px; }
+#app .otp-container { gap: clamp(4px, 1.4vw, 12px); }
+#app .auth-form .otp-input { width: 100%; min-width: 0; height: 56px; padding: 6px; margin: 0; font-size: 1.5rem; border: 1px solid #a9bdce; border-radius: 8px; background: white; }
+#app :is(.error-message, .auth-error, .mensaje-error) { border: 1px solid #e6b2b9; border-radius: 8px; color: #9b2436; background: #fff2f3; padding: 12px 16px; }
+
+/* Footer shared by public, auth and administrative layouts */
+#app footer { padding: 40px 32px 24px; background: #edf3f8; color: var(--sl-muted); border-top: 1px solid var(--sl-line); }
+#app .footer-content { max-width: 1176px; padding: 0; gap: 48px; }
+#app .footer-col { min-width: min(240px, 100%); }
+#app .footer-col h3, #app .footer-col strong { color: var(--sl-ink); font-size: 1rem; }
+#app .footer-col h3 { margin-bottom: 12px; }
+#app footer a { color: #254ca8; }
+#app .footer-col p { font-size: .92rem; margin-top: 6px; }
+#app .social-icons { display: flex; gap: 16px; align-items: center; margin-top: 14px; }
+#app .social-icons a { display: inline-flex; min-height: 44px; align-items: center; }
+#app .social-icons img { max-height: 36px; width: auto; object-fit: contain; }
+#app .footer-copy { max-width: 1176px; margin: 32px auto 0; border-color: var(--sl-line); color: var(--sl-muted); text-align: left; }
+
+/* Reading view */
+#app .avisoPrivacidad-view { width: 100%; max-width: 800px; }
+#app .avisoPrivacidad-view > h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 40px; color: var(--sl-ink); }
+#app .avisoPrivacidad-view section { background: transparent; border-radius: 0; padding: 24px 0; margin: 0; border-top: 1px solid var(--sl-line); }
+#app .avisoPrivacidad-view h2 { font-size: 1.35rem; margin: 0 0 16px; }
+#app .avisoPrivacidad-view p { line-height: 1.85; }
+
+@media (max-width: 900px) {
+  #app main { width: calc(100% - 40px); }
+  #app .auth-main { padding: 32px 20px 56px; }
+  #app .topic-card { flex-basis: calc((100% - 20px) / 2); }
+  #app .smartLearn-view .hero { padding: 40px 44% 40px 32px; }
+  #app .smartLearn-view .hero::after { left: 64%; }
+}
+@media (max-width: 600px) {
+  #app main { width: calc(100% - 32px); margin: 24px auto 40px; }
+  #app .auth-main { width: 100%; padding: 24px 16px 40px; margin: 0; }
+  #app #main-header .header-top { padding: 14px 20px; }
+  #app .navbar-logo img { height: 48px; }
+  #app #main-header h1 { font-size: 1.4rem; }
+  #app #navegacion { padding: 0 12px; }
+  #app #navegacion ul { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  #app #navegacion a { height: 100%; padding: 10px 8px; font-size: .85rem; }
+  #app #main-header.header-top { padding: 20px; column-gap: 12px; }
+  #app .smartLearn-view .hero { padding: 32px 24px 200px; min-height: 0; }
+  #app .smartLearn-view .hero::after { inset: auto 0 0; height: 172px; background-position: center 45%; }
+  #app .smartLearn-view .hero h2 { max-width: 12ch; font-size: 2.6rem; margin-bottom: 16px; }
+  #app .smartLearn-view .hero p { font-size: 1rem; }
+  #app .topics-carousel-container { margin-bottom: 28px; padding-inline: 48px; }
+  #app .topic-card { flex-basis: 100%; gap: 12px; padding: 12px; min-height: 88px; }
+  #app .topic-card .carousel-img { width: 48px; height: 48px; flex-basis: 48px; }
+  #app .smartLearn-view .info-block { flex-direction: column; align-items: stretch; text-align: left; gap: 24px; }
+  #app .smartLearn-view .info-block img { width: 100%; max-width: 100%; max-height: 240px; order: 1; }
+  #app .smartLearn-view .info-text p { font-size: 1rem; }
+  #app .auth-card { padding: 28px 22px; }
+  #app footer { padding: 32px 20px 24px; }
+  #app .footer-content { gap: 28px; }
+}
