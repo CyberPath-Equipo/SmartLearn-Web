@@ -1,5 +1,17 @@
 <template>
   <div class="usuario-view">
+    <div class="usuario-topbar topbar">
+      <div>
+        <h2 class="view-title">Panel de usuario</h2>
+        <p class="view-subtitle">Administra tu perfil y accede rápidamente a tus recursos.</p>
+      </div>
+
+      <nav class="usuario-menu" aria-label="Navegación del panel">
+        <router-link to="/dashboard" class="usuario-menu-link">Dashboard</router-link>
+        <router-link to="/materias" class="usuario-menu-link">Materias</router-link>
+        <router-link to="/ejercicio" class="usuario-menu-link">Ejercicios</router-link>
+      </nav>
+    </div>
 
     <!-- ========== PERFIL ========== -->
     <section v-if="seccionActiva === 'perfil'" class="card perfil-card">
@@ -411,12 +423,62 @@ function handleLogout() {
 
 <style scoped>
 .usuario-view {
-  max-width: 600px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.usuario-topbar {
+  margin-bottom: 0;
+}
+
+.view-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin: 0 0 6px;
+  letter-spacing: -0.025em;
+}
+
+.view-subtitle {
+  font-size: 0.95rem;
+  color: #718096;
+  margin: 0;
+}
+
+.usuario-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 5px;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.usuario-menu-link {
+  color: #4a5568;
+  text-decoration: none;
+  padding: 9px 14px;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.usuario-menu-link:hover {
+  color: #2563eb;
+  background: #edf4ff;
+}
+
+.usuario-menu-link.router-link-exact-active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
 }
 
 /* ── Card base ── */
@@ -692,5 +754,20 @@ h3 {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+@media (max-width: 700px) {
+  .usuario-topbar {
+    align-items: stretch;
+  }
+
+  .usuario-menu {
+    justify-content: center;
+  }
+
+  .usuario-menu-link {
+    flex: 1 1 auto;
+    text-align: center;
+  }
 }
 </style>
