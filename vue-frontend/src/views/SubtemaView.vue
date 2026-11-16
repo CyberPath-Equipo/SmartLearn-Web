@@ -27,10 +27,10 @@
       </div>
       <div class="tema-actions">
         <button class="btn-action-edit" @click="mostrarFormEditTema">
-          Editar Tema
+          <span class="btn-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#edit" /></svg></span> Editar Tema
         </button>
         <button class="btn-action-delete" @click="eliminarTemaActivo">
-          Eliminar Tema
+          <span class="btn-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#trash" /></svg></span> Eliminar Tema
         </button>
       </div>
     </div>

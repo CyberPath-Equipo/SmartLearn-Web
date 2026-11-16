@@ -36,10 +36,10 @@
       </div>
       <div class="subtema-actions">
         <button class="btn-action-edit" @click="mostrarFormEditSubtema">
-          Editar Subtema
+          <span class="btn-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#edit" /></svg></span> Editar Subtema
         </button>
         <button class="btn-action-delete" @click="eliminarSubtemaActivo">
-          Eliminar Subtema
+          <span class="btn-icon"><svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/smartlearn-icons.svg#trash" /></svg></span> Eliminar Subtema
         </button>
       </div>
     </div>

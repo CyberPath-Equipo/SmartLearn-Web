@@ -1468,3 +1468,93 @@ html {
   transform: scale(1.1);
   filter: drop-shadow(0 4px 6px rgba(255, 255, 255, 0.3));
 }
+
+/* Fix navbar menu toggle on desktop & video wrapper */
+.menu-toggle {
+  display: none !important;
+}
+
+@media (max-width: 1100px) {
+  .menu-toggle {
+    display: flex !important;
+  }
+}
+
+.sl-main-footer {
+  background: #08111e !important;
+  color: #94a3b8 !important;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+
+/* ==========================================================================
+   EMIL KOWALSKI DESIGN ENGINEERING POLISH (Static Pages Layer)
+   ========================================================================== */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+button,
+.btn-primary,
+.btn-secondary,
+.btn-edit,
+.btn-delete,
+.btn-logout,
+.btn-ghost,
+.hero-btn,
+.auth-submit,
+.carousel-btn {
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 180ms var(--ease-out),
+    box-shadow 200ms var(--ease-out),
+    border-color 180ms var(--ease-out);
+  touch-action: manipulation;
+}
+
+button:active:not(:disabled),
+.btn-primary:active:not(:disabled),
+.btn-secondary:active:not(:disabled),
+.btn-edit:active:not(:disabled),
+.btn-delete:active:not(:disabled),
+.btn-logout:active:not(:disabled),
+.hero-btn:active,
+.auth-submit:active:not(:disabled),
+.carousel-btn:active {
+  transform: scale(0.97) !important;
+  transition-duration: 90ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover:not(:disabled),
+  .auth-submit:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1d3f8f 0%, var(--primary) 100%);
+    transform: translateY(-1.5px);
+    box-shadow: 0 8px 20px -4px rgba(7, 172, 218, 0.38);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
