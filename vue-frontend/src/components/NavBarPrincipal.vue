@@ -3,7 +3,7 @@
     <header id="main-header" class="public-header" :class="{ scrolled: isScrolled, 'menu-open': menuOpen, 'keyboard-navigation': keyboardNavigation }"
       @keydown="keyboardNavigation = true" @pointerdown="keyboardNavigation = false"
       @keydown.esc="closeMenu" @focusout="handleFocusOut">
-      <router-link to="/smartlearn" class="header-top header-brand-link" aria-label="Smart Learn - Ir al inicio">
+      <router-link to="/smartlearn" @click="menuOpen = false" class="header-top header-brand-link" aria-label="Smart Learn - Ir al inicio">
         <div class="navbar-logo">
           <img src="/images/Blanco_sin_fondo_Recortada_Smart_Learn_logo.png" alt="Logo de Smart Learn" height="52" width="75">
         </div>

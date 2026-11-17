@@ -69,19 +69,19 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/smartlearn" class="footer-nav-link">
+              <router-link to="/smartlearn#accesibilidad" class="footer-nav-link">
                 <SlIcon name="accessibility" :size="16" />
                 <span>Estándar WCAG 2.2 AA</span>
               </router-link>
             </li>
             <li>
-              <router-link to="/smartlearn" class="footer-nav-link">
+              <router-link to="/smartlearn#mision" class="footer-nav-link">
                 <SlIcon name="target" :size="16" />
                 <span>Misión y Compromiso</span>
               </router-link>
             </li>
             <li>
-              <router-link to="/smartlearn/movil" class="footer-nav-link">
+              <router-link to="/smartlearn/movil#porque-movil" class="footer-nav-link">
                 <SlIcon name="sparkles" :size="16" />
                 <span>Guía de Accesibilidad Móvil</span>
               </router-link>

@@ -1,3 +1,4 @@
+import { nextTick } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import AuthLayout from '../layouts/AuthLayout.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
@@ -5,6 +6,18 @@ import { useAuthStore } from '../stores/auth';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  // Presentation only: new/repeated navigation starts at the requested section.
+  async scrollBehavior(to, from, savedPosition) {
+    await nextTick();
+    if (savedPosition) return { ...savedPosition, behavior: 'instant' };
+    const target = to.hash && document.getElementById(decodeURIComponent(to.hash.slice(1)));
+    if (target) {
+      const header = document.getElementById('main-header');
+      const offset = header ? header.getBoundingClientRect().height + 24 : 24;
+      return { el: target, top: offset, behavior: 'instant' };
+    }
+    return { left: 0, top: 0, behavior: 'instant' };
+  },
   routes: [
     {
       path: '/',

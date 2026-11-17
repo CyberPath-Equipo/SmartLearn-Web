@@ -11,14 +11,14 @@
         <h2 id="hero-title">Smart Learn en tu Bolsillo</h2>
         <p>Lleva tu educación accesible a cualquier lugar. Diseñada específicamente para ser intuitiva, rápida y 100% compatible con tecnologías de asistencia en dispositivos móviles.</p>
         <div class="hero-actions-row">
-          <a href="#video-demo" class="hero-btn-movil btn-emil-primary">
+          <router-link to="/smartlearn/movil#video-demo" class="hero-btn-movil btn-emil-primary">
             <SlIcon name="play" :size="16" />
             <span>Ver demostración</span>
-          </a>
-          <a href="#gallery-section" class="btn-emil-secondary">
+          </router-link>
+          <router-link to="/smartlearn/movil#gallery-section" class="btn-emil-secondary">
             <span>Explorar pantallas</span>
             <SlIcon name="arrow-right" :size="16" class="btn-arrow" />
-          </a>
+          </router-link>
         </div>
       </div>
 
@@ -63,9 +63,9 @@
     </section>
 
     <!-- INTRODUCCIÓN Y BENEFICIOS -->
-    <section aria-labelledby="porque-movil" class="intro-section">
+    <section id="porque-movil" aria-labelledby="porque-movil-title" class="intro-section">
       <div class="section-heading-block">
-        <h2 id="porque-movil">¿Por qué usar la App Móvil?</h2>
+        <h2 id="porque-movil-title">¿Por qué usar la App Móvil?</h2>
         <p class="section-desc">La aplicación móvil de <strong>Smart Learn</strong> ha sido optimizada desde cero para responder a las necesidades de accesibilidad portátil con controles por voz nativos, gestos hápticos y alto contraste adaptativo.</p>
       </div>
 
