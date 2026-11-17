@@ -1,11 +1,11 @@
 <template>
-  <div class="auth-layout-container">
+  <div class="auth-layout-container public-layout">
     <header id="main-header" class="public-header" :class="{ scrolled: isScrolled, 'menu-open': menuOpen, 'keyboard-navigation': keyboardNavigation }"
       @keydown="keyboardNavigation = true" @pointerdown="keyboardNavigation = false"
       @keydown.esc="closeMenu" @focusout="handleFocusOut">
       <router-link to="/smartlearn" @click="menuOpen = false" class="header-top header-brand-link" aria-label="Smart Learn - Ir al inicio">
         <div class="navbar-logo">
-          <img src="/images/Blanco_sin_fondo_Recortada_Smart_Learn_logo.png" alt="Logo de Smart Learn" height="52" width="75">
+          <img src="/images/Blanco_sin_fondo_Recortada_Smart_Learn_logo.png" alt="Logo de Smart Learn" height="64" width="94">
         </div>
         <div class="brand-text">
           <h1 class="title">Smart Learn</h1>
@@ -13,7 +13,7 @@
         </div>
       </router-link>
 
-      <!-- Botón de Menú Móvil: estrictamente oculto en desktop (>1100px) -->
+      <!-- Botón de Menú Móvil: estrictamente oculto en desktop (>1279px) -->
       <button ref="menuButton" class="menu-toggle" type="button" :aria-expanded="menuOpen"
         aria-controls="navegacion" :aria-label="menuOpen ? 'Cerrar menú' : 'Abrir menú'"
         @click="menuOpen = !menuOpen">
@@ -24,25 +24,21 @@
         <ul>
           <li class="nav-about">
             <router-link to="/smartlearn" @click="menuOpen = false">
-              <SlIcon name="book" :size="18" />
               <span>Sobre Smart Learn</span>
             </router-link>
           </li>
           <li class="nav-mobile">
             <router-link to="/smartlearn/movil" @click="menuOpen = false">
-              <SlIcon name="phone" :size="18" />
               <span>Sobre Smart Learn Móvil</span>
             </router-link>
           </li>
           <li class="nav-login">
             <router-link to="/login" @click="menuOpen = false">
-              <SlIcon name="login" :size="18" />
               <span>Inicio de sesión</span>
             </router-link>
           </li>
           <li class="nav-register">
             <router-link to="/registro" @click="menuOpen = false">
-              <SlIcon name="user" :size="18" />
               <span>Registro de usuario</span>
               <SlIcon name="arrow-right" :size="16" class="btn-arrow" />
             </router-link>
@@ -95,8 +91,8 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 <style scoped>
   @import '../assets/styles/global-styles.css';
 
-  /* Ocultar tajantemente el botón hamburguesa en desktop (>1100px) */
-  @media (min-width: 1101px) {
+  /* Ocultar tajantemente el botón hamburguesa en desktop (>1279px) */
+  @media (min-width: 1280px) {
     .menu-toggle {
       display: none !important;
       visibility: hidden !important;
@@ -104,7 +100,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
     }
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1279px) {
     .menu-toggle {
       display: flex !important;
     }

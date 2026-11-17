@@ -114,7 +114,7 @@
 
         <div class="logo-container-movil">
           <div class="emblem-halo">
-            <img src="/images/Azul_sin_fondo_Smart_Learn_logo_redondeada.png" alt="Smart Learn Mobile Logo" class="floating-logo">
+            <img src="/images/Blanco_sin_fondo_Recortada_Smart_Learn_logo.png" alt="Smart Learn Mobile Logo" class="floating-logo">
           </div>
         </div>
       </div>

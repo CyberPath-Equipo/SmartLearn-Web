@@ -22,3 +22,7 @@ Build original mediante `npm.cmd run build`: correcto. Permanece la advertencia 
 Comprobaciones de código: igualdad de rutas y guardias contra HEAD anterior, casos de inicio/ancla/ancla inexistente/historial, identidad binaria de las cinco imágenes y contraste de pares principales. Texto secundario/superficie 8.00:1; títulos/superficie 14.21:1; acción cian/texto oscuro 6.11:1; enlace/fondo azul 8.07:1. Estas mediciones no constituyen una auditoría WCAG completa.
 
 Pendiente revisión visual real en escritorio y móvil, navegación repetida, foco y gestos. Computer Use se detuvo porque no pudo verificar la URL de Chrome en Windows. No se utilizó Playwright ni se afirma validación visual.
+
+## Ajuste de cabecera y ancho completo
+
+La cabecera pública usa el símbolo blanco original sin recuadro azul, con mayor tamaño y enlaces de texto. La página activa tiene una línea cian, sin pastillas. El menú hamburguesa aparece bajo 1280px para evitar comprimir las etiquetas. Las secciones públicas ocupan todo el ancho y usan márgenes internos adaptables; los formularios conservan su medida. El emblema de beneficios móviles es blanco. La llamada de lanzamiento usa tonos oscuros fijos, separados del token de texto, para asegurar contraste. Sin cambios de scripts, rutas ni contenido informativo.
