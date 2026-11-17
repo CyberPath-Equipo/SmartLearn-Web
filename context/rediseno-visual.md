@@ -31,3 +31,5 @@ La cabecera pública usa el símbolo blanco original sin recuadro azul, con mayo
 ## Ajuste a tarjetas compactas
 
 Por preferencia posterior del usuario, las secciones p?blicas vuelven a tarjetas de radio 16px, con borde sutil, m?rgenes exteriores de 12?28px y separaci?n de 16?20px. El espacio interior se adapta entre 24 y 44px (18px lateral en m?vil). Se elimina la altura m?nima forzada de la portada. La cabecera refinada, los logos blancos y los colores se conservan. Cambio exclusivamente CSS.
+
+El carrusel se traslad? a ?Qu? ofrece Smart Learn? en lugar de la ilustraci?n de m?dulos. ?Qu? es Smart Learn? vuelve a mostrar el logotipo original, en su variante blanca para el fondo oscuro.

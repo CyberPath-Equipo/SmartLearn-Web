@@ -138,7 +138,9 @@
             <span class="story-tag"><SlIcon name="layers" :size="16" /> Web + App Móvil</span>
           </div>
         </div>
-        <ProductGallery />
+        <div class="story-visual-frame story-visual-brand">
+          <img src="/images/Blanco_sin_fondo_Recortada_Smart_Learn_logo.png" alt="Logo de Smart Learn">
+        </div>
       </div>
     </section>
 
@@ -186,9 +188,7 @@
             </li>
           </ul>
         </div>
-        <div class="story-visual-frame story-visual-diagram">
-          <img src="/images/smartlearn-ecosystem-ui.svg" alt="Ilustración de módulos de tecnología inclusiva: narrador TTS, línea Braille, control por voz y analítica docente">
-        </div>
+        <ProductGallery />
       </div>
     </section>
 
