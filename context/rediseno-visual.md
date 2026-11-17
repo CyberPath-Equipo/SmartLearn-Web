@@ -26,3 +26,8 @@ Pendiente revisión visual real en escritorio y móvil, navegación repetida, fo
 ## Ajuste de cabecera y ancho completo
 
 La cabecera pública usa el símbolo blanco original sin recuadro azul, con mayor tamaño y enlaces de texto. La página activa tiene una línea cian, sin pastillas. El menú hamburguesa aparece bajo 1280px para evitar comprimir las etiquetas. Las secciones públicas ocupan todo el ancho y usan márgenes internos adaptables; los formularios conservan su medida. El emblema de beneficios móviles es blanco. La llamada de lanzamiento usa tonos oscuros fijos, separados del token de texto, para asegurar contraste. Sin cambios de scripts, rutas ni contenido informativo.
+
+
+## Ajuste a tarjetas compactas
+
+Por preferencia posterior del usuario, las secciones p?blicas vuelven a tarjetas de radio 16px, con borde sutil, m?rgenes exteriores de 12?28px y separaci?n de 16?20px. El espacio interior se adapta entre 24 y 44px (18px lateral en m?vil). Se elimina la altura m?nima forzada de la portada. La cabecera refinada, los logos blancos y los colores se conservan. Cambio exclusivamente CSS.
