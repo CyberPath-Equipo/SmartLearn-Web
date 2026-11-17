@@ -729,6 +729,10 @@ body {
   color: var(--sl-muted);
 }
 
+#app .hero-badges-cluster {
+  display: contents;
+}
+
 /* Topics Navigator / Carousel */
 #app .topics-carousel-container {
   margin: 0 0 56px;
@@ -844,6 +848,43 @@ body {
     color: #ffffff;
     transform: scale(1.06);
   }
+}
+
+#app .carousel-mobile-nav {
+  display: none;
+}
+
+#app .carousel-nav-btn {
+  width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0;
+  border: 1.5px solid var(--sl-line-strong);
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--secondary);
+  box-shadow: 0 4px 12px rgba(23, 47, 80, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+}
+
+#app .carousel-nav-btn:hover {
+  background: var(--secondary);
+  border-color: var(--secondary);
+  color: #ffffff;
+}
+
+#app .carousel-nav-btn:active {
+  transform: scale(0.92);
+}
+
+#app .carousel-nav-indicator {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--sl-muted);
 }
 
 /* Story Sections */
@@ -2661,17 +2702,20 @@ body {
 
 @media (max-width: 900px) {
   #app .smartLearn-movil-view .mockups-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px;
   }
 
   #app .smartLearn-movil-view .hero-movil {
     grid-template-columns: 1fr;
-    padding: 40px 32px;
+    padding: 36px 24px;
+    gap: 32px;
   }
 
   #app .smartLearn-movil-view .info-block-movil {
     grid-template-columns: 1fr;
     text-align: left;
+    gap: 28px;
   }
 
   #app .benefits-grid {
@@ -2702,15 +2746,113 @@ body {
   }
 
   #app main {
-    width: calc(100% - 40px);
+    width: calc(100% - 32px);
   }
 
   #app .auth-main {
-    padding: 32px 20px 56px;
+    padding: 24px 16px 48px;
+  }
+
+  /* Ocultar botones flotantes que solapaban el contenido */
+  #app .desktop-only {
+    display: none !important;
+  }
+
+  /* Carrusel de temas responsivo: columna vertical para que las tarjetas queden arriba y controles abajo */
+  #app .topics-carousel-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    margin-bottom: 32px;
+    padding: 0 12px;
+    position: relative;
+  }
+
+  #app .topics-carousel {
+    display: flex !important;
+    width: 100% !important;
+    gap: 14px;
+    padding: 8px 4px 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  #app .topics-carousel::-webkit-scrollbar {
+    display: none;
   }
 
   #app .topic-card {
-    flex-basis: calc((100% - 32px) / 3);
+    flex: 0 0 220px;
+    scroll-snap-align: start !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    min-height: 80px;
+    box-shadow: 0 4px 14px rgba(23, 47, 80, 0.08);
+  }
+
+  #app .carousel-mobile-nav {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 14px !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+  }
+
+  /* Hero Media y Badges Responsivos lado a lado sin desborde de texto */
+  #app .hero-media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  #app .hero-photo-frame {
+    width: 100%;
+    max-height: 280px;
+    border-radius: 20px;
+  }
+
+  #app .hero-badges-cluster {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-top: 12px !important;
+  }
+
+  #app .hero-floating-badge {
+    position: static !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 12px 14px !important;
+    border-radius: 14px !important;
+    gap: 10px !important;
+    box-shadow: 0 4px 14px rgba(23, 47, 80, 0.08) !important;
+    animation: none !important;
+  }
+
+  #app .hero-floating-badge > div {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  #app .hero-floating-badge strong,
+  #app .hero-floating-badge span {
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
   }
 
   #app .smartLearn-view .hero {
@@ -2758,8 +2900,26 @@ body {
   }
 
   #app .smartLearn-movil-view .hero-movil {
-    padding: 28px 20px;
-    gap: 32px;
+    padding: 24px 16px;
+    gap: 24px;
+    border-radius: 20px;
+  }
+
+  #app .smartLearn-movil-view .hero-movil h2 {
+    font-size: clamp(1.8rem, 6.2vw, 2.2rem);
+    line-height: 1.15;
+  }
+
+  #app .smartLearn-movil-view .hero-actions-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  #app .smartLearn-movil-view .hero-actions-row > a {
+    width: 100%;
+    justify-content: center;
+    min-height: 46px;
   }
 
   #app .hero-floating-chip,
@@ -2770,35 +2930,163 @@ body {
 
   #app .mobile-hero-stage {
     flex-direction: column;
+    align-items: center;
+  }
+
+  #app .phone-device--hero {
+    width: 175px !important;
+    max-width: 75% !important;
+    margin: 0 auto;
   }
 
   #app .smartLearn-movil-view > section {
-    padding: 28px 20px;
+    padding: 20px 12px;
+    margin-bottom: 20px;
+    border-radius: 18px;
   }
 
+  /* 2 COLUMNAS COMPACTAS DE MOCKUPS EN TELÉFONOS MÓVILES (SOLICITUD DEL USUARIO) */
   #app .smartLearn-movil-view .mockups-grid {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin-top: 16px !important;
+    perspective: none !important;
+  }
+
+  #app .smartLearn-movil-view .mockup-card {
+    padding: 10px 8px !important;
+    border-radius: 14px !important;
+    min-width: 0 !important;
+  }
+
+  #app .mockup-card-top {
+    margin-bottom: 8px !important;
+    gap: 4px !important;
+  }
+
+  #app .mockup-step-num {
+    font-size: 0.65rem !important;
+    padding: 2px 5px !important;
+    border-radius: 6px !important;
+  }
+
+  #app .mockup-tag {
+    font-size: 0.60rem !important;
+    padding: 2px 5px !important;
+    max-width: 80px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Chasis de celular miniaturizado pero fiel al diseño 3D */
+  #app .smartLearn-movil-view .phone-mockup {
+    width: 100% !important;
+    max-width: 128px !important;
+    padding: 4px !important;
+    border-radius: 18px !important;
+    transform: rotateX(2deg) rotateY(-2deg) !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+      1px 2px 0px #18283e,
+      2px 3px 0px #101c2e,
+      3px 5px 1px #09121f,
+      4px 10px 18px -4px rgba(8, 17, 30, 0.35) !important;
+    margin: 0 auto !important;
+  }
+
+  #app .smartLearn-movil-view .phone-mockup .phone-hw-btn {
+    display: none !important;
+  }
+
+  #app .smartLearn-movil-view .phone-mockup .phone-bezel {
+    border-radius: 14px !important;
+  }
+
+  #app .smartLearn-movil-view .phone-mockup .phone-island-pill {
+    height: 10px !important;
+  }
+
+  #app .smartLearn-movil-view .phone-mockup .island-camera {
+    width: 24px !important;
+    height: 4px !important;
+  }
+
+  #app .smartLearn-movil-view .phone-mockup .phone-chin {
+    height: 8px !important;
+  }
+
+  #app .smartLearn-movil-view .phone-mockup .phone-home-bar {
+    width: 28px !important;
+    height: 2px !important;
+  }
+
+  #app .smartLearn-movil-view .mockup-desc {
+    margin-top: 8px !important;
+  }
+
+  #app .smartLearn-movil-view .mockup-desc h3 {
+    font-size: 0.82rem !important;
+    font-weight: 750 !important;
+    margin: 0 0 4px !important;
+    line-height: 1.2 !important;
+  }
+
+  #app .smartLearn-movil-view .mockup-desc p {
+    font-size: 0.70rem !important;
+    line-height: 1.35 !important;
+    margin: 0 0 8px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  #app .btn-mockup-inspect {
+    width: 100% !important;
+    min-height: 30px !important;
+    padding: 5px 6px !important;
+    font-size: 0.70rem !important;
+    gap: 4px !important;
+    border-radius: 7px !important;
+    justify-content: center !important;
   }
 
   #app .smartLearn-movil-view .cta-movil {
-    padding: 32px 22px;
+    padding: 24px 16px;
+    border-radius: 18px;
+  }
+
+  #app .store-buttons {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  #app .store-badge {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 10px 14px !important;
   }
 
   #app :is(.materia-header-card, .tema-header-card, .subtema-header-card, .exercise-header-card, .perfil-card, .section-box, .chart-card) {
-    padding: 20px;
+    padding: 16px;
   }
 
   #app .modal-overlay {
-    padding: 12px;
+    padding: 10px;
   }
 
   #app .modal-card {
-    padding: 22px 18px;
-    max-height: calc(100dvh - 24px);
+    padding: 18px 14px;
+    max-height: calc(100dvh - 20px);
+    border-radius: 18px;
   }
 
   #app :is(.form-actions, .perfil-acciones) > button {
-    flex: 1 1 160px;
+    flex: 1 1 100%;
   }
 
   #app .info-row {
@@ -2806,48 +3094,154 @@ body {
   }
 
   #app .teoria-display-body {
-    padding: 20px;
+    padding: 16px;
   }
 
   #app main {
-    width: calc(100% - 28px);
-    margin: 20px auto 40px;
+    width: calc(100% - 20px);
+    margin: 16px auto 36px;
   }
 
   #app .auth-main {
     width: 100%;
-    padding: 24px 16px 40px;
+    padding: 16px 12px 32px;
     margin: 0;
   }
 
   #app #main-header.header-top {
-    padding: 16px;
+    padding: 12px;
     flex-wrap: wrap;
   }
 
+  /* Carrusel de temas responsivo en móviles pequeños: columna vertical con controles abajo */
   #app .topics-carousel-container {
-    margin-bottom: 28px;
-    padding-inline: 48px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    margin-bottom: 24px;
+    padding: 0 4px !important;
+  }
+
+  #app .topics-carousel {
+    width: 100% !important;
+    padding: 6px 4px 10px !important;
+    scroll-padding-inline: 4px !important;
+    gap: 10px !important;
   }
 
   #app .topic-card {
-    flex-basis: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 14px;
-    padding: 14px 16px;
-    min-height: 82px;
+    flex: 0 0 calc(76vw - 16px) !important;
+    max-width: 240px !important;
+    scroll-snap-align: start !important;
+    gap: 10px !important;
+    padding: 12px 14px !important;
+    min-height: 72px !important;
+  }
+
+  #app .carousel-mobile-nav {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    margin-top: 8px !important;
+    width: 100% !important;
+  }
+
+  #app .carousel-nav-btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+  }
+
+  #app .carousel-nav-indicator {
+    font-size: 0.74rem !important;
+  }
+
+  /* Badges del Hero en 2 columnas en teléfonos móviles sin desborde de texto */
+  #app .hero-badges-cluster {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+  }
+
+  #app .hero-floating-badge {
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 12px !important;
+    border-radius: 14px !important;
+    gap: 8px !important;
+    box-shadow: 0 4px 12px rgba(23, 47, 80, 0.08) !important;
+    animation: none !important;
+  }
+
+  #app .hero-floating-badge > div {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  #app .hero-floating-badge .badge-icon-box {
+    width: 32px !important;
+    height: 32px !important;
+    flex-shrink: 0 !important;
+  }
+
+  #app .hero-floating-badge strong {
+    font-size: 0.76rem !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
+    margin-bottom: 2px !important;
+  }
+
+  #app .hero-floating-badge span {
+    font-size: 0.68rem !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  #app .smartLearn-view .hero {
+    padding: 24px 16px;
+    gap: 24px;
+    border-radius: 20px;
+  }
+
+  #app .smartLearn-view .hero h2 {
+    font-size: clamp(1.9rem, 7vw, 2.35rem);
+  }
+
+  #app .smartLearn-view .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  #app .smartLearn-view .hero-cta-group > a {
+    width: 100%;
+    justify-content: center;
   }
 
   #app .smartLearn-view > section.story-section {
-    padding: 26px 20px;
-    margin-bottom: 20px;
+    padding: 20px 14px;
+    margin-bottom: 18px;
+    border-radius: 18px;
   }
 
   #app .auth-card,
   #app .auth-shell .auth-card {
-    padding: 28px 20px;
+    padding: 24px 16px;
   }
 
   #app .auth-shell .auth-main:has(.auth-card) {
@@ -2859,10 +3253,10 @@ body {
   }
 
   #app footer {
-    padding: 32px 20px 24px;
+    padding: 28px 16px 20px;
   }
 
   #app .footer-content {
-    gap: 28px;
+    gap: 24px;
   }
 }

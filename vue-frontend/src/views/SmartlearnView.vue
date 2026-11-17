@@ -26,22 +26,24 @@
         <div class="hero-photo-frame">
           <img src="/images/misionEducativa.jpg" alt="" />
         </div>
-        <div class="hero-floating-badge badge-top-right">
-          <span class="badge-icon-box">
-            <SlIcon name="volume" :size="20" />
-          </span>
-          <div>
-            <strong>Audio y Voz Activos</strong>
-            <span>Navegación 100% guiada</span>
+        <div class="hero-badges-cluster">
+          <div class="hero-floating-badge badge-top-right">
+            <span class="badge-icon-box">
+              <SlIcon name="volume" :size="20" />
+            </span>
+            <div>
+              <strong>Audio y Voz Activos</strong>
+              <span>Navegación 100% guiada</span>
+            </div>
           </div>
-        </div>
-        <div class="hero-floating-badge badge-bottom-left">
-          <span class="badge-icon-box badge-icon-cyan">
-            <SlIcon name="braille" :size="20" />
-          </span>
-          <div>
-            <strong>Soporte Braille y Teclado</strong>
-            <span>Tecnología asistiva integrada</span>
+          <div class="hero-floating-badge badge-bottom-left">
+            <span class="badge-icon-box badge-icon-cyan">
+              <SlIcon name="braille" :size="20" />
+            </span>
+            <div>
+              <strong>Soporte Braille y Teclado</strong>
+              <span>Tecnología asistiva integrada</span>
+            </div>
           </div>
         </div>
       </div>
@@ -54,7 +56,7 @@
       @mouseenter="stopAutoScroll" 
       @mouseleave="startAutoScroll"
     >
-      <button @click="handleManualPrev" class="carousel-btn prev-btn" aria-label="Anterior">
+      <button @click="handleManualPrev" class="carousel-btn prev-btn desktop-only" aria-label="Anterior">
         <SlIcon name="chevron-left" :size="20" />
       </button>
       
@@ -106,9 +108,22 @@
         </a>
       </div>
       
-      <button @click="handleManualNext" class="carousel-btn next-btn" aria-label="Siguiente">
+      <button @click="handleManualNext" class="carousel-btn next-btn desktop-only" aria-label="Siguiente">
         <SlIcon name="chevron-right" :size="20" />
       </button>
+
+      <!-- Controles móviles en flujo natural (NUNCA solapan las tarjetas) -->
+      <div class="carousel-mobile-nav">
+        <button @click="handleManualPrev" class="carousel-nav-btn" aria-label="Tema anterior">
+          <SlIcon name="chevron-left" :size="18" />
+        </button>
+        <div class="carousel-nav-indicator">
+          <span>Desliza para explorar</span>
+        </div>
+        <button @click="handleManualNext" class="carousel-nav-btn" aria-label="Tema siguiente">
+          <SlIcon name="chevron-right" :size="18" />
+        </button>
+      </div>
     </section>
 
     <!-- SECCIÓN 1: ¿QUÉ ES SMART LEARN? -->
