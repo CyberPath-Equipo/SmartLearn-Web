@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "vue-frontend/src/assets/styles/global-styles.css"
+        ],
+        "createdAt": "2026-11-17T18:14:33.970Z",
+        "reason": "Agent review: legacy CSS from 0f4a849. Section heading border overridden by visual-system.css #app section h2; messages, contenidoTeoriaView and noTeoriaMessage absent from Vue templates; UsuarioView warning-text defines uniform 1px border. No active side-tab regression."
+      },
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "files": [
+          "vue-frontend/src/assets/styles/global-styles.css"
+        ],
+        "createdAt": "2026-11-17T18:14:43.011Z",
+        "reason": "Agent review: legacy reset font overridden by visual-system.css body DM Sans and #app * font-family inherit."
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "vue-frontend/src/assets/styles/global-styles.css"
+        ],
+        "createdAt": "2026-11-17T18:14:48.391Z",
+        "reason": "Agent review: legacy body font overridden by the self-hosted DM Sans declaration in visual-system.css."
+      }
+    ]
+  }
+}
