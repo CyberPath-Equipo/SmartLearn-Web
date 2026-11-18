@@ -7,14 +7,14 @@
       <form @submit.prevent="handleLogin" class="auth-form">
           <div class="form-group">
               <label for="correo">Correo electrónico</label>
-              <input type="email" id="correo" v-model="correo" placeholder="ejemplo@correo.com" required />
+              <input type="email" id="correo" v-model="correo" placeholder="ejemplo@correo.com" :aria-invalid="Boolean(errorMessage)" required />
           </div>
           <div class="form-group">
               <label for="password">Contraseña</label>
-              <input type="password" id="password" v-model="password" placeholder="Ingresa tu contraseña" required />
+              <input type="password" id="password" v-model="password" placeholder="Ingresa tu contraseña" :aria-invalid="Boolean(errorMessage)" required />
           </div>
           
-          <div v-if="errorMessage" class="error-message">
+          <div v-if="errorMessage" class="error-message" role="alert" aria-live="assertive">
             {{ errorMessage }}
           </div>
 

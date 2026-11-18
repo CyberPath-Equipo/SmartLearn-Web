@@ -1,7 +1,8 @@
 <template>
   <div class="auth-layout-container auth-shell">
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
     <header id="main-header" class="header-top" role="banner">
-      <div class="auth-header-brand" @click="volverSL" style="cursor: pointer;">
+      <button type="button" class="auth-header-brand" @click="volverSL" aria-label="Volver a la página principal de Smart Learn">
         <div class="navbar-logo">
           <img src="/images/Blanco_sin_fondo_Smart_Learn_logo.png" alt="Logo de Smart Learn" height="44">
         </div>
@@ -9,14 +10,14 @@
           <h1 id="pageTitle">Smart Learn</h1>
           <p class="subtitle">Plataforma Educativa Accesible</p>
         </div>
-      </div>
+      </button>
       <button @click="volverSL" class="btn-ghost">
         <svg class="sl-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="/smartlearn-icons.svg#arrow-left" /></svg>
         <span>Volver a Inicio</span>
       </button>
     </header>
 
-    <main class="auth-main">
+    <main id="main-content" class="auth-main" role="main" tabindex="-1">
       <router-view></router-view>
     </main>
 
@@ -48,5 +49,11 @@ const volverSL = () => {
   display: flex;
   align-items: center;
   gap: 14px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
 }
 </style>

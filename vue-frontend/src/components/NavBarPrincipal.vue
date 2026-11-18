@@ -1,5 +1,6 @@
 <template>
   <div class="auth-layout-container public-layout">
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
     <header id="main-header" class="public-header" :class="{ scrolled: isScrolled, 'menu-open': menuOpen, 'keyboard-navigation': keyboardNavigation }"
       @keydown="keyboardNavigation = true" @pointerdown="keyboardNavigation = false"
       @keydown.esc="closeMenu" @focusout="handleFocusOut">
@@ -52,7 +53,7 @@
       <div v-if="menuOpen" class="menu-backdrop" @click="closeMenu" aria-hidden="true"></div>
     </transition>
 
-    <main class="auth-main">
+    <main id="main-content" class="auth-main" role="main" tabindex="-1">
       <router-view></router-view>
     </main>
 

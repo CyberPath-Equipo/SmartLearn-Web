@@ -1,6 +1,16 @@
 <template>
   <nav class="panel-navigation" aria-label="Navegación del panel">
-    <div class="panel-navigation-inner">
+    <button
+      type="button"
+      class="panel-menu-toggle"
+      :aria-expanded="menuOpen"
+      aria-controls="panel-navigation-options"
+      @click="menuOpen = !menuOpen"
+    >
+      <span aria-hidden="true">☰</span>
+      <span>Menú</span>
+    </button>
+    <div id="panel-navigation-options" :class="['panel-navigation-inner', { open: menuOpen }]">
       <router-link to="/dashboard" class="panel-navigation-link">
         Dashboard
       </router-link>
@@ -22,8 +32,10 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
+import { ref } from 'vue';
 
 const route = useRoute();
+const menuOpen = ref(false);
 
 const sectionRoutes = {
   materias: ['materias', 'tema', 'subtema', 'teoria'],
@@ -37,6 +49,8 @@ function isSectionActive(section) {
 
 <style scoped>
 .panel-navigation {
+  display: flex;
+  align-items: center;
   padding: 8px 40px;
   background: #ffffff;
   border-bottom: 1px solid #edf2f7;
@@ -77,13 +91,40 @@ function isSectionActive(section) {
   box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
 }
 
+.panel-menu-toggle {
+  display: none;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid #496078;
+  border-radius: 10px;
+  background: #172331;
+  color: #edf3f8;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 @media (max-width: 700px) {
   .panel-navigation {
     padding: 8px 16px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .panel-menu-toggle {
+    display: inline-flex;
+    align-self: flex-start;
   }
 
   .panel-navigation-inner {
-    justify-content: center;
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .panel-navigation-inner.open {
+    display: flex;
   }
 
   .panel-navigation-link {

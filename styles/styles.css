@@ -1558,3 +1558,72 @@ button:active:not(:disabled),
     scroll-behavior: auto !important;
   }
 }
+
+/* Responsive/accessibility pass for legacy static pages */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 100000;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #172b43;
+  font-weight: 800;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+:is(button, a, input, textarea, select):focus-visible {
+  outline: 3px solid #74b9ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  main,
+  [role='main'] {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .form-actions,
+  .teoria-actions,
+  #accionesExtra {
+    flex-direction: column;
+  }
+
+  .form-actions button,
+  .teoria-actions button,
+  #accionesExtra button {
+    width: 100%;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}

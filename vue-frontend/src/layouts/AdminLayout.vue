@@ -1,10 +1,11 @@
 <template>
   <div class="admin-layout-container">
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
     <Navbar />
 
     <PanelNavigation v-if="authStore.isAuthenticated" />
     
-    <main role="main">
+    <main id="main-content" role="main" tabindex="-1">
       <router-view></router-view>
     </main>
 

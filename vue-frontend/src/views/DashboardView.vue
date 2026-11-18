@@ -19,7 +19,15 @@
       <aside class="materias-sidebar">
         <h3 class="section-title">Tus materias</h3>
         <div class="cards-vertical">
-          <div v-for="(mat, idx) in materiasStats" :key="mat.id" class="stat-card stat-card-clickable" :style="{ background: getGradient(idx) }" @click="irAMateria(mat)">
+          <button
+            v-for="(mat, idx) in materiasStats"
+            :key="mat.id"
+            type="button"
+            class="stat-card stat-card-clickable"
+            :style="{ background: getGradient(idx) }"
+            :aria-label="`Abrir materia ${mat.nombre}`"
+            @click="irAMateria(mat)"
+          >
             <h4 class="materia-title">{{ mat.nombre }}</h4>
             <div class="materia-metrics">
               <div class="metric">
@@ -31,7 +39,7 @@
                 <span class="metric-label">Temas</span>
               </div>
             </div>
-          </div>
+          </button>
           <div v-if="materiasStats.length === 0" class="no-data-chart-inner">
             No tienes materias registradas o con datos suficientes.
           </div>

@@ -3419,3 +3419,83 @@ body {
   #app .smartLearn-view > section.story-section,
   #app .smartLearn-movil-view > section { padding: 24px 18px; margin-bottom: 16px; }
 }
+
+/* Repeated responsive/accessibility pass */
+#app .skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 100000;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+#app .skip-link:focus {
+  top: 16px;
+}
+
+#app :is(button, a, input, textarea, select) {
+  min-height: 44px;
+}
+
+#app :is(.stat-card-clickable, .materia-card, .tema-card, .subtema-card, .ejercicio-card) {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  font: inherit;
+}
+
+#app :is(.panel-navigation, .dashboard-header) {
+  max-width: none;
+}
+
+#app main,
+#app [role='main'] {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  #app main,
+  #app [role='main'] {
+    width: 100%;
+  }
+
+  #app :is(.form-actions, .action-buttons, .exercise-actions, .teoria-actions) {
+    flex-direction: column;
+  }
+
+  #app :is(.form-actions, .action-buttons, .exercise-actions, .teoria-actions) :is(button, a) {
+    width: 100%;
+  }
+
+  #app :is(table, .cards-grid, .dashboard-layout, .charts-grid) {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  #app :is(.card, .auth-card, .modal-card, .chart-card) {
+    padding: 18px 16px;
+  }
+
+  #app :is(.dashboard-header, .auth-header-brand) {
+    min-width: 0;
+  }
+
+  #app table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  #app .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
