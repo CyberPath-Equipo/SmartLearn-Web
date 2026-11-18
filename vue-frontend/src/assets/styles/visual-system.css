@@ -3499,3 +3499,128 @@ body {
     align-items: flex-start;
   }
 }
+
+/* Final enforcement: flat surfaces across every inherited component and page */
+body {
+  background: #0d1520 !important;
+  background-image: none !important;
+}
+
+#app * {
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#app :is(button, a, .card, .topic-card, .stat-card, .materia-card,
+  .tema-card, .subtema-card, .ejercicio-card, .question-card,
+  .mockup-card, .carousel-btn, .carousel-nav-btn):hover,
+#app :is(button, a, .card, .topic-card, .stat-card, .materia-card,
+  .tema-card, .subtema-card, .ejercicio-card, .question-card,
+  .mockup-card, :active) {
+  transform: none !important;
+}
+
+/* Flat, low-noise interface: no decorative gradients or hover effects */
+#app :is(
+  .dashboard-header,
+  .public-header,
+  .public-header.scrolled,
+  .auth-layout-container header,
+  .admin-layout-container header,
+  .btn-primary,
+  .btn-primary-blue,
+  .auth-submit,
+  .btn-emil-primary,
+  .hero-btn-movil,
+  .panel-navigation-link.router-link-exact-active,
+  .panel-navigation-link.active,
+  .btn-edit,
+  .btn-action-edit,
+  .btn-secondary,
+  .btn-emil-secondary,
+  .btn-action-back,
+  .btn-logout,
+  .btn-ghost,
+  .hero-pill-badge,
+  .story-pill,
+  .story-tag,
+  .topic-icon-badge,
+  .benefit-icon-box,
+  .social-pill,
+  .footer-email-card
+) {
+  background: var(--card-bg) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#app :is(.btn-primary, .btn-primary-blue, .auth-submit, .btn-emil-primary, .hero-btn-movil) {
+  background: var(--primary) !important;
+  color: #092331 !important;
+  border: 1px solid var(--primary) !important;
+}
+
+#app :is(.btn-primary, .btn-primary-blue, .auth-submit, .btn-emil-primary, .hero-btn-movil,
+  .btn-secondary, .btn-emil-secondary, .btn-edit, .btn-action-edit, .btn-action-back,
+  .btn-logout, .btn-ghost, .panel-navigation-link, .social-pill, .footer-email-card,
+  .topic-card, .materia-card, .tema-card, .subtema-card, .ejercicio-card,
+  .stat-card, .mockup-card, .carousel-btn, .carousel-nav-btn):hover {
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+#app :is(.hero, .hero-movil, .story-section, .card, .chart-card, .materia-card,
+  .tema-card, .subtema-card, .ejercicio-card, .question-card, .modal-card,
+  .topic-card, .stat-card, .mockup-card, .footer-container, .footer-grid) {
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#app :is(.hero-floating-badge, .hero-floating-chip, .footer-ambient-glow,
+  .hero-ambient-glow, .emblem-halo, .phone-glass-glare) {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#app :is(.footer-email-card, .social-pill, .story-tag, .benefit-item,
+  .panel-navigation-inner, .auth-card, .card) {
+  background: var(--card-bg) !important;
+  background-image: none !important;
+}
+
+#app :is(.panel-navigation-link, .footer-nav-link, a) {
+  transition: color 120ms ease, background-color 120ms ease !important;
+}
+
+#app :is(.panel-navigation-link, .footer-nav-link, a):hover {
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+@media (max-width: 900px) {
+  #app :is(.hero, .hero-movil, .story-section, .card, .chart-card, .modal-card) {
+    border-radius: 12px;
+  }
+
+  #app :is(.hero-media, .mobile-hero-stage) {
+    min-width: 0;
+  }
+}

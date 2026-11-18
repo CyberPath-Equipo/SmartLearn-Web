@@ -1559,6 +1559,48 @@ button:active:not(:disabled),
   }
 }
 
+/* Flat static-page interface */
+:is(#main-header, .dashboard-header, .card, .auth-card, .hero,
+  .btn-primary, .btn-secondary, .btn-edit, .btn-delete, .btn-logout,
+  .btn-ghost, .btn-ghost2, .auth-submit, .hero-btn, .carousel-btn) {
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#main-header,
+.dashboard-header {
+  background: #111d2b !important;
+}
+
+:is(.btn-primary, .btn-edit, .auth-submit, .hero-btn) {
+  background: #07acda !important;
+  color: #092331 !important;
+}
+
+:is(button, a, .card, .topic-card, .carousel-btn):hover {
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+body,
+body * {
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body {
+  background: #0d1520 !important;
+}
+
 /* Responsive/accessibility pass for legacy static pages */
 .skip-link {
   position: fixed;
